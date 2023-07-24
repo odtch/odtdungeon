@@ -4,6 +4,8 @@
 #include "utils/Module.h"
 #include "utils/Clock.h"
 #include "window/Window.h"
+#include "renderer/DummyRenderer.h"
+#include "dungeon/DungeonScene.h"
 
 int main( int argc, char** argv ) {
     logInfo( "odtdungeon" );
@@ -20,8 +22,16 @@ int main( int argc, char** argv ) {
             modules.start();
             Window window;
             window.create( 800, 600, String( "ODT-Dungeon" ));
+            DummyRenderer renderer;
+            renderer.start();
+            DungeonScene scene;
+            scene.start();
             window.main();
+            renderer.requestStop();
+            scene.requestStop();
+            renderer.stop();
             window.destroy();
+            scene.stop();;
             rc = EXIT_SUCCESS;
             modules.stop();
         }
