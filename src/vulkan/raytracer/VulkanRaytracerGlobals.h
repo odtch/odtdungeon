@@ -18,6 +18,8 @@ public:
 public:
 	void create( VulkanCommandPool* commandPool );
 	void destroy();
+public:
+	void addMaterial( VulkanMaterial* material );
 //public:
 //	void begin();
 //	void addDecal( const Decal& decal, VulkanTextureArray& textures );

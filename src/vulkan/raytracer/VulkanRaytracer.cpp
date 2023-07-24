@@ -62,7 +62,7 @@ void VulkanRaytracer::render(){
 bool VulkanRaytracer::handle( const Message& message ){
 	switch( message.type ){
 	case VulkanMaterialCreated:
-		assert( false );
+		_globals->addMaterial( asserted( dynamic_cast<VulkanMaterial*>( message.p1 ) ) );
 		return true;
 	default:
 		logError( "VulkanRaytracer unhandled message", message.type );
