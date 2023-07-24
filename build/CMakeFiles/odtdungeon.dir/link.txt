@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/odtdungeon.dir/src/main.cpp.o CMakeFiles/odtdungeon.dir/src/utils/Debugging.cpp.o CMakeFiles/odtdungeon.dir/src/utils/List.cpp.o CMakeFiles/odtdungeon.dir/src/utils/Logger.cpp.o CMakeFiles/odtdungeon.dir/src/utils/Threading.cpp.o -o odtdungeon 
