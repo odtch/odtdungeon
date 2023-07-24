@@ -1,14 +1,16 @@
 # ODT - Dungeon
-github
-main
-qtc
-module
-window
-scene
-renderer
-vulkan
-triangle
-rock
-men
+Summer week 2023, have fun and enjoy
 
-bones
+- github
+- main
+- qtc
+- module
+- window
+- scene
+- renderer
+- vulkan
+- triangle
+- rock
+- men
+
+- bones
