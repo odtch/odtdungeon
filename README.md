@@ -1,9 +1,9 @@
 # ODT - Dungeon
 Summer week 2023, have fun and enjoy
 
-- github
-- main
-- qtc
++ github
++ main
++ qtc
 - module
 - window
 - scene
