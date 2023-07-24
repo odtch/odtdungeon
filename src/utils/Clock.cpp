@@ -39,7 +39,6 @@ float StopClock::fps() const{
 	assert( _state == Paused );
 	assert( 0 < _frame_count );
 	return ( _frame_count / seconds() );
-
 }
 
 SectionedStopClock::SectionedStopClock(){
@@ -183,4 +182,24 @@ void PerformanceCounter::next(){
 	_frameCount++;
 	_statistic.add( _prev_duration );
 	_history.next() = _prev_duration;
+}
+
+FpsCounter::FpsCounter(){
+	reset();
+}
+FpsCounter::~FpsCounter(){
+}
+void FpsCounter::reset(){
+	_start_time = std::chrono::high_resolution_clock::now();
+	_frame_count = 0;
+}
+void FpsCounter::tick(){
+	_frame_count++;
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	float seconds = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - _start_time ).count();
+	_current_fps = _frame_count / seconds;
+	if( 60 < _frame_count ){
+		_start_time = currentTime;
+		_frame_count = 0;
+	}
 }

@@ -21,7 +21,7 @@ int main( int argc, char** argv ) {
             Modules modules;
             modules.start();
             Window window;
-            window.create( 800, 600, String( "ODT-Dungeon" ));
+			window.create( 1600, 1200, String( "ODT-Dungeon" ));
             VulkanRaytracer renderer( &window );
             renderer.start();
             DungeonScene scene( &renderer );

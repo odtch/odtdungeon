@@ -103,6 +103,7 @@ void Window::create( int width, int height, const String& title ){
 //	}
 //}
 void Window::destroy(){
+	logDebug( "Window::destroy" );
 	if( _active ){
 		onDeactivated();
 	}
@@ -123,10 +124,13 @@ void Window::destroy(){
 //		delete viewport;
 //	}
 	if( _window ){
+		logDebug( "Window::destroy glfwDestroyWindow" );
 		glfwDestroyWindow( _window );
 		_window = null;
+		logDebug( "Window::destroy glfwTerminate" );
 		glfwTerminate();
 	}
+	logDebug( "Window::destroy done" );
 }
 void Window::main(){
 	assert( _window );
@@ -148,6 +152,7 @@ void Window::main(){
 			logError( "Window::main failed unexpected" );
 		}
 	}
+	logDebug( "Window::main done" );
 }
 void Window::setMouseCursorVisible( bool visible ){
 	assert( _window );

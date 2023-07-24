@@ -9,10 +9,10 @@ class VulkanPresenter : public Renderer
 private:
 	Window* _window;
 	VkExtent2D _window_extend;
-	PerformanceCounter* _present_pc = null;
+	FpsCounter _fps;
+	// PerformanceCounter* _present_pc = null;
 private:
 	enum State {
-		PreInitializing,
 		Initializing,
 		Ready,
 		//WaitForRenderImage,
@@ -20,14 +20,16 @@ private:
 		Presenting,
 		FramebufferInvalid,
 		Destroying
-	} _state = PreInitializing;
+	} _state = Initializing;
 private:
+	Vulkan* _vulkan = null;
     VulkanInstance* _instance = null;
     VulkanDevice* _device = null;
 private:
 	VulkanSurface* _surface = null;
 private:
 	VulkanQueue* _presentQueue = null;
+	VulkanQueue* _computeQueue = null;
 private:
 	VkImageUsageFlags _swapchainImageUsage;
 	VulkanSwapchain* _swapchain = null;
@@ -57,8 +59,7 @@ protected:
 private:
 	void createDevice();
 	void createFramebuffer();
-	void tick();
-	bool addBeginAcquireNextRenderImage( VulkanTask& task, VkImage& targetImage );
+	bool acquireNextRenderImage( VkImage& targetImage );
 	void present();
 	void destroyFramebuffer();
 	void destroyDevice();

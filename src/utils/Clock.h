@@ -31,6 +31,24 @@ public:
 	float fps() const;
 };
 
+class FpsCounter {
+	DEBUGCOUNTER(FpsCounter);
+private:
+	std::chrono::high_resolution_clock::time_point _start_time;
+	int _frame_count = 0;
+	float _current_fps = 0;
+public:
+	explicit FpsCounter();
+	~FpsCounter();
+public:
+	void reset();
+	void tick();
+public:
+	int frame_count() const{ return _frame_count; }
+	float fps() const{ return _current_fps; }
+};
+
+
 class SectionedStopClock {
 public:
 	DEBUGCOUNTER(SectionedStopClock);
