@@ -1,12 +1,13 @@
 #pragma once
 
-#include "utils/Threading.h"
 #include "SceneCore.h"
 #include "SceneNode.h"
 
 class Scene : public Thread, private SceneNode
 {
-	DEBUGCOUNTER(Scene)
+    DEBUGCOUNTER(Scene)
+private:
+    Renderer* _renderer;
 //private:
 //	SceneRootNode* _root = null;
 private:
@@ -17,8 +18,10 @@ private:
 	float _rest_dt = 0;
     //List<SceneListener*> _listeners;
 public:
-	explicit Scene();
+    explicit Scene( Renderer* renderer );
     virtual ~Scene() override;
+public:
+    Renderer& renderer(){ return *_renderer; }
 public:
 	const List<SceneNode*>& childs() const{ return SceneNode::childs(); }
 	void add( SceneNode* node );

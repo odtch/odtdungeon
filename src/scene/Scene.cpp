@@ -4,12 +4,15 @@
 //#include "SceneListener.h"
 #include "SceneNode.h"
 
-Scene::Scene(){
+Scene::Scene( Renderer* renderer )
+    :_renderer( asserted( renderer ) )
+{
 //	_root = new SceneRootNode( this );
 }
 Scene::~Scene(){
 //	ASSERT( _listeners.isEmpty() );
 	ASSERT( childs().isEmpty() );
+    _renderer = null;
 }
 void Scene::add( SceneNode* node ){
 	addChild( node );

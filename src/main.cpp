@@ -24,7 +24,7 @@ int main( int argc, char** argv ) {
             window.create( 800, 600, String( "ODT-Dungeon" ));
             DummyRenderer renderer;
             renderer.start();
-            DungeonScene scene;
+            DungeonScene scene( &renderer );
             scene.start();
             window.main();
             renderer.requestStop();

@@ -5,6 +5,8 @@
 class DungeonScene : public Scene
 {
 public:
-    explicit DungeonScene();
+    explicit DungeonScene( Renderer* renderer );
     virtual ~DungeonScene() override;
+protected:
+    virtual void run() override;
 };

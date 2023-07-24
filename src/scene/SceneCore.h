@@ -4,10 +4,12 @@
 #include "utils/Logger.h"
 #include "utils/String.h"
 #include "utils/List.h"
+#include "utils/Threading.h"
 
 //#include "utils/OdtUtils.h"
 //#include "math/OdtMath.h"
-//#include "renderer/RenderCore.h"
+
+#include "renderer/Renderer.h"
 
 class Scene;
 class SceneNode;
