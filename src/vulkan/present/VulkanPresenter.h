@@ -30,6 +30,7 @@ private:
 private:
 	VulkanQueue* _presentQueue = null;
 	VulkanQueue* _computeQueue = null;
+	VulkanCommandPool* _computeCommandPool = null;
 private:
 	VkImageUsageFlags _swapchainImageUsage;
 	VulkanSwapchain* _swapchain = null;
@@ -56,10 +57,10 @@ public:
 	// const std::vector<VulkanFramebuffer*>& framebuffers(){ return _framebuffers; }
 protected:
 	virtual void getRequirements( VulkanRequirements& requirements ) = 0;
-private:
 	void createDevice();
 	void createFramebuffer();
 	bool acquireNextRenderImage( VkImage& targetImage );
+	virtual void render();
 	void present();
 	void destroyFramebuffer();
 	void destroyDevice();

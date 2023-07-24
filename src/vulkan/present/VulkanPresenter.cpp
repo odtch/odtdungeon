@@ -57,56 +57,7 @@ void VulkanPresenter::run(){
 	//		if( !_prevRenderTask.isCompleted() ){
 	//		} else {
 			//sleep_ms( 13 );
-			{
-			if( vp == null ){
-				vp = new VulkanCommandPool();
-				vp->create( _computeQueue );
-			}
-				VulkanCommandBuffer* cb = new VulkanCommandBuffer();
-				cb->begin(  VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, vp );
-
-				// Create a render pass with the clear color
-				VkRenderPassBeginInfo renderPassBeginInfo = {};
-				renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-				renderPassBeginInfo.renderPass = asserted( _renderPass )->vkRenderPass(); // Your render pass object
-				//logDebug( "_prevRenderImageIndex", _prevRenderImageIndex );
-				auto framebuffer = _framebuffers[ _prevRenderImageIndex ];
-				renderPassBeginInfo.framebuffer = framebuffer->vkFramebuffer(); // Your framebuffer object
-				renderPassBeginInfo.renderArea.offset = {0, 0};
-				renderPassBeginInfo.renderArea.extent = { _window_extend.width, _window_extend.height }; //framebufferWidth, framebufferHeight}; // The size of your framebuffer
-				renderPassBeginInfo.clearValueCount = 1;
-				static float r = 0;
-				r += 1.0f / 6;
-				if( r > 1 )r = 0;
-				//logDebug( "r", r );
-
-				VkClearValue clearValues[2] = {};
-				clearValues[0].color = {r, 0.0f, 0.0f, 1.0f}; // Black color (R=0, G=0, B=0, A=1)
-				clearValues[1].depthStencil = {1.0f, 0}; // Depth=1.0, Stencil=0
-
-
-				renderPassBeginInfo.clearValueCount = 2; // Number of elements in the clearValues array
-				renderPassBeginInfo.pClearValues = clearValues;
-
-				// Begin the render pass
-				vkCmdBeginRenderPass(cb->vkCommandBuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-				// Render a full-screen quad
-				// Your vertex buffer and vertex shader setup to render a full-screen quad
-
-				// End the render pass
-				vkCmdEndRenderPass(cb->vkCommandBuffer());
-
-
-				// End recording the command buffer
-				//vkEndCommandBuffer(commandBuffer);
-				cb->end();
-
-				cb->execute();
-
-				cb->destroy();
-				odelete( cb );
-			}
+			render();
 			_state = Presenting;
 			break;
 		case Presenting:
@@ -167,9 +118,14 @@ void VulkanPresenter::createDevice(){
 	_device->create(requirements);
 	assert( _presentQueue == null );
 	_presentQueue = _device->getPresentQueue(*_surface);
+	assert(_presentQueue);
 	assert( _computeQueue == null );
 	_computeQueue = _device->getComputeQueue();
-	assert(_presentQueue);
+	assert( _computeQueue );
+	assert( _computeCommandPool == null );
+	_computeCommandPool = new VulkanCommandPool();
+	_computeCommandPool->create( _computeQueue );
+	assert( _computeCommandPool );
 }
 void VulkanPresenter::createFramebuffer()
 {
@@ -264,6 +220,33 @@ bool VulkanPresenter::acquireNextRenderImage( VkImage& targetImage ){
 	return true;
 
 }
+void VulkanPresenter::render(){
+	VulkanCommandBuffer* cb = new VulkanCommandBuffer();
+	cb->begin(  VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, _computeCommandPool );
+	VkRenderPassBeginInfo renderPassBeginInfo = {};
+	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassBeginInfo.renderPass = asserted( _renderPass )->vkRenderPass(); // Your render pass object
+	//logDebug( "_prevRenderImageIndex", _prevRenderImageIndex );
+	auto framebuffer = _framebuffers[ _prevRenderImageIndex ];
+	renderPassBeginInfo.framebuffer = framebuffer->vkFramebuffer(); // Your framebuffer object
+	renderPassBeginInfo.renderArea.offset = {0, 0};
+	renderPassBeginInfo.renderArea.extent = { _window_extend.width, _window_extend.height }; //framebufferWidth, framebufferHeight}; // The size of your framebuffer
+	renderPassBeginInfo.clearValueCount = 1;
+	static float r = 0;
+	r += 1.0f / 6;
+	if( r > 1 )r = 0;
+	VkClearValue clearValues[2] = {};
+	clearValues[0].color = {r, 0.0f, 0.0f, 1.0f}; // Black color (R=0, G=0, B=0, A=1)
+	clearValues[1].depthStencil = {1.0f, 0}; // Depth=1.0, Stencil=0
+	renderPassBeginInfo.clearValueCount = 2; // Number of elements in the clearValues array
+	renderPassBeginInfo.pClearValues = clearValues;
+	vkCmdBeginRenderPass(cb->vkCommandBuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdEndRenderPass(cb->vkCommandBuffer());
+	cb->end();
+	cb->execute();
+	cb->destroy();
+	odelete( cb );
+}
 VkResult vulkanQueuePresent( VulkanQueue* queue, uint32_t imageIndex, VulkanSwapchain& swapchain ){
 	assert( queue );
 	VkPresentInfoKHR presentInfo;
@@ -348,6 +331,11 @@ void VulkanPresenter::destroyDevice(){
 	logDebug( "VulkanPresenter::destroyDevice" );
 	//_prevRenderTask.clear();
 	//_renderer->destroy();
+	if( _computeCommandPool ){
+		_computeCommandPool->destroy();
+		odelete( _computeCommandPool );
+	}
+	_computeQueue = null;
 	_presentQueue = null;
 	//	_presentingDoneFence.destroy();
 	//		_renderingDoneFence.clear();

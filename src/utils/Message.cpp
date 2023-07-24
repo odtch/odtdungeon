@@ -18,6 +18,11 @@ void MessageQueue::post( const Message& message ){
 void MessageQueue::post( MessageType type, void* p1, void* p2, void* sender ){
 	_mutex.lock();
 	if( _next_read <= _next_write && _next_write +1 < MaxMessages ){
+		Message& message = _messages[ _next_write ];
+		message.type = type;
+		message.p1 = p1;
+		message.p2 = p2;
+		message.sender = sender;
 		_next_write++;
 		if( MaxMessages <= _next_write ){
 			logError( "MessageQueue::post over end of array" );
@@ -35,8 +40,29 @@ bool MessageQueue::get( Message& message ){
 		_mutex.unlock();
 		return false;
 	} else {
+		message = _messages[ _next_read ];
+		_next_read++;
+		if( MaxMessages <= _next_read ){
+			logError( "MessageQueue::get over end of array" );
+			_next_read = 0;
+		}
 		_mutex.unlock();
 		return true;
+	}
+}
+void MessageQueue::handle( MessageHandler* handler, uint max_messagecount ){
+	assert( handler );
+	assert( 0 < max_messagecount && max_messagecount < 9999 );
+	Message message;
+	while( get( message ) ){
+		if( !handler->handle( message ) ){
+			logError( "MessageQueue::handle not handled", message.type );
+		}
+		max_messagecount--;
+		if( max_messagecount == 0 ){
+			logWarning( "MessageQueue::handle too many messages" );
+			return;
+		}
 	}
 }
 void MessageQueue::receive( MessageType type, void* p1, void* p2, void* sender ){

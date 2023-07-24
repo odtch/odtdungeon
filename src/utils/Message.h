@@ -7,9 +7,13 @@
 #include "Array.h"
 
 enum MessageType {
+	NoMessage = 0,
+	// Windowing
 	WindowCreated,
 	WindowResized,
-	WindowDestroyed
+	WindowDestroyed,
+	// Vulkan
+	VulkanMaterialCreated,
 };
 
 struct Message {
@@ -18,6 +22,31 @@ public:
 	void* p1;
 	void* p2;
 	void* sender;
+public:
+	explicit Message()
+		:type( NoMessage )
+		,p1( null )
+		,p2( null )
+		,sender( null )
+	{}
+	explicit Message( const Message& src )
+		:type( src.type )
+		,p1( src.p1 )
+		,p2( src.p2 )
+		,sender( src.sender )
+	{}
+public:
+	void operator=( const Message& src ){
+		type = src.type;
+		p1 = src.p1;
+		p2 = src.p2;
+		sender = src.sender;
+	}
+};
+
+class MessageHandler {
+public:
+	virtual bool handle( const Message& message ) = 0;
 };
 
 class MessageListener {
@@ -41,6 +70,7 @@ public:
 	void post( const Message& message );
 	void post( MessageType type, void* p1, void* p2, void* sender );
 	bool get( Message& message );
+	void handle( MessageHandler* handler, uint max_messagecount = 10 );
 protected:
 	virtual void receive( MessageType type, void* p1, void* p2, void* sender ) override;
 };

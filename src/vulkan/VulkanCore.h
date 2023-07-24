@@ -91,6 +91,7 @@ class VulkanRasterizerWindow;
 class VulkanRasterizer;
 
 class VulkanRaytracer;
+class VulkanRaytracerGlobals;
 class VulkanRaytracingPipelineProperties;
 class VulkanRaytracingShaderBindingTable;
 class VulkanAccelerationStructureExtension;
