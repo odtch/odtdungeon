@@ -9,11 +9,13 @@ class Resource
 private:
 //	uint _debugno = 0;
 //	String _id;
+    String _name;
 public:
-	explicit Resource();
+    explicit Resource( const String& name );
 //	explicit Resource( const String& id );
 	virtual ~Resource();
 public:
+    const String& name() const{ return _name; }
 //	const String& id() const{ return _id; }
 //	void setId( const String& id );
 public:

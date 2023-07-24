@@ -19,14 +19,15 @@
 
 
 
-//Material::Material()
+Material::Material( const String& name )
+    :Resource( name )
 //	:_texture( null )
 ////	,_texture_has_transparency( false )
 ////	,_emissiveTexture( null )
-//	,_color( 1, 1, 1, 1 )
+    ,_color( 1, 1, 1, 1 )
 ////	,_transparency( 0, 0, 0, 0 )
 //	,_reflection( 0, 0, 0, 0 )
-//{
+{
 //	_index = Resources::Get()->registerMaterial( this );
 ////	if( _index == 57 ){
 ////		logDebug( "material 57" );
@@ -35,12 +36,12 @@
 ////	setCreatesShadow( true );
 ////	setLightAffected( true );
 ////	logDebug( "Material", this );
-//}
-//Material::~Material(){
+}
+Material::~Material(){
 //	//_alternatives = null;
 //	Resources::Get()->unregisterMaterial( this );
 ////	logDebug( "~Material", this );
-//}
+}
 //bool Material::hasFlag( uint flag ) const{
 //	return _flags & flag;
 //}

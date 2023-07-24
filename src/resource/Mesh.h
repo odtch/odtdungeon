@@ -33,7 +33,7 @@ protected:
 //private:
 //	VulkanMesh* _vulkanmesh = null;
 public:
-	explicit AbstractMesh();
+    explicit AbstractMesh( const String& name );
 	virtual ~AbstractMesh() override;
 //public:
 //	UpdateType updateType() const{ return _updateType; }
@@ -73,9 +73,13 @@ protected:
 	std::vector<V> _vertices;
 	std::vector<uint32_t> _indices;
 public:
-	explicit Mesh(){
-	}
-	explicit Mesh( int maxVertexCount, int maxIndexCount ){
+    explicit Mesh( const String& name )
+        :AbstractMesh( name )
+    {
+    }
+    explicit Mesh(  const String& name, int maxVertexCount, int maxIndexCount )
+        :AbstractMesh( name )
+    {
 		_vertices.reserve( maxVertexCount );
 		_indices.reserve( maxIndexCount );
 	}

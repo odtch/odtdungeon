@@ -3,7 +3,9 @@
 #include "Resource.h"
 //#include "ResourceStorage.h"
 
-Resource::Resource(){
+Resource::Resource( const String& name )
+    :_name( name )
+{
 }
 //Resource::Resource( const String& id )
 //	:_id( id )

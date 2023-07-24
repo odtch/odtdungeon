@@ -44,7 +44,7 @@ public:
 //private:
 //	MaterialAlternatives* _alternatives = null;
 public:
-	explicit Material();
+    explicit Material( const String& name );
 	virtual ~Material() override;
 //public:
 //	virtual ResourceType* type() const override { return Singleton::Get<MaterialType>(); }
