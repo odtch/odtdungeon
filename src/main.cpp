@@ -4,7 +4,7 @@
 #include "utils/Module.h"
 #include "utils/Clock.h"
 #include "window/Window.h"
-#include "renderer/DummyRenderer.h"
+#include "vulkan/raytracer/VulkanRaytracer.h"
 #include "dungeon/DungeonScene.h"
 
 int main( int argc, char** argv ) {
@@ -22,7 +22,7 @@ int main( int argc, char** argv ) {
             modules.start();
             Window window;
             window.create( 800, 600, String( "ODT-Dungeon" ));
-            DummyRenderer renderer;
+            VulkanRaytracer renderer( &window );
             renderer.start();
             DungeonScene scene( &renderer );
             scene.start();

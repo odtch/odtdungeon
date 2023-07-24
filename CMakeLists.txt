@@ -31,6 +31,6 @@ target_compile_definitions(odtdungeon PUBLIC "$<$<CONFIG:DEBUG>:ODTDEBUG>"
 target_link_libraries(odtdungeon
     glfw
     #pthread
-    #vulkan
+    vulkan
 )
 
