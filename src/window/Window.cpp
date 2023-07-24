@@ -40,7 +40,9 @@ void windowFocusCallback( GLFWwindow* glfwindow, int focused ){
 }
 
 
-Window::Window(){
+Window::Window()
+	:_listeners( 2 )
+{
 //	_idle_pc = PerformanceCounter::Create( "Idle dt" );
 //	_idle_pc->setTypeTicked();
 //	_frame_pc = PerformanceCounter::Create( "Full Frame" );
@@ -51,7 +53,6 @@ Window::Window(){
 Window::~Window(){
 //	ASSERT( _active_viewport == null );
 	ASSERT( _window == null );
-	ASSERT( _listeners.isEmpty() );
 //	_renderer = null;
 }
 //void Window::setRenderer( Renderer* renderer ){
@@ -59,13 +60,12 @@ Window::~Window(){
 //	assert( _renderer == null );
 //	_renderer = renderer;
 //}
-void Window::addListener( WindowListener* listener ){
+void Window::addListener( MessageListener* listener ){
 	assert( listener );
 	_listeners.add( listener );
 }
-void Window::removeListener( WindowListener* listener ){
+void Window::removeListener( MessageListener* listener ){
 	_listeners.remove( listener );
-
 }
 void Window::create( int width, int height, const String& title ){
 	assert( 0 < width && 0 < height );
@@ -90,9 +90,7 @@ void Window::create( int width, int height, const String& title ){
 	glfwSetScrollCallback( _window, windowScrollCallback );
 	glfwSetWindowFocusCallback( _window, windowFocusCallback );
 //	_scheduler = new JobScheduler();
-	for( WindowListener* listener : _listeners ){
-		listener->onWindowCreated( this );
-	}
+	_listeners.send( WindowCreated, null, null, this );
 }
 //void Window::sendOnDestroyed(){
 //	int prev_count = _listeners.size();
@@ -119,11 +117,7 @@ void Window::destroy(){
 //		_viewport = null;
 //	}
 //	_scenes.deleteAll();
-	while( !_listeners.isEmpty() ){
-		WindowListener* listener = _listeners.last();
-		listener->onWindowDestroy();
-		assert( !_listeners.contains( listener ) );
-	}
+	_listeners.send( WindowDestroyed, null, null, this );
 //	while( !_viewports.isEmpty() ){
 //		Viewport* viewport = _viewports.takeLast();
 //		delete viewport;
@@ -230,9 +224,7 @@ void Window::onResized( int width, int height ){
 //	if( _viewport ){
 //		_viewport->setRect( Rect2i( 0, 0, _width, _height ) );
 //	}
-	for( WindowListener* listener : _listeners ){
-		listener->onWindowResized( width, height );
-	}
+	_listeners.send( WindowResized, null, null, this );
 }
 void Window::onIdle(){
 	//logDebug( "Window.onIdle" );
@@ -331,10 +323,10 @@ void Window::onIdle(){
 //	}
 //	int todo_rm;
 	//std::cout << "W::oI li\n"; std::cout.flush();
-    float dt = 0;
-	for( auto listener : _listeners ){
-		listener->onWindowIdle( dt );
-	}
+//    float dt = 0;
+//	for( auto listener : _listeners ){
+//		listener->onWindowIdle( dt );
+//	}
 //		_scheduler->tick( dt );
 //		if( _viewport ){
 //			_viewport->control( dt, _mouse, _keyboard );

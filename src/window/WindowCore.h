@@ -4,6 +4,7 @@
 #include "utils/Logger.h"
 #include "utils/String.h"
 #include "utils/List.h"
+#include "utils/Message.h"
 //#include "utils/OdtUtils.h"
 //#include "math/OdtMath.h"
 //#include "renderer/RenderCore.h"

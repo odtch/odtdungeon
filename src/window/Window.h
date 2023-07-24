@@ -1,11 +1,8 @@
 #pragma once
 
 #include "WindowCore.h"
-#include "WindowListener.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-//#include "Viewport.h"
-//#include "resource/Collections.h"
 
 class Window
 {
@@ -32,7 +29,7 @@ private:
 //	float _first_rest_time = 0;
 //	std::chrono::high_resolution_clock::time_point _prev_idle_timepoint;
 private:
-	List<WindowListener*> _listeners;
+	MessageListeners _listeners;
 //private:
 //	JobScheduler* _scheduler = null;
 //private:
@@ -51,8 +48,8 @@ public:
 public:
 //	void setRenderer( Renderer* renderer );
 public:
-	void addListener( WindowListener* listener );
-	void removeListener( WindowListener* listener );
+	void addListener( MessageListener* listener );
+	void removeListener( MessageListener* listener );
 //public:
 //	const Collections& collections() const { return _collections; }
 //	Collections& collections(){ return _collections; }
