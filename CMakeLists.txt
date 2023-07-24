@@ -7,17 +7,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(src .)
 file(GLOB source_files CONFIGURE_DEPENDS
-			"src/*.h"
-			"src/*.cpp"
-			"src/*/*.cpp"
-			"src/*/*.h"
-			"src/*/*/*.cpp"
-			"src/*/*/*.h"
-			"src/vulkan/rasterizer/*.glsl"
-			"src/vulkan/raycompute/*.glsl"
-			"src/vulkan/raytracer/shader/*"
-			"src/vulkan/raytracer/sensorshader/*"
-	)
+    "README.md"
+    "src/*.h"
+    "src/*.cpp"
+    "src/*/*.cpp"
+    "src/*/*.h"
+    "src/*/*/*.cpp"
+    "src/*/*/*.h"
+    "src/vulkan/rasterizer/*.glsl"
+    "src/vulkan/raycompute/*.glsl"
+    "src/vulkan/raytracer/shader/*"
+    "src/vulkan/raytracer/sensorshader/*"
+)
 
 include_directories(
 )
@@ -28,5 +29,8 @@ target_compile_definitions(odtdungeon PUBLIC "$<$<CONFIG:DEBUG>:ODTDEBUG>"
 )
 
 target_link_libraries(odtdungeon
+    glfw
+    #pthread
+    #vulkan
 )
 

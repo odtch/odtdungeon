@@ -1,48 +1,32 @@
 #include "stdodt.h"
 #include "utils/Debugging.h"
 #include "utils/Logger.h"
-
+#include "utils/Module.h"
+#include "utils/Clock.h"
+#include "window/Window.h"
 
 int main( int argc, char** argv ) {
     logInfo( "odtdungeon" );
 	int rc;
 	try {
-//		srand( time( NULL ) );
-
-//		//String exepath( argv[ 0 ] );
-//		//logDebug( "exe", exepath );
-//		String binpath( std::filesystem::path( argv[ 0 ] ).parent_path() );
-//		String binmediapath = binpath + "/media";
-//		//logDebug( "xx", binpath );
-///*
-//		float s = 0.01f;
-//		Vec3 t( 0, 3000, 0 );
-//		Mat4 m = Mat4::Translation( t ) * Mat4::Scale( s );
-//		Vec3 i( 100, 100, 100 );
-//		Vec3 e = i * s + t;
-//		Vec3 r = m.map( i );
-//		logDebug( "u", i, "e: ", e, "r: ", r, "error", ( e - r ).length() );
-//		assert( false );
-//*/
-////	Json::Test();
-///* */
-//		new Modules();
-
-//		App* app = App::Create();
-//		assert( app );
-//		app->onStartup();
-//#ifdef ODTDEBUG
-//		Converter::Run( "/home/rt/odtspace/media", binmediapath  );
-//		//assert( false );
-//#endif
-//		Collections::Get()->load( binmediapath );
-//		app->main( binpath );
-//		Modules::Get()->onShutdown();
-//		odelete( app );
-///* */
-        rc = EXIT_SUCCESS;
-//		Singleton::Shutdown();
-//		PerformanceCounter::Destroy();
+        //		srand( time( NULL ) );
+        //		//String exepath( argv[ 0 ] );
+        //		String binpath( std::filesystem::path( argv[ 0 ] ).parent_path() );
+        //#ifdef ODTDEBUG
+        //		Converter::Run( "/home/rt/odtspace/media", binmediapath  );
+        //#endif
+        {
+            Modules modules;
+            modules.start();
+            Window window;
+            window.create( 800, 600, String( "ODT-Dungeon" ));
+            window.main();
+            window.destroy();
+            rc = EXIT_SUCCESS;
+            modules.stop();
+        }
+        Singleton::Shutdown();
+        PerformanceCounter::Destroy();
 #ifdef ODTDEBUG
         OdtCore::DebugCounter::Shutdown();
 #endif
@@ -54,7 +38,7 @@ int main( int argc, char** argv ) {
 		rc = EXIT_FAILURE;
 	}
     logDebug( "main.exiting rc:", rc );
-	std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) );
+    std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) ); // qtc ist mit dem stdout verzögert
     logDebug( "main.exit rc:", rc );
 	return rc;
 }
