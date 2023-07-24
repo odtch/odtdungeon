@@ -65,81 +65,6 @@ void VulkanPresenter::run(){
 				VulkanCommandBuffer* cb = new VulkanCommandBuffer();
 				cb->begin(  VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, vp );
 
-
-	//			VkCommandBufferBeginInfo beginInfo = {};
-	//			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	//			beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-	//			vkBeginCommandBuffer(commandBuffer, &beginInfo);
-				/*
-
-				VkImage image = targetImage;
-
-				// Transition the image layout to VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				VkImageMemoryBarrier imageBarrier1 = {};
-				imageBarrier1.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-				imageBarrier1.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-				imageBarrier1.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-				imageBarrier1.srcAccessMask = 0; // Memory access flags for the old layout
-				imageBarrier1.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT; // Memory access flags for the new layout
-				imageBarrier1.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-				imageBarrier1.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-				imageBarrier1.image = image;
-				imageBarrier1.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				imageBarrier1.subresourceRange.baseMipLevel = 0;
-				imageBarrier1.subresourceRange.levelCount = 1;
-				imageBarrier1.subresourceRange.baseArrayLayer = 0;
-				imageBarrier1.subresourceRange.layerCount = 1;
-
-				vkCmdPipelineBarrier(cb->vkCommandBuffer(),
-									 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-									 VK_PIPELINE_STAGE_TRANSFER_BIT,
-									 0, 0, nullptr, 0, nullptr, 1, &imageBarrier1);
-
-
-				// Specify the clear color
-				* /
-				static float r = 0;
-				logDebug( "r", r );
-				VkClearColorValue clearColor = { r, 0, 0.0f, 1.0f}; // Black color (R=0, G=0, B=0, A=1)
-				r += 1.0f / 6;
-				if( r > 1 )r = 0;
-				/ *
-
-				// Create the image subresource range
-				VkImageSubresourceRange subresourceRange = {};
-				subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				subresourceRange.baseMipLevel = 0;
-				subresourceRange.levelCount = 1;
-				subresourceRange.baseArrayLayer = 0;
-				subresourceRange.layerCount = 1;
-
-				// Record the clear color command
-				vkCmdClearColorImage( cb->vkCommandBuffer(), image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
-
-
-
-				VkImageMemoryBarrier imageBarrier2 = {};
-				imageBarrier2.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-				imageBarrier2.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL; // The current layout of the image
-				imageBarrier2.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // The desired layout for presentation
-				imageBarrier2.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT; // Memory access flags for the old layout
-				imageBarrier2.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT; // Memory access flags for the new layout
-				imageBarrier2.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-				imageBarrier2.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-				imageBarrier2.image = image; // The image you want to present
-				imageBarrier2.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				imageBarrier2.subresourceRange.baseMipLevel = 0;
-				imageBarrier2.subresourceRange.levelCount = 1;
-				imageBarrier2.subresourceRange.baseArrayLayer = 0;
-				imageBarrier2.subresourceRange.layerCount = 1;
-
-				vkCmdPipelineBarrier(cb->vkCommandBuffer(),
-									 VK_PIPELINE_STAGE_TRANSFER_BIT,
-									 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-									 0, 0, nullptr, 0, nullptr, 1, &imageBarrier2);
-									 */
-
 				// Create a render pass with the clear color
 				VkRenderPassBeginInfo renderPassBeginInfo = {};
 				renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -181,34 +106,8 @@ void VulkanPresenter::run(){
 
 				cb->destroy();
 				odelete( cb );
-	//			// Submit the command buffer to the graphics queue for execution
-	//			VkSubmitInfo submitInfo = {};
-	//			submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	//			submitInfo.commandBufferCount = 1;
-	//			submitInfo.pCommandBuffers = &commandBuffer;
-
-	//			// Create a fence for synchronization
-	//			VkFence fence;
-	//			VkFenceCreateInfo fenceCreateInfo = {};
-	//			fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-	//			vkCreateFence(device, &fenceCreateInfo, nullptr, &fence);
-
-	//			// Submit the command buffer
-	//			vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence);
-
-	//			// Wait for the command buffer to finish executing
-	//			vkWaitForFences(device, 1, &fence, VK_TRUE, UINT64_MAX);
-
-	//			// Clean up the fence
-	//			vkDestroyFence(device, fence, nullptr);
-
-
 			}
-
 			_state = Presenting;
-	//			_prevRenderTask.clear();
-	//			//	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-	//		}
 			break;
 		case Presenting:
 			//logDebug( "pres" );
@@ -230,8 +129,6 @@ void VulkanPresenter::run(){
 			throw std::runtime_error( "VulkanPresenter::run invalid state" );
 			break;
 		}
-
-		//sleep_ms(1300);
 	}
 	if( vp ){
 		vp->destroy();
@@ -240,8 +137,7 @@ void VulkanPresenter::run(){
 	destroyFramebuffer();
 	destroyDevice();
 }
-void VulkanPresenter::createDevice()
-{
+void VulkanPresenter::createDevice(){
 	assert( _vulkan == null );
 	_vulkan = new Vulkan();
 	VulkanRequirements requirements;
@@ -257,7 +153,7 @@ void VulkanPresenter::createDevice()
 	getRequirements( requirements );
 	assert(_instance == null);
 	_instance = new VulkanInstance();
-	_instance->create("OdtVulkanPresenter", requirements);
+	_instance->create( _window->title(), requirements );
 	{
 		requirements.requireDeviceExtension( VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME );
 		assert(_surface == null);

@@ -77,8 +77,8 @@ VulkanInstance::~VulkanInstance(){
 	ASSERT( _instance == nullptr );
 	ASSERT( _physicalDevices.size() == 0 );
 }
-void VulkanInstance::create( const char* applicationName, const VulkanRequirements& requirements ){
-	assert( applicationName );
+void VulkanInstance::create( const String& applicationName, const VulkanRequirements& requirements ){
+	assert( !applicationName.isEmpty() );
 	uint32_t apiVersion = VK_API_VERSION_1_0;
 	std::vector<const char*> requiredLayers;
 	std::vector<const char*> requiredExtensions;
@@ -125,7 +125,7 @@ void VulkanInstance::create( const char* applicationName, const VulkanRequiremen
 		VkApplicationInfo appInfo;
 		memset( &appInfo, 0, sizeof( appInfo ) );
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-		appInfo.pApplicationName = applicationName;
+		appInfo.pApplicationName = applicationName.asCStr();
 		appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 		appInfo.pEngineName = "odt.ch";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);

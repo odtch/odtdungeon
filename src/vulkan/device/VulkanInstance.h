@@ -37,7 +37,7 @@ public:
 	VulkanInstance();
 	~VulkanInstance();
 public:
-	void create( const char* applicationName, const VulkanRequirements& requirements );
+	void create( const String& applicationName, const VulkanRequirements& requirements );
 	void destroy();
 public:
 	const VkInstance& vkInstance() const{ assert( _instance ); return _instance; }

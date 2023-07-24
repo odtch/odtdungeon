@@ -15,14 +15,14 @@
 
 //class Resources;
 
-//class Resource;
+class Resource;
 //class ResourceType;
 //class ResourceTypes;
 //class ResourceReader;
 //class ResourceWriter;
-//class Image;
-//class Texture;
-//class Material;
+class Image;
+class Texture;
+class Material;
 ////class MaterialAlternatives;
 //class AbstractMesh;
 //class MeshModel;

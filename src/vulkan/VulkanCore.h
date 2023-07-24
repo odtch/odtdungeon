@@ -9,7 +9,7 @@
 //#include "utils/OdtUtils.h"
 //#include "window/WindowCore.h"
 //#include "math/OdtMath.h"
-//#include "resource/ResourceCore.h"
+#include "resource/ResourceCore.h"
 //#include "renderer/RenderCore.h"
 
 #define VK_CHECK_RESULT( f ){ \
