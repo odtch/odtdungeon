@@ -6,17 +6,20 @@
 #include "window/Window.h"
 #include "vulkan/raytracer/VulkanRaytracer.h"
 #include "dungeon/DungeonScene.h"
+#include "converter/Converter.h"
 
 int main( int argc, char** argv ) {
     logInfo( "odtdungeon" );
 	int rc;
 	try {
-        //		srand( time( NULL ) );
-        //		//String exepath( argv[ 0 ] );
-        //		String binpath( std::filesystem::path( argv[ 0 ] ).parent_path() );
-        //#ifdef ODTDEBUG
-        //		Converter::Run( "/home/rt/odtspace/media", binmediapath  );
-        //#endif
+		srand( time( NULL ) );
+		assert( 0 < argc );
+		//String exepath( argv[ 0 ] );
+		//String binpath( std::filesystem::path( argv[ 0 ] ).parent_path() );
+		//logDebug( exepath ); //, binpath );
+		#ifdef ODTDEBUG
+				Converter::Run();
+		#endif
         {
             Modules modules;
             modules.start();

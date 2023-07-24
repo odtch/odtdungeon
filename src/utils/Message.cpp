@@ -46,8 +46,14 @@ void MessageQueue::receive( MessageType type, void* p1, void* p2, void* sender )
 MessageListeners::MessageListeners( uint max_listener_count )
 	:_listeners( max_listener_count )
 {
+	for( int l = 0; l < _listeners.size(); l++ ){
+		_listeners[ l ] = null;
+	}
 }
 MessageListeners::~MessageListeners(){
+	for( int l = 0; l < _listeners.size(); l++ ){
+		_listeners[ l ] = null;
+	}
 }
 void MessageListeners::add( MessageListener* listener ){
 	assert( listener );
