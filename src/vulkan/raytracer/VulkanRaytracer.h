@@ -100,6 +100,7 @@ public:
 	virtual MeshPNT* createDynamicMeshPNT( const String& name ) override;
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) override;
+	virtual void addLight( RenderLayer* layer, RenderLight* light ) override;
 protected:
 	virtual void getRequirements( VulkanRequirements& requirements ) override;
 	virtual void createDevice() override;

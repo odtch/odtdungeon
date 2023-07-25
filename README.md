@@ -25,3 +25,4 @@ Summer week 2023, have fun and enjoy
 - globals.data mv private
 - rm dependencies of mesh to vulkan
 - VulkanMesh extends Mesh
+- render-lights reorg

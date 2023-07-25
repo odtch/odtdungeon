@@ -10,3 +10,4 @@ class Renderer;
 class RenderLayer;
 class RenderInstance;
 class RenderInstancePNT;
+class RenderLight;

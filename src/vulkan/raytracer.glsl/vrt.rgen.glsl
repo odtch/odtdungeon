@@ -47,8 +47,7 @@ vec4 calcPixelColor( float pixelx, float pixely ){
 			return bc;
 
 	}
-	return vec4( 1, 0, 1, 1 );
-	/* * /
+	/* */
 //	if( pixelx < 256 && pixely < 256 ){
 //		int texture_index = 9;
 //		vec2 texture_coord = vec2( pixelx / 256, pixely / 256 );
@@ -60,7 +59,7 @@ vec4 calcPixelColor( float pixelx, float pixely ){
 	uint layer_index = 0;
 	vec4 color = ORayResolve( vec2( pixelx, pixely ), layer_index, camera_position, camera_direction );
 	return color;
-	*/
+	/* */
 }
 void main(){
 	const ivec2 resolution = imageSize(storageImage);

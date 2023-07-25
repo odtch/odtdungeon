@@ -14,6 +14,7 @@
 #include "vulkan/as/VulkanAccelerationStructureExtension.h"
 #include "utils/File.h"
 #include "renderer/RenderLayer.h"
+#include "renderer/RenderLight.h"
 
 class xRenderLayer;
 class xDummyRenderInstancePNT : public RenderInstancePNT
@@ -30,11 +31,12 @@ class xRenderLayer : public RenderLayer
 {
 public:
 	List<xDummyRenderInstancePNT*> _instances;
+	List<RenderLight*> _lights;
 public:
 	explicit xRenderLayer(){}
-	virtual ~xRenderLayer(){
+	virtual ~xRenderLayer() override{
 		_instances.deleteAll();
-
+		_lights.deleteAll();
 	}
 
 };
@@ -87,6 +89,9 @@ RenderInstancePNT* VulkanRaytracer::createInstance( RenderLayer* layer, const Po
 	RenderInstancePNT* instance = new xDummyRenderInstancePNT( asserted( dynamic_cast<xRenderLayer*>( layer) ), posori, mesh, material );
 	_queue.post( VulkanRenderInstancePNTCreated, instance, null, this );
 	return instance;
+}
+void VulkanRaytracer::addLight( RenderLayer* layer, RenderLight* light ){
+	_queue.post( VulkanLightAdded, layer, light, this );
 }
 void VulkanRaytracer::getRequirements( VulkanRequirements& requirements ){
 	requirements.requireApiVersion( VK_API_VERSION_1_2 );
@@ -232,6 +237,9 @@ bool VulkanRaytracer::handle( const Message& message ){
 		i->_layer->_instances.add( i );
 		}
 		return true;
+	case VulkanLightAdded:
+		((xRenderLayer*)message.p1)->_lights.add( (RenderLight*) message.p2 );
+		return true;
 	default:
 		logError( "VulkanRaytracer unhandled message", message.type );
 		ASSERT( false );
@@ -244,6 +252,7 @@ void VulkanRaytracer::startLoadData(){
 //	for( RenderLayer* layer : _layers ){
 //		layer->prerender();
 //	}
+	_globals->begin();
 	_tasks.buildTLAS.clear();
 	_meshLoaderImmediate.reinit();
 //	_meshLoaderBackground.preTick();
@@ -280,7 +289,11 @@ void VulkanRaytracer::startLoadData(){
 //		} else {
 			layerdata.translucent_layer_index = -1;
 //		}
-//		if( layer->hasNextLayer() ){
+		if( layer->hasNextLayer() == false ){
+			layerdata.next_layer_index = -1;
+			layerdata.next_camera_action = 0;
+		} else {
+			assert( false );
 //			layerdata.next_layer_index = layer->nextLayer()->index();
 //			assert( 0 < layerdata.next_layer_index );
 //			layerdata.next_camera_action = layer->nextCameraAction();
@@ -301,10 +314,7 @@ void VulkanRaytracer::startLoadData(){
 //				_globals->_data.layers_next_camera_transform[ layerindex ] = Mat4::Translation( layer->nextCamera()->position() ).asGlm();
 //				_globals->_data.layers_next_camera_transform[ layerindex ] = layer->nextCamera()->posori().matrix().asGlm();
 //			}
-//		} else {
-//			layerdata.next_layer_index = -1;
-//			layerdata.next_camera_action = 0;
-//		}
+		}
 	}
 	{
 		_globals->_data.instance_count = _instances.count();
@@ -587,33 +597,33 @@ void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata
 //#endif
 			const Mat4& transform = renderable->posori().matrix();
 			uint32_t instanceIndex = _instances.add( transform, meshIndex, materialIndex, renderable->color(), renderable->textureOffsetY(), renderable->textureTile() );
-//			VulkanBLAS* blas = data->vulkanBLAS();
-//			ASSERT( blas );
+			VulkanBLAS* blas = data->vulkanBLAS();
+			ASSERT( blas );
 //			//auto blas = _blases.blasesArray.at( meshIndex );
 //			//logDebug( "Raytracer add", instanceIndex, materialIndex, renderable->posori().map( Vec3::Null ) );
-//			tlas->add( transform,
-//								instanceIndex,
-//								255, //material->raytracingFlags(), // mask
-//								0,  // shaderBindingTableRecordOffset
-//								0, // flags: VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance
-//								blas
-//								);
+			tlas->add( transform,
+								instanceIndex,
+								255, //material->raytracingFlags(), // mask
+								0,  // shaderBindingTableRecordOffset
+								0, // flags: VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance
+								blas
+								);
 //		} else {
 //			assert( false );
 		}
 	}{
 //		int todo_load_mb_task_is_wohl_der_falsche;
-//		tlas->addRebuild( _meshLoaderImmediate.loadMBTask(), _tasks.buildTLAS );
+		tlas->addRebuild( _meshLoaderImmediate.loadMBTask(), _tasks.buildTLAS );
 //	}{
-//		layerdata.first_light_index = _globals->_data.light_count;
+		layerdata.first_light_index = _globals->_data.light_count;
 		layerdata.light_count = 0;
-//		for( RenderLight* light : layer->lights() ){
-//			_lights.set( _globals->_data.light_count, *light );
-//			_globals->_data.light_count++;
-//			layerdata.light_count++;
-//		}
+		for( RenderLight* light : layer->_lights ){
+			_lights.set( _globals->_data.light_count, *light );
+			_globals->_data.light_count++;
+			layerdata.light_count++;
+		}
 //	}{
-//		layerdata.first_decal_index = _globals->_data.decal_count;
+		layerdata.first_decal_index = _globals->_data.decal_count;
 		layerdata.decal_count = 0;
 //		for( Decal* decal : layer->decals() ){
 //			_globals->addDecal( *decal, _textures );

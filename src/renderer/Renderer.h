@@ -19,4 +19,5 @@ public:
     virtual MeshPNT* createDynamicMeshPNT( const String& name ) = 0;
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) = 0;
+	virtual void addLight( RenderLayer* layer, RenderLight* light ) = 0;
 };

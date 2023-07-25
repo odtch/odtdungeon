@@ -40,6 +40,11 @@ void VulkanRaytracerGlobals::updateData(){
 			if( mi < VuklanRaytracerGlobalsData_MaxMaterialCount ){
 				VulkanMaterialData& data = _data.materials[ mi ];
 				data.color = material->color().asGlm();
+//				data.flags = material->flags();
+//				data.texture1Index = material->texture().;
+//				data.tileCountX;
+//				data.tileCountY;
+//				data.reflection;
 			} else {
 				logError( "VulkanRaytracerGlobals too many materials" );
 			}
@@ -76,11 +81,11 @@ void VulkanRaytracerGlobals::updateBuffer( VulkanTask& task ){
 	//_buffer.load( *_commandPool, &data, sizeof( data ) );
 //}
 }
-//void VulkanRaytracerGlobals::begin(){
-//	data.layer_count = 0;
-//	data.decal_count = 0;
-//	data.light_count = 0;
-//}
+void VulkanRaytracerGlobals::begin(){
+	_data.layer_count = 0;
+	_data.decal_count = 0;
+	_data.light_count = 0;
+}
 //void VulkanRaytracerGlobals::addDecal( const Decal& decal, VulkanTextureArray& textures ){
 //	if( VulkanRaytracerDecal_MaxCount <= data.decal_count ){
 //		assert( false );

@@ -23,8 +23,8 @@ public:
 public:
 	const List<VulkanMaterial*>& materials(){ return _materials; }
 	void addMaterial( VulkanMaterial* material );
-//public:
-//	void begin();
+public:
+	void begin();
 //	void addDecal( const Decal& decal, VulkanTextureArray& textures );
 public:
 	void update( VulkanTask& task );

@@ -19,8 +19,8 @@ private:
 //	List<RenderLight*> _lights;
 //private:
 //	RenderLayer* _translucent_layer = null;
-//private:
-//	RenderLayer* _nextLayer = null;
+private:
+	RenderLayer* _nextLayer = null;
 //	uint _nextCameraAction = 0;
 //	const Camera* _nextCamera = null;
 //	SceneCameraNode* _nextCameraNode = null;
@@ -58,8 +58,8 @@ public:
 //	bool hasTranslucentLayer() const{ return _translucent_layer != null; }
 //	RenderLayer* translucentLayer() const{ ASSERT( _translucent_layer ); return _translucent_layer; }
 //	RenderLayer* createTranslucentLayer();
-//public:
-//	bool hasNextLayer() const{ return _nextLayer != null; }
+public:
+	bool hasNextLayer() const{ return _nextLayer != null; }
 //	RenderLayer* nextLayer() const{ assert( _nextLayer ); return _nextLayer; }
 //	void setNextLayer( RenderLayer* nextlayer );
 //public:
