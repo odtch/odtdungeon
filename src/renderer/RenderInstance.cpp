@@ -4,6 +4,7 @@
 
 RenderInstance::RenderInstance( const PosOri& posori )
     :_posori( posori )
+	,_color( 1, 1, 1, 1 )
 {
 }
 RenderInstance::~RenderInstance(){

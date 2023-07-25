@@ -42,9 +42,9 @@ ORayResult ORayCalc( in ORay ray ){
 		if( 0 != ( materials[ pld.hit.material_index ].flags & MaterialFlag_NoLightAffected ) ){
 		} else {
 			vec4 light_color = OCalcLights( ray.layer_index, result.hit_position, result.hit_normal );
-			result.color.rgb *= light_color.rgb;
+//			result.color.rgb *= light_color.rgb;
 		}
-result.color = vec4( 0, 0, 1, 1 );
+//result.color = vec4( 0, 0, 1, 1 );
 	} else {
 		result.has_hit = false;
 		result.color = vec4( 0 );

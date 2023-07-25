@@ -22,7 +22,7 @@ void DungeonScene::run(){
         material->setColor( Vec4( 0.5f, 0.5f, 0.5f, 1.0f ) );
 		Texture* texture_red = renderer().loadTexture( "test_red" );
         MeshPNT* mesh = renderer().createDynamicMeshPNT( "dungeonboxmesh" );
-		MeshBuilder::CreateBox( *mesh, PosOri(), Vec3( 200, 400, 1 ), VertexPNT() );
+		MeshBuilder::CreateBox( *mesh, PosOri().translated( Vec3( 800, 600, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ), Vec3( 600, 400, 1 ), VertexPNT() );
 		renderer().createInstance( layer, PosOri(), mesh, material );
     }
     Scene::run();
