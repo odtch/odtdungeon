@@ -16,6 +16,7 @@ void DungeonScene::run(){
 		Camera* camera = new Camera();
 		RenderLayer* layer = renderer().createLayer();
 		renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.8f, 0.5f, 0.5f, 1.0f ) ) );
+		renderer().addLight( layer, RenderLight::CreateDirectional( Vec3( 0.1f, 0.1f, -1.0f ).normalized(), vec4( 0.5f, 0.8f, 0.5f, 1.0f ) ) );
 
         Material* material = renderer().createMaterial( "dungeonboxmaterial" );
         material->setColor( Vec4( 0.5f, 0.5f, 0.5f, 1.0f ) );

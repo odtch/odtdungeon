@@ -60,6 +60,7 @@ vec4 OCalcLights( uint layer_index, vec3 position, vec3 normal ){
 	for( uint l = 0; l < globals.layers[ layer_index ].light_count; l++ ){
 		uint light_index = globals.layers[ layer_index ].first_light_index + l;
 		light_color += OCalcLight( layer_index, light_index, position, normal );
+//		light_color[ l ] += 0.5f;
 	}
 	return light_color;
 }
