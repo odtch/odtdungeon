@@ -27,15 +27,15 @@ void AbstractMesh::setModified( ModificationState modificationState ){
 //	assert( _vulkanmesh == null );
 //	_geometryFlags = geometryFlags;
 //}
-//void AbstractMesh::setVulkanMesh( VulkanMesh* vulkanmesh ){
-//	if( vulkanmesh ){
-//		assert( _vulkanmesh == null );
-//		_vulkanmesh = vulkanmesh;
-//	} else {
-//		assert( _vulkanmesh != null );
-//		_vulkanmesh = null;
-//	}
-//}
+void AbstractMesh::setVulkanMesh( VulkanMesh* vulkanmesh ){
+	if( vulkanmesh ){
+		assert( _vulkanmesh == null );
+		_vulkanmesh = vulkanmesh;
+	} else {
+		assert( _vulkanmesh != null );
+		_vulkanmesh = null;
+	}
+}
 //void AbstractMesh::collectPreLoad( List<AbstractMesh*>& meshes ){
 //	meshes.add( this );
 //}

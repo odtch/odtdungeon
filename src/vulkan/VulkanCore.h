@@ -65,6 +65,7 @@ class VulkanMesh;
 class VulkanMeshData;
 class VulkanMeshDataPointer;
 class VulkanMeshPool;
+class VulkanMaterial;
 
 class VulkanSurface;
 
@@ -94,6 +95,7 @@ class VulkanRaytracer;
 class VulkanRaytracerGlobals;
 class VulkanRaytracingPipelineProperties;
 class VulkanRaytracingShaderBindingTable;
+class VulkanPipelineRaytracerExtension;
 class VulkanAccelerationStructureExtension;
 class VulkanAccelerationStructure;
 class VulkanBLAS;

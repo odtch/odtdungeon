@@ -9,9 +9,9 @@
 #include "VulkanSemaphore.h"
 #include "vulkan/resource/VulkanBuffer.h"
 #include "vulkan/resource/VulkanImage.h"
-//#include "vulkan/pipeline/VulkanPipeline.h"
-//#include "vulkan/pipeline/VulkanPipelineLayout.h"
-//#include "vulkan/descriptor/VulkanDescriptorSet.h"
+#include "vulkan/pipeline/VulkanPipeline.h"
+#include "vulkan/pipeline/VulkanPipelineLayout.h"
+#include "vulkan/descriptor/VulkanDescriptorSet.h"
 
 VulkanCommandBuffer::VulkanCommandBuffer()
 	:_pool( nullptr )
@@ -55,18 +55,18 @@ void VulkanCommandBuffer::reset(){
 void VulkanCommandBuffer::end(){
 	Vulkan::check( vkEndCommandBuffer( vkCommandBuffer() ), "vkEndCommandBuffer failed" );
 }
-//void VulkanCommandBuffer::bindPipeline( VkPipelineBindPoint pipelineBindPoint, VulkanPipeline* pipeline ){
-//	assert( pipeline );
-//	vkCmdBindPipeline( vkCommandBuffer(), pipelineBindPoint, pipeline->vkPipeline() );
-//}
-//void VulkanCommandBuffer::bindDescriptorSet( VkPipelineBindPoint pipelineBindPoint, VulkanPipelineLayout* pipelineLayout, VulkanDescriptorSet* descriptorSet ){
-//	assert( pipelineLayout );
-//	assert( descriptorSet );
-//	vkCmdBindDescriptorSets( vkCommandBuffer(), pipelineBindPoint,
-//							 pipelineLayout->vkPipelineLayout(),
-//							 0, 1, &descriptorSet->vkDescriptorSet(),
-//							 0, nullptr );
-//}
+void VulkanCommandBuffer::bindPipeline( VkPipelineBindPoint pipelineBindPoint, VulkanPipeline* pipeline ){
+	assert( pipeline );
+	vkCmdBindPipeline( vkCommandBuffer(), pipelineBindPoint, pipeline->vkPipeline() );
+}
+void VulkanCommandBuffer::bindDescriptorSet( VkPipelineBindPoint pipelineBindPoint, VulkanPipelineLayout* pipelineLayout, VulkanDescriptorSet* descriptorSet ){
+	assert( pipelineLayout );
+	assert( descriptorSet );
+	vkCmdBindDescriptorSets( vkCommandBuffer(), pipelineBindPoint,
+							 pipelineLayout->vkPipelineLayout(),
+							 0, 1, &descriptorSet->vkDescriptorSet(),
+							 0, nullptr );
+}
 //void VulkanCommandBuffer::resetWaits(){
 //	_waitCount = 0;
 //}

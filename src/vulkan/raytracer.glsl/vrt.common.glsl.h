@@ -1,7 +1,7 @@
 #ifndef VRT_COMMON_H
 #define VRT_COMMON_H
 
-#include "VulkanData.h"
+#include "vulkan/raytracer/VulkanRaytracerData.h"
 
 #define RENDER_WIDTH 800
 #define RENDER_HEIGHT 600

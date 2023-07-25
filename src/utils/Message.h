@@ -14,6 +14,10 @@ enum MessageType {
 	WindowDestroyed,
 	// Vulkan
 	VulkanMaterialCreated,
+	VulkanTextureCreated,
+	VulkanLayerCreated,
+	VulkanMeshPNTCreated,
+	VulkanRenderInstancePNTCreated,
 };
 
 struct Message {

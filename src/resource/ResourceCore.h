@@ -50,3 +50,6 @@ class Material;
 //class ObjectType;
 
 //class PhysicsShape;
+
+class BinaryFileReader;
+class BinaryFileWriter;

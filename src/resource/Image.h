@@ -37,8 +37,8 @@ public:
     //virtual ResourceType* type() const override { return Singleton::Get<ImageType>(); }
 public:
 	void create( uint width, uint height );
-//	virtual void load( BinaryFileReader& reader ) override;
-//	virtual void save( BinaryFileWriter& writer ) const override;
+	virtual void load( BinaryFileReader& reader ) override;
+	virtual void save( BinaryFileWriter& writer ) const override;
 //#ifdef ODTDEBUG
 //	void import( const String& filename );
 //	static Array2D<vec4>* Import16( const String& filename );

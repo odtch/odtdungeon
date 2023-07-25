@@ -20,12 +20,12 @@ class Material : public Resource
 	DEBUGCOUNTER( Material )
 private:
 //	uint32_t _index = 0;
-//private:
-//	uint32_t _flags = 0;
+private:
+	uint32_t _flags = 0;
 //private:
 //	bool _translucent = false;
-//private:
-//	Texture* _texture = null;
+private:
+	Texture* _texture = null;
 ////	bool _texture_has_transparency;
 ////	Texture* _emissiveTexture;
 private:
@@ -34,13 +34,13 @@ private:
 ////	vec4 _transparency;
 //	vec4 _reflection;
 private:
-//	struct TileCount { uint x = 0; uint y = 0; } _tileCount;
+	struct TileCount { uint x = 0; uint y = 0; } _tileCount;
 //private:
 //	int _viewport_index = -1;
 //public:
 //	int _raytracer_index = -1;
 public:
-//	bool _modified = true;
+	bool _modified = true;
 //private:
 //	MaterialAlternatives* _alternatives = null;
 public:
@@ -50,8 +50,8 @@ public:
 //	virtual ResourceType* type() const override { return Singleton::Get<MaterialType>(); }
 //public:
 //	uint32_t index() const{ ASSERT( _index < 201 ); return _index; }
-//public:
-//	uint32_t flags() const{ return _flags; }
+public:
+	uint32_t flags() const{ return _flags; }
 //	bool hasFlag( uint flag ) const;
 //	void setFlag( const uint flag, bool enabled = true );
 ////	MaterialType type() const{ return _type; }
@@ -73,9 +73,9 @@ public:
 //public:
 //	bool isTranslucent() const{ return _translucent; }
 //	void setTranslucent( bool translucent = true );
-//public:
-//	bool hasTexture() const{ return _texture != null; }
-//	Texture* texture() const{ assert( hasTexture() ); return _texture; }
+public:
+	bool hasTexture() const{ return _texture != null; }
+	Texture* texture() const{ assert( hasTexture() ); return _texture; }
 //	void setTexture( Texture* texture );
 ////	void setTextureHasTransparency( bool f );
 ////public:
@@ -91,11 +91,11 @@ public:
 //public:
 //	const vec4& reflection() const{ return _reflection; }
 //	void setReflection( const vec4& reflection );
-//public:
-//	bool hasTileCount() const{ return ( 0 < _tileCount.x ) || ( 0 < _tileCount.y ); }
-//	const TileCount& tileCount() const{ ASSERT( hasTileCount() ); return _tileCount; }
-//	uint tileCountX() const{ return _tileCount.x; }
-//	uint tileCountY() const{ return _tileCount.y; }
+public:
+	bool hasTileCount() const{ return ( 0 < _tileCount.x ) || ( 0 < _tileCount.y ); }
+	const TileCount& tileCount() const{ ASSERT( hasTileCount() ); return _tileCount; }
+	uint tileCountX() const{ return _tileCount.x; }
+	uint tileCountY() const{ return _tileCount.y; }
 //	void setTileCount( const TileCount& tileCount );
 //	void setTileCount( uint x, uint y );
 ////public:
@@ -107,6 +107,9 @@ public:
 //public:
 //	virtual void load( BinaryFileReader& reader ) override;
 //	virtual void save( BinaryFileWriter& writer ) const override;
+public:
+	bool isModified() const{ return _modified; }
+	void setModified( bool modified = true );
 //public:
 //	friend class Collection;
 };

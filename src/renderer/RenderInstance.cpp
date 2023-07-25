@@ -11,6 +11,8 @@ RenderInstance::~RenderInstance(){
 
 RenderInstancePNT::RenderInstancePNT( const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material )
     :RenderInstance( posori )
+	,_mesh( asserted( mesh ) )
+	,_material( asserted( material ) )
 {
 }
 RenderInstancePNT::~RenderInstancePNT(){

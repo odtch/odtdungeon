@@ -36,8 +36,8 @@ public:
 	Image* image() const{ assert( _image ); return _image; }
 	void setImage( Image* image );
 public:
-//	virtual void load( BinaryFileReader& reader ) override;
-//	virtual void save( BinaryFileWriter& writer ) const override;
+	virtual void load( BinaryFileReader& reader ) override;
+	virtual void save( BinaryFileWriter& writer ) const override;
 //	bool isFile() const{ return !_filename.isEmpty(); }
 //	const String& filename() const{ ASSERT( isFile() ); return _filename; }
 //public:

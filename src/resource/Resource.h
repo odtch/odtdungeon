@@ -20,9 +20,9 @@ public:
 //	void setId( const String& id );
 public:
 //    virtual ResourceType* type() const{ assert( false ); }
-//public:
-//	virtual void load( BinaryFileReader& reader );
-//	virtual void save( BinaryFileWriter& writer ) const;
+public:
+	virtual void load( BinaryFileReader& reader );
+	virtual void save( BinaryFileWriter& writer ) const;
 //public:
 //	virtual void collectPreLoad( List<AbstractMesh*>& meshes ){ OUNUSED( meshes ); }
 public:

@@ -92,27 +92,27 @@ void VulkanRequirements::add( VulkanRequirement* requirement ){
 	_requirements.add( requirement );
 }
 void VulkanRequirements::requireInstanceLayer( const char *name ){
-    logDebug( "VulkanRequirements::requireInstanceLayer", name );
+	//logDebug( "VulkanRequirements::requireInstanceLayer", name );
 	add( new VulkanInstanceLayerRequirement( name ) );
 }
 void VulkanRequirements::requireInstanceExtension( const char* name ){
-    logDebug( "VulkanRequirements::requireInstanceExtension", name );
+	//logDebug( "VulkanRequirements::requireInstanceExtension", name );
     add( new VulkanInstanceExtensionRequirement( name ) );
 }
 void VulkanRequirements::requireApiVersion(uint32_t apiVersion){
-    logDebug( "VulkanRequirements::requireApiVersion", apiVersion );
+	//logDebug( "VulkanRequirements::requireApiVersion", apiVersion );
     add( new VulkanApiVersionRequirement( apiVersion ) );
 }
 void VulkanRequirements::requireDeviceExtension( const char* name ){
-    logDebug( "VulkanRequirements::requireDeviceExtension", name );
+	//logDebug( "VulkanRequirements::requireDeviceExtension", name );
     add( new VulkanDeviceExtensionRequirement( name ) );
 }
 void VulkanRequirements::requireComputeQueue(){
-    logDebug( "VulkanRequirements::requireComputeQueue" );
+	//logDebug( "VulkanRequirements::requireComputeQueue" );
     add( new VulkanComputeQueueRequirement() );
 }
 void VulkanRequirements::requirePresentQueue( VulkanSurface* surface ){
-    logDebug( "VulkanRequirements::requirePresentQueue" );
+	//logDebug( "VulkanRequirements::requirePresentQueue" );
     add( new VulkanPresentQueueRequirement( surface ) );
 }
 

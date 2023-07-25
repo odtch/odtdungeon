@@ -7,6 +7,7 @@
 //#include "resource/Resources.h"
 //#include "resource/MeshModel.h"
 //#include "resource/Texture.h"
+#include "resource/Image.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "external/stb/stb_image.h"
@@ -36,8 +37,6 @@ void Converter::run(){
 	}
 	File::CreateDirectoryIfNotExists( _targetpath );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.rgen.glsl" );
-}
-#ifdef ooold
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.rahit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.rchit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.rmiss.glsl" );
@@ -47,6 +46,9 @@ void Converter::run(){
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rahit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rchit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rmiss.glsl" );
+	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
+}
+#ifdef ooold
 
 	//compileShader( "1.1", "space/vulkan/rasterizer/VulkanRasterizerPNT.frag.glsl" );
 	//compileShader( "1.1", "space/vulkan/rasterizer/VulkanRasterizerPNT.vert.glsl" );
@@ -246,7 +248,7 @@ void Converter::compileShader( const String& vulkanLevel, const String& fn ){
     // /home/rt/vulkan/x86_64/bin/glslc --target-env=vulkan1.2 -I space/vulkan/shader -fshader-stage=compute -o /home/rt/temp/space/raytracer.comp.glsl.spv space/vulkan/shader/raytracer.comp.glsl
     cmd += "glslc --target-env=vulkan";
     cmd += vulkanLevel;
-	cmd += " -I src/vulkan";
+	cmd += " -I src";
     cmd += " -fshader-stage="; //compute
     cmd += shader_stage;
     cmd += " -o ";
@@ -261,28 +263,53 @@ void Converter::compileShader( const String& vulkanLevel, const String& fn ){
 		assert( false );
 	}
 }
-#ifdef old
-void Converter::convertImage( const String& trgpath, const String& srcpath ){
+float i16toc( stbi_us i16 ){
+	// stbi_us = unsigned short = 0 to 65535
+	float f = i16;
+	f /= 65535;
+	ASSERT( 0 <= f && f <= 1 );
+	return f;
+}
+void Converter::convertImage( const String& trgname, const String& srcpath ){
+	String trgpath = _targetpath + "/" + trgname;
 	if( File::Exists( trgpath ) )
 		return;
 	logInfo( "converting image", srcpath, trgpath );
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load( srcpath.asCStr(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha );
+	//stbi_uc* pixels = stbi_load( srcpath.asCStr(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha );
+	stbi_us* pixels = stbi_load_16( srcpath.asCStr(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha );
+	stbi_us* rgba = pixels;
 	if( !pixels ){
 		logError( "load image failed", srcpath );
 		assert( false );
 	}
-	{
-		BinaryFileWriter writer( trgpath );
-		writer.write_uint32( texWidth );
-		writer.write_uint32( texHeight );
-		int pixel_size = texWidth * texHeight * 4;
-		writer.write_uint32( pixel_size );
-		writer.write_block( pixels, pixel_size );
-		writer.close();
+	Image image( trgname );
+	image.create( texWidth, texHeight );
+	for( uint x = 0; x < texWidth; x++ ){
+		for( uint y = 0; y < texHeight; y++ ){
+			float r = i16toc( *rgba ); rgba++;
+			float g = i16toc( *rgba ); rgba++;
+			float b = i16toc( *rgba ); rgba++;
+			float a = i16toc( *rgba ); rgba++;
+			glm::vec4 c( r, g, b, a );
+			image.set( x, y, c );
+		}
 	}
+	BinaryFileWriter writer( trgpath );
+	image.save( writer );
+//	{
+//		BinaryFileWriter writer( trgpath );
+//		writer.write_uint32( texWidth );
+//		writer.write_uint32( texHeight );
+//		int pixel_size = texWidth * texHeight * 4;
+//		writer.write_uint32( pixel_size );
+//		writer.write_block( pixels, pixel_size );
+//		writer.close();
+//	}
+	writer.close();
 	stbi_image_free( pixels );
 }
+#ifdef old
 void Converter::copy( const String& trgpath, const String& srcpath ){
 	if( File::Exists( trgpath ) )
 		return;

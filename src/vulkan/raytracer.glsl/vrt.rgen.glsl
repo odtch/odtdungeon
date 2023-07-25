@@ -6,7 +6,7 @@
 #extension GL_EXT_debug_printf : require
 #include "vrt.common.glsl.h"
 #include "vrt.globals.glsl.h"
-#include "VulkanData.h"
+//#include "vulkan/raytracer/VulkanRaytracerData.h"
 
 // Binding BINDING_IMAGEDATA in set 0 is a storage image with four 32-bit floating-point channels,
 // defined using a uniform image2D variable.
@@ -23,7 +23,7 @@ layout(location = 0) rayPayloadEXT ORayPayload pld;
 vec4 calcPixelColor( float pixelx, float pixely ){
 	/*
 	color-table
-	* /
+	*/
 	if( pixelx < 256 + 40 && pixely < 100 ){
 		float px = pixelx;
 		px -= 20;
@@ -47,7 +47,8 @@ vec4 calcPixelColor( float pixelx, float pixely ){
 			return bc;
 
 	}
-	*/
+	return vec4( 1, 0, 1, 1 );
+	/* * /
 //	if( pixelx < 256 && pixely < 256 ){
 //		int texture_index = 9;
 //		vec2 texture_coord = vec2( pixelx / 256, pixely / 256 );
@@ -59,6 +60,7 @@ vec4 calcPixelColor( float pixelx, float pixely ){
 	uint layer_index = 0;
 	vec4 color = ORayResolve( vec2( pixelx, pixely ), layer_index, camera_position, camera_direction );
 	return color;
+	*/
 }
 void main(){
 	const ivec2 resolution = imageSize(storageImage);

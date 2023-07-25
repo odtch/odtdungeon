@@ -3,12 +3,13 @@
 #include "resource/Material.h"
 #include "vulkan/command/VulkanCommandPool.h"
 #include "vulkan/resource/VulkanTextureArray.h"
+#include "vulkan/resource/VulkanMaterial.h"
 #include "vulkan/command/VulkanTask.h"
 
 VulkanRaytracerGlobals::VulkanRaytracerGlobals()
 	:_commandPool( null )
 {
-	memset( &data, 0, sizeof( data ));
+	memset( &_data, 0, sizeof( _data ));
 }
 VulkanRaytracerGlobals::~VulkanRaytracerGlobals(){
 	ASSERT( _commandPool == null );
@@ -21,6 +22,59 @@ void VulkanRaytracerGlobals::create( VulkanCommandPool* commandPool ){
 void VulkanRaytracerGlobals::destroy(){
 	_buffer.clear();
 	_commandPool = null;
+	_materials.deleteAll();
+}
+void VulkanRaytracerGlobals::addMaterial( VulkanMaterial* material ){
+	assert( material );
+	assert( _materials.size()+1 < VuklanRaytracerGlobalsData_MaxMaterialCount );
+	_materials.add( material );
+}
+void VulkanRaytracerGlobals::update( VulkanTask& task ){
+	updateData();
+	updateBuffer( task );
+}
+void VulkanRaytracerGlobals::updateData(){
+	{
+		uint mi = 0;
+		for( VulkanMaterial* material : _materials ){
+			if( mi < VuklanRaytracerGlobalsData_MaxMaterialCount ){
+				VulkanMaterialData& data = _data.materials[ mi ];
+				data.color = material->color().asGlm();
+			} else {
+				logError( "VulkanRaytracerGlobals too many materials" );
+			}
+			mi++;
+		}
+	}
+}
+void VulkanRaytracerGlobals::updateBuffer( VulkanTask& task ){
+//void VulkanRaytracerGlobals::update(){
+	if( !_buffer.isCreated() ){
+		_buffer.create(
+			sizeof( _data ),
+			VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			_commandPool->device()
+		);
+	}
+	_data.sample_batch++;
+	if( _data.sample_batch < 0 || _data.sample_batch > 63 )
+		_data.sample_batch = 0;
+//	for( int v = 0; v < 3; v++ ){
+////		_data.layers[v].reserve01 = 1000 + v * 100 + 1;
+//		_data.layers[v].reserve92 = 1000 + v * 100 + 92;
+//		_data.layers[v].reserve93 = 1000 + v * 100 + 93;
+//		_data.layers[v].last = 1000 + v * 100 + 99;
+//	}
+//	for( int v = 0; v < _data.layer_count; v++ ){
+//		//logDebug( "viewport", v, "p:", _data.viewports[v].camera_position, "d:", _data.viewports[v].camera_direction, "p:", _data.viewports[v].camera_projection, "t:", _data.viewports[v].tlas_index );
+//	}
+	_data.reserve92 = 1092;
+	_data.reserve93 = 1093;
+	_data.last = 1094;
+	task.addLoadBuffer( _buffer, &_data, sizeof( _data ) );
+	//_buffer.load( *_commandPool, &data, sizeof( data ) );
+//}
 }
 //void VulkanRaytracerGlobals::begin(){
 //	data.layer_count = 0;
@@ -64,32 +118,5 @@ void VulkanRaytracerGlobals::destroy(){
 
 
 //	v.last = 2071;
-//}
-//void VulkanRaytracerGlobals::update( VulkanTask& task ){
-//	if( !_buffer.isCreated() ){
-//		_buffer.create(
-//			sizeof( data ),
-//			VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-//			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-//			_commandPool->device()
-//		);
-//	}
-//    data.sample_batch++;
-//    if( data.sample_batch < 0 || data.sample_batch > 63 )
-//        data.sample_batch = 0;
-//	for( int v = 0; v < 3; v++ ){
-////		data.layers[v].reserve01 = 1000 + v * 100 + 1;
-//		data.layers[v].reserve92 = 1000 + v * 100 + 92;
-//		data.layers[v].reserve93 = 1000 + v * 100 + 93;
-//		data.layers[v].last = 1000 + v * 100 + 99;
-//	}
-////	for( int v = 0; v < data.layer_count; v++ ){
-////		//logDebug( "viewport", v, "p:", data.viewports[v].camera_position, "d:", data.viewports[v].camera_direction, "p:", data.viewports[v].camera_projection, "t:", data.viewports[v].tlas_index );
-////	}
-//	data.reserve92 = 1092;
-//	data.reserve93 = 1093;
-//	data.last = 1094;
-//	task.addLoadBuffer( _buffer, &data, sizeof( data ) );
-//	//_buffer.load( *_commandPool, &data, sizeof( data ) );
 //}
 

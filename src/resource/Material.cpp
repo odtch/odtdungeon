@@ -86,7 +86,12 @@ Material::~Material(){
 ////}
 void Material::setColor( const Vec4& color ){
     _color = color;
-//	_modified = true;
+	setModified();
+	//	_modified = true;
+}
+
+void Material::setModified( bool modified ){
+	_modified = modified;
 }
 ////void Material::setTransparency( const glm::vec4& transparency ){
 ////	_transparency = transparency;

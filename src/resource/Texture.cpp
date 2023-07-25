@@ -53,15 +53,15 @@ void Texture::setImage( Image* image ){
 	assert( image );
 	_image = image;
 }
-//void Texture::load( BinaryFileReader& reader ){
+void Texture::load( BinaryFileReader& reader ){
 //	Resource::load( reader );
-//	assert( _image == null );
+	assert( _image == null );
 //	ResourceReader* rr = asserted( dynamic_cast<ResourceReader*>( &reader ) );
 //	_image = asserted( dynamic_cast<Image*>( rr->read_reference() ) );
-//}
-//void Texture::save( BinaryFileWriter& writer ) const {
+}
+void Texture::save( BinaryFileWriter& writer ) const {
 //	Resource::save( writer );
-//	assert( _image );
+	assert( _image );
 //	ResourceWriter* rw = asserted( dynamic_cast<ResourceWriter*>( &writer ) );
 //	rw->write_reference( _image );
-//}
+}

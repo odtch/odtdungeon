@@ -14,10 +14,11 @@ file(GLOB source_files CONFIGURE_DEPENDS
     "src/*/*.h"
     "src/*/*/*.cpp"
     "src/*/*/*.h"
-    "src/vulkan/rasterizer/*.glsl"
-    "src/vulkan/raycompute/*.glsl"
-    "src/vulkan/raytracer/shader/*"
-    "src/vulkan/raytracer/sensorshader/*"
+	#"src/vulkan/rasterizer/*.glsl"
+	#"src/vulkan/raycompute/*.glsl"
+	#"src/vulkan/raytracer/shader/*"
+	"src/vulkan/raytracer.glsl/*"
+	#"src/vulkan/raytracer/sensorshader/*"
 )
 
 include_directories(

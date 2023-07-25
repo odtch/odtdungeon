@@ -1,6 +1,7 @@
 #include "stdodt.h"
 
 #include "Image.h"
+#include "utils/File.h"
 //#include "ResourceStorage.h"
 
 //const char* ImageType::Id = "ImageType";
@@ -82,31 +83,31 @@ void Image::create( uint width, uint height ){
 	uint size = _width * _height * 4;
 	_pixels = new unsigned char[ size ];
 }
-//void Image::load( BinaryFileReader& reader ){
+void Image::load( BinaryFileReader& reader ){
 //	Resource::load( reader );
-//	assert( _width == 0 && _height == 0 && _pixels == null );
-//	uint8_t magicnumber = reader.read_uint8();
-//	assert( magicnumber == 'i' );
-//	_width = reader.read_uint32();
-//	_height = reader.read_uint32();
-//	uint32_t texSize = reader.read_uint32();
-//	assert( texSize == _width * _height * 4 );
-//	_pixels = new unsigned char[ texSize ];
-//	reader.read_block( _pixels, texSize );
-//	magicnumber = reader.read_uint8();
-//	assert( magicnumber == 'I' );
-//}
-//void Image::save( BinaryFileWriter& writer ) const {
+	assert( _width == 0 && _height == 0 && _pixels == null );
+	uint8_t magicnumber = reader.read_uint8();
+	assert( magicnumber == 'i' );
+	_width = reader.read_uint32();
+	_height = reader.read_uint32();
+	uint32_t texSize = reader.read_uint32();
+	assert( texSize == _width * _height * 4 );
+	_pixels = new unsigned char[ texSize ];
+	reader.read_block( _pixels, texSize );
+	magicnumber = reader.read_uint8();
+	assert( magicnumber == 'I' );
+}
+void Image::save( BinaryFileWriter& writer ) const {
 //	Resource::save( writer );
-//	assert( 0 < _width && 0 < _height && _pixels != null );
-//	writer.write_uint8( 'i' );
-//	writer.write_uint32( _width );
-//	writer.write_uint32( _height );
-//	uint32_t texSize = _width * _height * 4;
-//	writer.write_uint32( texSize );
-//	writer.write_block( _pixels, texSize );
-//	writer.write_uint8( 'I' );
-//}
+	assert( 0 < _width && 0 < _height && _pixels != null );
+	writer.write_uint8( 'i' );
+	writer.write_uint32( _width );
+	writer.write_uint32( _height );
+	uint32_t texSize = _width * _height * 4;
+	writer.write_uint32( texSize );
+	writer.write_block( _pixels, texSize );
+	writer.write_uint8( 'I' );
+}
 //#ifdef ODTDEBUG
 //#include "external/stb/stb_image.h"
 //void Image::import( const String& filename ){

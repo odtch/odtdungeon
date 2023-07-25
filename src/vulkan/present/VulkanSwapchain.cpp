@@ -90,17 +90,17 @@ void VulkanSwapchain::create( const VkExtent2D& extent, VkImageUsageFlags imageU
 }
 void VulkanSwapchain::destroy(){
 	for( uint32_t i = 0; i < _swapchainImageViews.size(); i++ ){
-		logDebug( "VulkanSwapchain::destroy iv", i );
+		//logDebug( "VulkanSwapchain::destroy iv", i );
 		vkDestroyImageView( device()->vkDevice(), _swapchainImageViews[i], nullptr );
 	}
-	logDebug( "VulkanSwapchain::destroy sivs" );
+	//logDebug( "VulkanSwapchain::destroy sivs" );
 	_swapchainImageViews.clear();
 	if( _vkSwapchain ){
-		logDebug( "VulkanSwapchain::destroy sc" );
+		//logDebug( "VulkanSwapchain::destroy sc" );
 		vkDestroySwapchainKHR( device()->vkDevice(), _vkSwapchain, nullptr );
 		_vkSwapchain = nullptr;
 	}
-	logDebug( "VulkanSwapchain::destroyed" );
+	//logDebug( "VulkanSwapchain::destroyed" );
 }
 size_t VulkanSwapchain::size() const {
 	assert( _vkSwapchain );

@@ -1,12 +1,7 @@
 #pragma once
 
-#include "utils/Debugging.h"
-#include "utils/Logger.h"
+#include "RenderCore.h"
 #include "utils/Threading.h"
-#include "math/PosOri.h"
-#include "resource/Material.h"
-#include "resource/Mesh.h"
-
 #include "RenderInstance.h"
 
 class Renderer : public Thread
@@ -18,8 +13,10 @@ public:
 	virtual ~Renderer();
 public:
     virtual Material* createMaterial( const String& name ) = 0;
+	virtual Texture* loadTexture( const String& name ) = 0;
 public:
+	virtual RenderLayer* createLayer() = 0;
     virtual MeshPNT* createDynamicMeshPNT( const String& name ) = 0;
 public:
-    virtual RenderInstancePNT* createInstance( const PosOri& posori, MeshPNT* mesh, Material* material ) = 0;
+	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) = 0;
 };

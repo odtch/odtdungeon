@@ -7,6 +7,8 @@
 #include "Vertex.h"
 //#include "space/vulkan/resource/VulkanMeshBuffer.h"
 
+class VulkanMesh; // todo: rm
+
 class AbstractMesh : public Resource
 {
 	DEBUGCOUNTER(AbstractMesh)
@@ -25,13 +27,11 @@ protected:
 //	};
 //private:
 //	UpdateType _updateType = UpdateImmediate;
-//private:
-//	VkGeometryFlagsKHR _geometryFlags =
-//			VK_GEOMETRY_OPAQUE_BIT_KHR // indicates that this geometry does not invoke the any-hit shaders even if present in a hit group.
-//			// VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR // indicates that the implementation must only call the any-hit shader a single time for each primitive in this geometry. If this bit is absent an implementation may invoke the any-hit shader more than once for this geometry.
-//			;
-//private:
-//	VulkanMesh* _vulkanmesh = null;
+private:
+	VkGeometryFlagsKHR _geometryFlags = VK_GEOMETRY_OPAQUE_BIT_KHR; // indicates that this geometry does not invoke the any-hit shaders even if present in a hit group.
+			// VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR // indicates that the implementation must only call the any-hit shader a single time for each primitive in this geometry. If this bit is absent an implementation may invoke the any-hit shader more than once for this geometry.
+private:
+	VulkanMesh* _vulkanmesh = null;
 public:
     explicit AbstractMesh( const String& name );
 	virtual ~AbstractMesh() override;
@@ -51,13 +51,13 @@ public:
 	virtual uint32_t abstractIndexCount() const = 0;
 	virtual uint32_t abstractIndexMemorySize() const { return abstractIndexCount() * sizeof( uint32_t ); }
 	virtual const void* abstractIndexData() const = 0;
-//public:
-//	VkGeometryFlagsKHR geometryFlags() const { return _geometryFlags; }
-//	void setGeometryFlags( VkGeometryFlagsKHR geometryFlags );
-//public:
-//	bool hasVulkanMesh() const{ return _vulkanmesh != null; }
-//	VulkanMesh* vulkanMesh() const { ASSERT( _vulkanmesh ); return _vulkanmesh; }
-//	void setVulkanMesh( VulkanMesh* vulkanmesh );
+public:
+	VkGeometryFlagsKHR geometryFlags() const { return _geometryFlags; }
+	void setGeometryFlags( VkGeometryFlagsKHR geometryFlags );
+public:
+	bool hasVulkanMesh() const{ return _vulkanmesh != null; }
+	VulkanMesh* vulkanMesh() const { ASSERT( _vulkanmesh ); return _vulkanmesh; }
+	void setVulkanMesh( VulkanMesh* vulkanmesh );
 //public:
 //	virtual void collectPreLoad( List<AbstractMesh*>& meshes ) override;
 //public:

@@ -48,6 +48,7 @@ public:
 protected:
 	virtual void run() override;
 public:
+	const VkExtent2D& window_extend() const{ return _window_extend; }
 	// VulkanInstance* instance(){ return _instance; }
 	VulkanDevice* device(){ ASSERT( _device ); return _device; }
 	// VulkanSurface& surface(){ return _surface; }
@@ -55,13 +56,15 @@ public:
 	// VkFormat depthFormat() const{ return _depthFormat; }
 	// VulkanRenderPass& renderPass(){ return _renderPass; }
 	// const std::vector<VulkanFramebuffer*>& framebuffers(){ return _framebuffers; }
+	VulkanQueue* computeQueue() const{ return asserted( _computeQueue ); }
+	VulkanCommandPool* computeCommandPool() const{ return asserted( _computeCommandPool ); }
 protected:
 	virtual void getRequirements( VulkanRequirements& requirements ) = 0;
-	void createDevice();
+	virtual void createDevice();
 	void createFramebuffer();
 	bool acquireNextRenderImage( VkImage& targetImage );
-	virtual void render();
+	virtual void render( VkImage targetimage );
 	void present();
 	void destroyFramebuffer();
-	void destroyDevice();
+	virtual void destroyDevice();
 };

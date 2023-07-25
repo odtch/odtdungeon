@@ -50,14 +50,14 @@ void VulkanPresenter::run(){
 			//logDebug( "acqu done" );
 			break;
 		case Rendering:
-	//		if( _prevRenderTask.isNull() ){
-	//			logError( "VulkanPresenter::idle rendering no task" );
-	//			break;
-	//		}
-	//		if( !_prevRenderTask.isCompleted() ){
-	//		} else {
+			//		if( _prevRenderTask.isNull() ){
+			//			logError( "VulkanPresenter::idle rendering no task" );
+			//			break;
+			//		}
+			//		if( !_prevRenderTask.isCompleted() ){
+			//		} else {
 			//sleep_ms( 13 );
-			render();
+			render( targetImage );
 			_state = Presenting;
 			break;
 		case Presenting:
@@ -96,8 +96,8 @@ void VulkanPresenter::createDevice(){
 		uint32_t glfwExtensionCount = 0;
 		const char **glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 		std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-		for (auto extension : extensions) {
-			logDebug(extension);
+		for( auto extension : extensions ){
+			//logDebug(extension);
 			requirements.requireInstanceExtension(extension);
 		}
 	}
@@ -220,7 +220,7 @@ bool VulkanPresenter::acquireNextRenderImage( VkImage& targetImage ){
 	return true;
 
 }
-void VulkanPresenter::render(){
+void VulkanPresenter::render( VkImage targetimage ){
 	VulkanCommandBuffer* cb = new VulkanCommandBuffer();
 	cb->begin(  VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, _computeCommandPool );
 	VkRenderPassBeginInfo renderPassBeginInfo = {};
@@ -297,38 +297,38 @@ void VulkanPresenter::present(){
 	}
 }
 void VulkanPresenter::destroyFramebuffer(){
-	logDebug( "VulkanPresenter::destroyFramebuffer wait idle" );
+	//logDebug( "VulkanPresenter::destroyFramebuffer wait idle" );
 	device()->waitIdle();
 	for (VulkanFramebuffer *framebuffer : _framebuffers) {
-		logDebug( "VulkanPresenter::destroyFramebuffer framebuffer" );
+		//logDebug( "VulkanPresenter::destroyFramebuffer framebuffer" );
 		framebuffer->destroy();
 		delete framebuffer;
 	}
 	_framebuffers.clear();
 	if( _renderPass ){
-		logDebug( "VulkanPresenter::destroyFramebuffer renderPass" );
+		//logDebug( "VulkanPresenter::destroyFramebuffer renderPass" );
 		_renderPass->destroy();
 		odelete(_renderPass);
 	}
 	if( _depthImageView ){
-		logDebug( "VulkanPresenter::destroyFramebuffer depthImageView" );
+		//logDebug( "VulkanPresenter::destroyFramebuffer depthImageView" );
 		_depthImageView->destroy();
 		odelete( _depthImageView );
 	}
 	if( _depthImage ){
-		logDebug( "VulkanPresenter::destroyFramebuffer depthImage" );
+		//logDebug( "VulkanPresenter::destroyFramebuffer depthImage" );
 		_depthImage->destroy();
 		odelete( _depthImage );
 	}
 	if( _swapchain ){
-		logDebug( "VulkanPresenter::destroyFramebuffer swapChain" );
+		//logDebug( "VulkanPresenter::destroyFramebuffer swapChain" );
 		_swapchain->destroy();
 		odelete( _swapchain );
 	}
-	logDebug( "VulkanPresenter::destroyFramebuffer done" );
+	//logDebug( "VulkanPresenter::destroyFramebuffer done" );
 }
 void VulkanPresenter::destroyDevice(){
-	logDebug( "VulkanPresenter::destroyDevice" );
+	//logDebug( "VulkanPresenter::destroyDevice" );
 	//_prevRenderTask.clear();
 	//_renderer->destroy();
 	if( _computeCommandPool ){
@@ -359,7 +359,7 @@ void VulkanPresenter::destroyDevice(){
 	if( _vulkan ){
 		odelete( _vulkan );
 	}
-	logDebug( "VulkanPresenter::destroyDevice done" );
+	//logDebug( "VulkanPresenter::destroyDevice done" );
 }
 
 //void VulkanWindowAdapter::onWindowCreated( Window* window ){

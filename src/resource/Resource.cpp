@@ -16,6 +16,12 @@ Resource::Resource( const String& name )
 //}
 Resource::~Resource(){
 }
+void Resource::load( BinaryFileReader& reader ){
+	assert( false );
+}
+void Resource::save( BinaryFileWriter& writer ) const {
+	assert( false );
+}
 //void Resource::setId( const String& id ){
 //	//ASSERT( _id.isEmpty() || _id.startsWith( "mesh " ) );
 //	ASSERT( !id.isEmpty() );

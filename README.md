@@ -14,3 +14,14 @@ Summer week 2023, have fun and enjoy
 - men
 
 - bones
+
+
+
+
+- rm VulkanMeshPool
+- rm VulkanRenderableArray
+- rm VulkanLightArray
+- rm VulkanMaterialArray
+- globals.data mv private
+- rm dependencies of mesh to vulkan
+- VulkanMesh extends Mesh
