@@ -202,7 +202,7 @@ void VulkanRaytracer::run(){
 	VulkanPresenter::run();
 }
 void VulkanRaytracer::render( VkImage targetimage ){
-	logDebug( "VulkanRaytracer::render" );
+	//logDebug( "VulkanRaytracer::render" );
 	_queue.handle( this );
 	startLoadData();
 	startRender();

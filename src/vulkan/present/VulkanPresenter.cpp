@@ -37,10 +37,12 @@ void VulkanPresenter::run(){
 	createFramebuffer();
 	_state = Ready;
 	VkImage targetImage = 0;
+	std::chrono::high_resolution_clock::time_point prev_present_time = std::chrono::high_resolution_clock::now();
+	StopClock prev_present_clock;
 	while( !should_stop() ){
 		//logDebug("VulkanPresenter::run", _state );
 		device()->onIdle();
-		sleep_ms( 6 );
+		//sleep_ms( 4 );
 		switch( _state ){
 		case Ready:
 			//logDebug( "acqu" );
@@ -62,7 +64,21 @@ void VulkanPresenter::run(){
 			break;
 		case Presenting:
 			//logDebug( "pres" );
-			present();
+			{
+				static const auto min_delay = std::chrono::milliseconds( 1000 / 60 +1 );
+				std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+				auto delay = now - prev_present_time;
+				if( delay < min_delay ){
+					auto sleep_time = min_delay - delay;
+					//std::cout << "sl " << std::chrono::duration_cast<std::chrono::milliseconds>( sleep_time ).count() << " ms" << std::endl;
+					_sleep_time_per_frame.add( std::chrono::duration_cast<std::chrono::milliseconds>( sleep_time ).count() );
+					std::this_thread::sleep_for( sleep_time );
+				} else {
+					_sleep_time_per_frame.add( 0 );
+				}
+				present();
+				prev_present_time = std::chrono::high_resolution_clock::now();
+			}
 			//logDebug( "pres done" );
 			assert( _state != Presenting );
 			break;
@@ -279,7 +295,9 @@ void VulkanPresenter::present(){
 		//if( _fps.frame_count() % 10 == 2
 		//_present_pc->stop();
 		if( _fps.frame_count() % 10 == 9 )
-			logDebug( "present fps=", _fps.fps() );
+			logDebug( "present fps=", _fps.fps(), _sleep_time_per_frame.toString() );
+		if( _fps.frame_count() % 60 == 59 )
+			_sleep_time_per_frame.reset();
 		_window->onNewFrame();
 		//_present_pc->start();
 		_state = Ready;

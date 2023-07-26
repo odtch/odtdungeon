@@ -3,6 +3,7 @@
 #include "window/Window.h"
 #include "renderer/Renderer.h"
 #include "vulkan/VulkanCore.h"
+#include "utils/FloatStatistic.h"
 
 class VulkanPresenter : public Renderer
 {
@@ -10,6 +11,7 @@ private:
 	Window* _window;
 	VkExtent2D _window_extend;
 	FpsCounter _fps;
+	FloatStatistic _sleep_time_per_frame;
 	// PerformanceCounter* _present_pc = null;
 private:
 	enum State {
