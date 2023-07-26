@@ -97,8 +97,8 @@ public:
 	float& operator()( int c, int r ){ return _mat4[r][c]; }
 	const float& operator()( int c, int r ) const { return _mat4[r][c]; }
 public:
-//	void load( BinaryFileReader& reader );
-//	void write( BinaryFileWriter& writer ) const;
+	void load( BinaryFileReader& reader );
+	void write( BinaryFileWriter& writer ) const;
 public:
 	const glm::mat4& asGlm() const{ return _mat4; }
 	glm::mat4& asGlm(){ return _mat4; }

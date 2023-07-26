@@ -5,8 +5,8 @@
 class AssImp
 {
 public:
-	static Mat4 YUp_to_ZUp(){ return Mat4::Scale( 1.0f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
-	//static Mat4 YUp_to_ZUp(){ return Mat4::Scale( 0.01f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
+	static Mat4 YUp_to_ZUp_Synty1(){ return Mat4::Scale( 1.0f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
+	static Mat4 YUp_to_ZUp_Synty2(){ return Mat4::Scale( 0.01f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
 private:
 	String _filename;
 	String _modelname;
@@ -18,7 +18,7 @@ public:
 	explicit AssImp();
 	~AssImp();
 public:
-	void open( const String& filename, const Mat4& transform = YUp_to_ZUp() );
+	void open( const String& filename, const Mat4& transform );
 	void close();
 public:
 	const Mat4& transform() const{ return _transform; }

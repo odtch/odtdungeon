@@ -3,11 +3,13 @@
 #include "utils/Debugging.h"
 #include "utils/Logger.h"
 #include "utils/String.h"
+#include "utils/List.h"
 #include "utils/File.h"
 #include "math/Vec3.h"
 #include "math/Vec4.h"
 #include "math/Mat4.h"
 #include "math/Box3.h"
+#include "math/PosOri.h"
 //#include "renderer/RenderCore.h"
 //#include "Shared.h"
 

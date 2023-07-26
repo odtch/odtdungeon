@@ -7,6 +7,7 @@
 //#include "resource/MeshModel.h"
 //#include "resource/Texture.h"
 #include "resource/Image.h"
+#include "resource/Skeleton.h"
 #include "AssImp.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -42,7 +43,25 @@ void Converter::run(){
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rchit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rmiss.glsl" );
 	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
-	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx" );
+	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx", AssImp::YUp_to_ZUp_Synty1() );
+
+	convertImage( "mcg_diff", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
+	//material->setFlag( MaterialFlag_CalcNormalFromTriangle );
+	{
+		AssImp assimp;
+		assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
+		assimp.trace();
+		//assimp.l
+		Skeleton* skeleton = assimp.loadSkeleton();
+//		charimporter.setupRagdollFromSkeleton( *skeleton );
+//		charimporter.loadSkin( *skeleton, assimp, 0 );
+		//skeleton->trace();
+		odelete( skeleton );
+//		addResource( "MotusMan", charimporter.ragdolltype() );
+	}
+
+
+
 }
 #ifdef ooold
 
@@ -305,13 +324,13 @@ void Converter::convertImage( const String& trgname, const String& srcpath ){
 	writer.close();
 	stbi_image_free( pixels );
 }
-void Converter::convertMesh( const String& name, const String& srcpath ){
+void Converter::convertMesh( const String& name, const String& srcpath, const Mat4& transform ){
 	String trgpath = _targetpath + "/" + name;
 #ifndef REBUILD_ALL
 	if( File::Exists( trgpath ) )
 		return;
 	AssImp assimp;
-	assimp.open( srcpath );
+	assimp.open( srcpath, transform );
 	assimp.trace();
 	MeshPNT* mesh = assimp.loadMeshPNT( 0 );
 	//MeshModel* model = assimp.loadModel();

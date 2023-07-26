@@ -15,8 +15,8 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-//class BinaryFileReader;
-//class BinaryFileWriter;
+class BinaryFileReader;
+class BinaryFileWriter;
 
 inline bool fequals( float a, float b, float maxDiff = 0.001f ){
     return std::fabs( a - b ) <= maxDiff;

@@ -2,7 +2,7 @@
 #include "AssImp.h"
 #include "AssImpUtils.h"
 #include "AssImpAnimation.h"
-//#include "resource/OdtResource.h"
+#include "resource/Skeleton.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -536,19 +536,19 @@ vec4 AssImp::getVertexColor( uint meshindex, uint vertexindex ){
 	const aiColor4D& aicolor = aicolorchannel[ vertexindex ];
 	return vec4( aicolor.r, aicolor.g, aicolor.b, aicolor.a );
 }
-//Skeleton* AssImp::loadSkeleton(){
-//	Skeleton* skeleton = new Skeleton();
-//	loadSkeletonNode( skeleton, _aiScene->mRootNode, null );
-//	skeleton->transform( _transform );
-//	return skeleton;
-//}
-//void AssImp::loadSkeletonNode( Skeleton* skeleton, aiNode* node, SkeletonJoint* parent ){
-//	SkeletonJoint* joint = skeleton->createJoint( String( node->mName.C_Str() ), parent, Mat4( ai_mat4_cast( node->mTransformation ) ) );
-//	for( int c = 0; c < node->mNumChildren; c++ ){
-//		aiNode* child = node->mChildren[ c ];
-//		loadSkeletonNode( skeleton, child, joint );
-//	}
-//}
+Skeleton* AssImp::loadSkeleton(){
+	Skeleton* skeleton = new Skeleton();
+	loadSkeletonNode( skeleton, _aiScene->mRootNode, null );
+	skeleton->transform( _transform );
+	return skeleton;
+}
+void AssImp::loadSkeletonNode( Skeleton* skeleton, aiNode* node, SkeletonJoint* parent ){
+	SkeletonJoint* joint = skeleton->createJoint( String( node->mName.C_Str() ), parent, Mat4( ai_mat4_cast( node->mTransformation ) ) );
+	for( int c = 0; c < node->mNumChildren; c++ ){
+		aiNode* child = node->mChildren[ c ];
+		loadSkeletonNode( skeleton, child, joint );
+	}
+}
 //uint AssImp::animationCount() const {
 //	return _aiScene->mNumAnimations;
 //}
