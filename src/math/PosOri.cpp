@@ -1,7 +1,6 @@
 #include "stdodt.h"
 #include "PosOri.h"
-//#include "Math.h"
-//#include "utils/File.h"
+#include "utils/File.h"
 #include "utils/Logger.h"
 
 PosOri::PosOri()
@@ -174,28 +173,26 @@ PosOri PosOri::rotated( const glm::quat& rotation ) const {
 	p.rotate( rotation );
 	return p;
 }
-
-void PosOri::setZto0()
-{
+void PosOri::setZto0(){
 	setPosition( Vec3( position().x(), position().y(), 0 ) );
 	Vec3 dir( direction().x(), direction().y(), 0 );
 	setOrientation( Orientation( dir, Vec3::Up ) );
 }
-//void PosOri::save( BinaryFileWriter& writer ) const{
-//	writer.write_uint8( 'O' );
-//	writer.write_vec3( position() );
-//	writer.write_vec3( direction() );
-//	writer.write_vec3( up() );
-//}
-//void PosOri::load( BinaryFileReader& reader ){
-//	if( reader.read_uint8() != 'O' ){
-//		assert( false );
-//	}
-//	Vec3 pos = Vec3( reader.read_vec3() );
-//	Vec3 dir = Vec3( reader.read_vec3() );
-//	Vec3 up  = Vec3( reader.read_vec3() );
-//	set( pos, Orientation( dir, up ) );
-//}
+void PosOri::save( BinaryFileWriter& writer ) const{
+	writer.write_uint8( 'O' );
+	writer.write_vec3( position() );
+	writer.write_vec3( direction() );
+	writer.write_vec3( up() );
+}
+void PosOri::load( BinaryFileReader& reader ){
+	if( reader.read_uint8() != 'O' ){
+		assert( false );
+	}
+	Vec3 pos = Vec3( reader.read_vec3() );
+	Vec3 dir = Vec3( reader.read_vec3() );
+	Vec3 up  = Vec3( reader.read_vec3() );
+	set( pos, Orientation( dir, up ) );
+}
 bool PosOri::Equals( const PosOri& a, const PosOri& b, float max_pos_dist, float max_ori_dist ){
 	if( max_pos_dist < ( a.position() - b.position() ).length() )
 		return false;

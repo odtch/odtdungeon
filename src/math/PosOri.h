@@ -46,9 +46,9 @@ public:
 	PosOri rotated( const glm::quat& rotation ) const;
 public:
 	void setZto0();
-//public:
-//	void save( BinaryFileWriter& writer ) const;
-//	void load( BinaryFileReader& reader );
+public:
+	void save( BinaryFileWriter& writer ) const;
+	void load( BinaryFileReader& reader );
 public:
 	static bool Equals( const PosOri& a, const PosOri& b, float max_pos_dist = 0.001f, float max_ori_dist = 0.001f );
 public:

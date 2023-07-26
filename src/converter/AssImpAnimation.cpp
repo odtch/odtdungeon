@@ -1,31 +1,31 @@
 #include "stdodt.h"
 #include "AssImpAnimation.h"
 
-//AssImpAnimation::AssImpAnimation(){
-//}
-//AssImpAnimation::~AssImpAnimation(){
-//	while( !_frames.isEmpty() ){
-//		AssImpAnimationFrame* frame = _frames.takeLast();
-//		odelete( frame->_skeleton );
-//		odelete( frame );
-//	}
-//}
-//AssImpAnimationFrame* AssImpAnimation::findFrameStartingAt( float starttime ) const {
-//	float starttimemin = starttime - 0.0001f;
-//	float starttimemax = starttime + 0.0001f;
-//	for( AssImpAnimationFrame* frame : _frames ){
-//		if( starttimemin < frame->_starttime && frame->_starttime <= starttimemax )
-//			return frame;
-//	}
-//	return null;
-//}
-//AssImpAnimationFrame*AssImpAnimation::findFrameAt( float time ) const {
-//	for( AssImpAnimationFrame* frame : _frames ){
-//		if( frame->_starttime <= time && time <= frame->_endtime )
-//			return frame;
-//	}
-//	return null;
-//}
+AssImpAnimation::AssImpAnimation(){
+}
+AssImpAnimation::~AssImpAnimation(){
+	while( !_frames.isEmpty() ){
+		AssImpAnimationFrame* frame = _frames.takeLast();
+		odelete( frame->_skeleton );
+		odelete( frame );
+	}
+}
+AssImpAnimationFrame* AssImpAnimation::findFrameStartingAt( float starttime ) const {
+	float starttimemin = starttime - 0.0001f;
+	float starttimemax = starttime + 0.0001f;
+	for( AssImpAnimationFrame* frame : _frames ){
+		if( starttimemin < frame->_starttime && frame->_starttime <= starttimemax )
+			return frame;
+	}
+	return null;
+}
+AssImpAnimationFrame*AssImpAnimation::findFrameAt( float time ) const {
+	for( AssImpAnimationFrame* frame : _frames ){
+		if( frame->_starttime <= time && time <= frame->_endtime )
+			return frame;
+	}
+	return null;
+}
 
 //AssImpAnimationRenderer::AssImpAnimationRenderer( AssImpAnimation* animation, Object* object )
 //	:ObjectProperty( object )
