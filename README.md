@@ -1,6 +1,14 @@
 # ODT - Dungeon
-Summer week 2023, have fun and enjoy. 
-One goal is to separate the main thread from the scene- and render-thread in the realtime raytracer. 
+ODT-Dungeon is the Summer Week 2023 practice project aimed at extending the real-time raytracer from the previous exercise. The goals include separating the renderer and raytracer, optimizing and cleaning up the raytracer, and splitting the single thread into Main, Scene, and Render threads. Above all, the main focus is to have fun and enjoy the project.
+
+ODT-Dungeon is the practice project of Summer week 2023. 
+Goals: 
+- have fun and enjoy. 
+- extend the real-time-raytracer of the previous practice project
+- isolate renderer and raytracer
+- cleanup the raytracer 
+- splitt the single thread to each one for Main, Scene and Render 
+
 
 
 + github
