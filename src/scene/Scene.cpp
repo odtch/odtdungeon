@@ -55,7 +55,9 @@ void Scene::run(){
 		}
 		_frameratelimiter.tick();
 		if( _fps.tick() ){
-			//logDebug( "Scene::run", _fps.fps(), _frameratelimiter._sleep_time_per_frame.toString() );
+			if( _fps.fps() < 50 ){
+				logDebug( "Scene::run", _fps.fps(), _frameratelimiter._sleep_time_per_frame.toString() );
+			}
 			_frameratelimiter._sleep_time_per_frame.reset();
 		}
     }

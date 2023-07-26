@@ -47,21 +47,18 @@ void Converter::run(){
 
 	convertImage( "mcg_diff", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
 	//material->setFlag( MaterialFlag_CalcNormalFromTriangle );
-	{
-		AssImp assimp;
-		assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
-		assimp.trace();
-		//assimp.l
-		Skeleton* skeleton = assimp.loadSkeleton();
-//		charimporter.setupRagdollFromSkeleton( *skeleton );
-//		charimporter.loadSkin( *skeleton, assimp, 0 );
-		//skeleton->trace();
-		odelete( skeleton );
-//		addResource( "MotusMan", charimporter.ragdolltype() );
-	}
-
-
-
+//	{
+//		AssImp assimp;
+//		assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
+//		assimp.trace();
+//		//assimp.l
+//		Skeleton* skeleton = assimp.loadSkeleton();
+////		charimporter.setupRagdollFromSkeleton( *skeleton );
+////		charimporter.loadSkin( *skeleton, assimp, 0 );
+//		//skeleton->trace();
+//		odelete( skeleton );
+////		addResource( "MotusMan", charimporter.ragdolltype() );
+//	}
 }
 #ifdef ooold
 

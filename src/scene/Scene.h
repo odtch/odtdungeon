@@ -4,7 +4,7 @@
 #include "SceneNode.h"
 #include "utils/Clock.h"
 
-class Scene : public Thread, private SceneNode
+class Scene : public Thread, public SceneNode
 {
     DEBUGCOUNTER(Scene)
 private:

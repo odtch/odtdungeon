@@ -1,23 +1,17 @@
 #pragma once
 
 #include "SceneCore.h"
+#include "SceneProperty.h"
 
 class SceneNode
 {
-    //: public
-    //: PropertyObject public NamedObject, public EventReceiver
 	DEBUGCOUNTER( SceneNode )
 	ODTNOCOPY( SceneNode )
-//public:
-//	static EventType AddedToScene;
-//	static EventType RemovedFromScene;
-//	static EventType Animate;
-//protected:
-//	SceneNodeType* _type = null;
 private:
 	SceneNode* _parent = null;
 	List<SceneNode*> _childs;
 private:
+	SceneProperty* _firstProperty = null;
 //	bool _atAnimate = false;
 //	List<SceneNode*> _childsToAdd;
 //	List<SceneNode*> _childsToRemove;
@@ -28,9 +22,10 @@ public:
 	Scene* scene();
 	bool isInScene();
 	virtual Scene* findScene();
-//public:
-//	virtual bool isInArea() const;
-//	virtual SceneArea* area();
+public:
+	bool isInArea();
+	SceneArea* area();
+	virtual SceneArea* findArea();
 public:
 	bool hasParent() const{ return _parent != null; }
 	SceneNode* parent() const{ assert( _parent ); return _parent; }
@@ -43,6 +38,28 @@ public:
 	void deleteAllChilds();
 //public:
 //	void moveToParent( SceneNode* parent );
+private:
+	void registerProperty( SceneProperty* property );
+public:
+	template< class T > T* findProperty() const {
+		T* result = null;
+		SceneProperty* property = _firstProperty;
+		while( property ){
+			T* typed = dynamic_cast<T*>( property );
+			if( typed ){
+				ASSERT( result == null );
+				result = typed;
+				int todo_return_in_release_mode;
+			}
+			property = property->_next;
+		}
+		return result;
+	}
+	template< class T > T* getProperty() const {
+		T* r = findProperty<T>();
+		assert( r );
+		return r;
+	}
 protected:
 	virtual void onAddedToScene( Scene* scene );
 	virtual void onRemovedFromScene( Scene* scene );
@@ -84,8 +101,9 @@ public:
 //public:
 //	virtual bool isPhysicsObject() const { return false; }
 //	virtual PhysicsObject* asPhysicsObject(){ assert( false ); }
-//public:
+public:
 //	friend class Scene;
+	friend class SceneProperty;
 };
 
 //class SceneResourceHolderNode : public SceneNode

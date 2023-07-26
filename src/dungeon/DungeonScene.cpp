@@ -2,6 +2,9 @@
 
 #include "DungeonScene.h"
 #include "math/Camera.h"
+#include "scene/SceneArea.h"
+#include "scene/SceneObject.h"
+#include "scene/SceneRenderInstanceProperty.h"
 #include "renderer/RenderLight.h"
 #include "renderer/RenderLayer.h"
 #include "resource/MeshBuilder.h"
@@ -36,10 +39,20 @@ void DungeonScene::animate( float dt ){
 //	_camera->recalcMatrices( vec2( 600, 400 ));
 //	_camera->recalcTest();
 	_uilayer->setNextFixedCamera( *_camera );
+
+	_sphere1vel += Vec3::Down * 0.05f * dt;
+	_sphere1->setPosOri( _sphere1->posori().translated( _sphere1vel ) );
+	if( _sphere1->posori().position().z() < 0 ){
+		if( _sphere1vel.z() < 0 ){
+			_sphere1vel.setZ( - _sphere1vel.z() );
+		}
+	}
 	Scene::animate( dt );
 }
 void DungeonScene::run(){
     {
+		//_sphere1vel = Vec3::Up * 5;
+
 		Material* material = renderer().createMaterial( "dungeonboxmaterial" );
 		material->setColor( Vec4( 0.8f, 0.8f, 0.8f, 1.0f ) );
 		Texture* texture_red = renderer().loadTexture( "test_red" );
@@ -49,6 +62,8 @@ void DungeonScene::run(){
 		_uilayer->setNextFixedCamera( *_camera );
 
 		RenderLayer* layer = renderer().createNextLayer( _uilayer );
+		_area1 = new SceneArea( "area1", layer );
+		addChild( _area1 );
 
 		{
 			renderer().addLight( _uilayer, RenderLight::CreateAmbient( vec4( 0.8f, 0.5f, 0.5f, 1.0f ) ) );
@@ -67,14 +82,22 @@ void DungeonScene::run(){
 
 
 			mesh = renderer().createDynamicMeshPNT( "dungeonboxmesh3" );
-			MeshBuilder::CreateSphere( *mesh, Vec3::Null, 0.4f, 2, VertexPNT() );
-			renderer().createInstance( layer, PosOri().translated( Vec3( -3, 0, 0 ) ), mesh, material );
+			MeshBuilder::CreateSphere( *mesh, Vec3::Null, 1.4f, 3, VertexPNT() );
+			//renderer().createInstance( layer, PosOri().translated( Vec3( -3, 0, 0 ) ), mesh, material );
+			_sphere1 = new SceneObject();
+			_sphere1->setPosOri( PosOri().translated( Vec3( -8, 0, 5 ) ));
+			new SceneRenderInstancePNTProperty( mesh, material, _sphere1 );
+			_area1->addChild( _sphere1 );
+			_sphere2 = new SceneObject();
+			new SceneRenderInstancePNTProperty( mesh, material, _sphere2 );
+			_sphere2->setPosOri( PosOri().translated( Vec3( -11, 0, 5 ) ));
+			_area1->addChild( _sphere2 );
 		}
 		{
-			MeshPNT* mesh = renderer().loadMeshPNT( "platform5" );
-			renderer().createInstance( layer, PosOri().translated( Vec3( -8, 0, 0 ) ), mesh, material );
-			renderer().createInstance( layer, PosOri().translated( Vec3( -9.9, 0.1f, -0.1f ) ), mesh, material );
-			renderer().createInstance( layer, PosOri().translated( Vec3( -11.8, 0, -0.0f ) ), mesh, material );
+//			MeshPNT* mesh = renderer().loadMeshPNT( "platform5" );
+//			renderer().createInstance( layer, PosOri().translated( Vec3( -8, 0, 0 ) ), mesh, material );
+//			renderer().createInstance( layer, PosOri().translated( Vec3( -9.9, 0.1f, -0.1f ) ), mesh, material );
+//			renderer().createInstance( layer, PosOri().translated( Vec3( -11.8, 0, -0.0f ) ), mesh, material );
 		}
     }
     Scene::run();

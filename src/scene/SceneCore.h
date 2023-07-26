@@ -13,8 +13,10 @@
 
 class Scene;
 class SceneNode;
+class SceneProperty;
+class SceneArea;
+class SceneObject;
 
-//class SceneArea;
 //class SceneAreaJumper;
 //class SceneAreaShifter;
 

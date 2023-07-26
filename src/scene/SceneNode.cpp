@@ -26,6 +26,22 @@ Scene* SceneNode::findScene(){
 		return _parent->findScene();
 	return null;
 }
+bool SceneNode::isInArea(){
+	return findArea() != null;
+}
+SceneArea* SceneNode::area(){
+	SceneArea* area = findArea();
+	if( area == null ){
+		logError( "SceneNode::area not in area" );
+		assert( false );
+	}
+	return area;
+}
+SceneArea* SceneNode::findArea(){
+	if( _parent )
+		return _parent->findArea();
+	return null;
+}
 //bool SceneNode::isInArea() const{
 //	if( _parent )
 //		return _parent->isInArea();
@@ -79,6 +95,20 @@ void SceneNode::deleteAllChilds(){
 		delete child;
 	}
 }
+void SceneNode::registerProperty( SceneProperty* property ){
+	assert( property );
+	ASSERT( property->_next == null );
+	if( _firstProperty == null ){
+		_firstProperty = property;
+	} else {
+		SceneProperty* prev = _firstProperty;
+		while( prev->_next ){
+			prev = prev->_next;
+		}
+		ASSERT( prev->_next == null );
+		prev->_next = property;
+	}
+}
 //void SceneNode::moveToParent( SceneNode* parent ){
 //	assert( parent );
 //	assert( _parent );
@@ -91,6 +121,11 @@ void SceneNode::deleteAllChilds(){
 void SceneNode::onAddedToScene( Scene* scene ){
 //	for( auto listener : scene->listeners() )
 //		listener->onAddedToScene( this );
+	SceneProperty* property = _firstProperty;
+	while( property ){
+		property->onAddedToScene( scene );
+		property = property->_next;
+	}
 	for( SceneNode* child : _childs ){
 		child->onAddedToScene( scene );
 	}
@@ -99,6 +134,11 @@ void SceneNode::onAddedToScene( Scene* scene ){
 void SceneNode::onRemovedFromScene( Scene* scene ){
 	for( SceneNode* child : _childs ){
 		child->onRemovedFromScene( scene );
+	}
+	SceneProperty* property = _firstProperty;
+	while( property ){
+		property->onRemovedFromScene( scene );
+		property = property->_next;
 	}
 //	for( auto listener : scene->listeners() )
 //		listener->onRemovedFromScene( this );
@@ -120,6 +160,11 @@ void SceneNode::animate( float dt ){
 	assert( 0 < dt );
 	//ASSERT( !_atAnimate );
 	//_atAnimate = true;
+	SceneProperty* property = _firstProperty;
+	while( property ){
+		property->animate( dt );
+		property = property->_next;
+	}
 	int prev_size = _childs.size();
 	for( SceneNode* child : _childs ){
 		ASSERT( child->_parent == this );

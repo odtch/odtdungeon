@@ -29,3 +29,4 @@ One goal is to separate the main thread from the scene- and render-thread in the
 - rm dependencies of mesh to vulkan
 - VulkanMesh extends Mesh
 - render-lights reorg
+- scenenode.childs as array 
