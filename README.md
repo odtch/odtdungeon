@@ -1,5 +1,7 @@
 # ODT - Dungeon
-Summer week 2023, have fun and enjoy
+Summer week 2023, have fun and enjoy. 
+One goal is to separate the main thread from the scene- and render-thread in the realtime raytracer. 
+
 
 + github
 + main
@@ -7,11 +9,12 @@ Summer week 2023, have fun and enjoy
 + module
 + window
 + scene
-- renderer
-- vulkan
-- triangle
++ renderer
++ vulkan
++ triangle
+- input
 - rock
-- men
+- char
 
 - bones
 

@@ -16,7 +16,7 @@ private:
 //public:
 //	bool pause_animate = false;
 private:
-	enum { FPS = 120 };
+	enum { FPS = 1200 };
 	FpsCounter _fps;
 	FrameRateLimiter _frameratelimiter;
 	//float _rest_dt = 0;

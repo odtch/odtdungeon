@@ -197,7 +197,11 @@ void VulkanRaytracer::run(){
 void VulkanRaytracer::render( VkImage targetimage ){
 	//logDebug( "VulkanRaytracer::render" );
 	_queue.handle( this );
-	startLoadData();
+	{
+		MutexLocker locker;
+		locker.lock( writeMutex() );
+		startLoadData();
+	}
 	startRender();
 	startCopyToFB( targetimage );
 	_pcs.present->start();

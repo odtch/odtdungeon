@@ -48,9 +48,12 @@ void Scene::run(){
     while( !should_stop() ){
 		//logDebug( "Scene::run" );
 		//_frameratelimiter._debug = true;
+		{
+			MutexLocker locker;
+			locker.lock( _renderer->writeMutex() );
+			animate( 1.0f / FPS );
+		}
 		_frameratelimiter.tick();
-		sleep_ms( 1 );
-		animate( 1.0f / FPS );
 		if( _fps.tick() ){
 			logDebug( "Scene::run", _fps.fps(), _frameratelimiter._sleep_time_per_frame.toString() );
 			_frameratelimiter._sleep_time_per_frame.reset();

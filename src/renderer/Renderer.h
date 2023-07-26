@@ -8,6 +8,7 @@ class Renderer : public Thread
 {
 	DEBUGCOUNTER(Renderer);
 private:
+	std::timed_mutex _writeMutex;
 public:
 	explicit Renderer();
 	virtual ~Renderer();
@@ -22,4 +23,6 @@ public:
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) = 0;
 	virtual void addLight( RenderLayer* layer, RenderLight* light ) = 0;
+public:
+	std::timed_mutex& writeMutex(){ return _writeMutex; }
 };
