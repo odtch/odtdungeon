@@ -75,7 +75,7 @@ public:
 	void post( const Message& message );
 	void post( MessageType type, void* p1, void* p2, void* sender );
 	bool get( Message& message );
-	void handle( MessageHandler* handler, uint max_messagecount = 10 );
+	void handle( MessageHandler* handler, uint max_messagecount = 100 );
 protected:
 	virtual void receive( MessageType type, void* p1, void* p2, void* sender ) override;
 };

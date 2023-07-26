@@ -86,9 +86,12 @@ bool ORayNextLayer( vec2 pixel, uint layer_index, out ORay ray ){
 	if( globals.layers[ layer_index ].next_layer_index < 0 ){
 		return false;
 	} else if( globals.layers[ layer_index ].next_camera_action == VulkanLayer_NextCameraAction_2D_to_3D ){
-		ray.direction = vec3( -( globals.target_half_width - pixel.x ), globals.layers[ layer_index ].next_camera_2d_fov_size, ( globals.target_half_height - pixel.y ) );
+		ray.direction = vec3( -( globals.target_half_width - pixel.x ),
+							  1000, //globals.layers[ layer_index ].next_camera_2d_fov_size,
+							  ( globals.target_half_height - pixel.y ) );
 		ray.direction = normalize( ray.direction );
-		ray.origin = vec3( ray.origin.x, 0, ray.origin.z );
+		//ray.origin = vec3( ray.origin.x, 0, ray.origin.z );
+		ray.origin = vec3( 0, 0, 0 );
 		ray.origin = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.origin, 1 ) ).xyz;
 		ray.direction = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.direction, 0 ) ).xyz;
 		ray.direction = normalize( ray.direction );
@@ -96,6 +99,7 @@ bool ORayNextLayer( vec2 pixel, uint layer_index, out ORay ray ){
 //			debugPrintfEXT( "r %f %f %f  %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z, ray.direction.x, ray.direction.y, ray.direction.z );
 //		}
 	} else if( globals.layers[ layer_index ].next_camera_action == VulkanLayer_NextCameraAction_Transform ){
+		debugPrintfEXT( "ORayNextLayer transform not tested\n" );
 		ray.origin = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.origin, 1 ) ).xyz;
 		ray.direction = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.direction, 0 ) ).xyz;
 		ray.direction = normalize( ray.direction );
@@ -123,8 +127,6 @@ vec4 ORayResolve( vec2 pixel, uint start_layer_index, vec3 start_ray_origin, vec
 		for( uint s = 0; s < stack_count; s++ ){
 			ORayResult result = ORayCalc( stack[s].ray );
 			if( result.has_hit ){
-				//return result.color;
-				/**/
 				stack[s].color = result.color;
 				if( 0 < result.translucent_factor.a && stack_count < ORAY_STACKSIZE ){
 					stack[stack_count].index = stack_count;
@@ -151,6 +153,7 @@ vec4 ORayResolve( vec2 pixel, uint start_layer_index, vec3 start_ray_origin, vec
 				//if( s == 2 )return vec4( 0, 1, 0, 1 );
 				stack[s].color = vec4( 0 );
 				if( stack_count + 1 < ORAY_STACKSIZE ){
+//if( stack[s].ray.layer_index == 1 )return vec4( 1, 0, 0, 1 );
 					if( ORayNextLayer( pixel, stack[s].ray.layer_index, stack[stack_count].ray ) ){
 						stack[stack_count].index = stack_count;
 						stack[stack_count].dest_factor = stack[s].dest_factor;

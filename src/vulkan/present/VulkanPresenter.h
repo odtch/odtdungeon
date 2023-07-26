@@ -11,7 +11,7 @@ private:
 	Window* _window;
 	VkExtent2D _window_extend;
 	FpsCounter _fps;
-	FloatStatistic _sleep_time_per_frame;
+	FrameRateLimiter _frameratelimiter;
 	// PerformanceCounter* _present_pc = null;
 private:
 	enum State {

@@ -33,17 +33,18 @@ void Camera::setFov( const glm::vec2& fov ){
 //	_projection = Projection::Orthographic;
 //	_orthographic_viewport_size = viewportSize;
 //}
-//void Camera::recalcTest(){
-//	if( _projection == Projection::Perspective ){
-//		_near_plane_center = position() + direction() * 10;
-//		//std::cout << "Camera recalcTest " << position() << "    " << direction() << "   " << _near_plane_center << "    " << _fov.x << " " << _fov.y << " \n";
-//		Plane near_plane(  _near_plane_center, direction() );
-//		//std::cout << "fov " << Vec2( _fov ).toString() << "\n";
-//		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( -_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis( -_fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_lt ) ){ assert( false ); }
-//		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( +_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis( -_fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_rt ) ){ assert( false ); }
-//		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( +_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis(  _fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_rb ) ){ assert( false ); }
-//		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( -_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis(  _fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_lb ) ){ assert( false ); }
-//	} else if( _projection == Projection::Orthographic ){
+void Camera::recalcTest(){
+	if( _projection == Projection::Perspective ){
+		_near_plane_center = position() + direction() * 10;
+		//std::cout << "Camera recalcTest " << position() << "    " << direction() << "   " << _near_plane_center << "    " << _fov.x << " " << _fov.y << " \n";
+		Plane near_plane(  _near_plane_center, direction() );
+		//std::cout << "fov " << Vec2( _fov ).toString() << "\n";
+		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( -_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis( -_fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_lt ) ){ assert( false ); }
+		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( +_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis( -_fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_rt ) ){ assert( false ); }
+		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( +_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis(  _fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_rb ) ){ assert( false ); }
+		if( !near_plane.intersectionPoint( Ray( position(), ( Mat4::RotationAtAxis( -_fov.x / 2, orientation().up() ) * Mat4::RotationAtAxis(  _fov.y / 2, orientation().right() ) ) .mapNormal( direction() ) ), _near_plane_lb ) ){ assert( false ); }
+	} else if( _projection == Projection::Orthographic ){
+		assert( false );
 ////		_near_plane_center = position() - direction() * 10; int todo_war_mal_minus;
 ////		_near_plane_lt = _near_plane_center + orientation().right() * _orthographic_viewport_size.width() * -0.5f + orientation().up() * _orthographic_viewport_size.height() * -0.5f;
 ////		_near_plane_rt = _near_plane_center + orientation().right() * _orthographic_viewport_size.width() *  0.5f + orientation().up() * _orthographic_viewport_size.height() * -0.5f;
@@ -61,10 +62,10 @@ void Camera::setFov( const glm::vec2& fov ){
 //		_near_plane_rb = to_3d( _orthographic_viewport_size.rb.x, _orthographic_viewport_size.rb.y );
 //		_near_plane_lb = to_3d( _orthographic_viewport_size.lt.x, _orthographic_viewport_size.rb.y );
 //		//std::cout << "camera " << *this << "\n";
-//	} else {
-//		assert( false );
-//	}
-//}
+	} else {
+		assert( false );
+	}
+}
 Vec3 Camera::point_on_near_plane_01( const Vec2& factor ) const {
 	assert( 0 <= factor.x() && factor.x() <= 1 );
 	assert( 0 <= factor.y() && factor.y() <= 1 );

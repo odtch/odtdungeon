@@ -9,6 +9,9 @@ RenderInstance::RenderInstance( const PosOri& posori )
 }
 RenderInstance::~RenderInstance(){
 }
+void RenderInstance::setPosOri( const PosOri& posori ){
+	_posori = posori;
+}
 
 RenderInstancePNT::RenderInstancePNT( const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material )
     :RenderInstance( posori )

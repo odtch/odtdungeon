@@ -4,6 +4,7 @@
 
 class RenderInstance
 {
+	DEBUGCOUNTER(RenderInstance)
 private:
     PosOri _posori;
 private:

@@ -2,6 +2,7 @@
 
 #include "SceneCore.h"
 #include "SceneNode.h"
+#include "utils/Clock.h"
 
 class Scene : public Thread, private SceneNode
 {
@@ -15,7 +16,10 @@ private:
 //public:
 //	bool pause_animate = false;
 private:
-	float _rest_dt = 0;
+	enum { FPS = 120 };
+	FpsCounter _fps;
+	FrameRateLimiter _frameratelimiter;
+	//float _rest_dt = 0;
     //List<SceneListener*> _listeners;
 public:
     explicit Scene( Renderer* renderer );

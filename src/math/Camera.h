@@ -8,6 +8,7 @@
 
 class Camera
 {
+	DEBUGCOUNTER(Camera)
 private:
 	PosOri _posori;
 private:

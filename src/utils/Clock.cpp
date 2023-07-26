@@ -206,3 +206,39 @@ bool FpsCounter::tick(){
 		return false;
 	}
 }
+
+FrameRateLimiter::FrameRateLimiter( float maxFramesPerSeconds ){
+	prev_time = std::chrono::high_resolution_clock::now();
+	min_duration = std::chrono::milliseconds( (int)( 1000 / ( maxFramesPerSeconds ) ) + 1 );
+}
+FrameRateLimiter::~FrameRateLimiter(){
+}
+void FrameRateLimiter::tick(){
+	static std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+	auto delay = now - prev_time;
+	auto sleep_time = min_duration - delay;
+	if( _debug ){
+//		std::time_t t_now = std::chrono::system_clock::to_time_t(now);
+//		   std::tm* gmtime = std::gmtime(&t_now);
+//		   // Extract the milliseconds
+//		   auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+//		   // Format the time
+//		   std::cout << std::put_time(gmtime, "%Y-%m-%d %H:%M:%S") << '.' << std::setfill('0') << std::setw(3) << milliseconds.count() << " UTC" << std::endl;
+		std::time_t now_c = std::chrono::system_clock::to_time_t( now );
+		//std::cout << "frl.t now=" << std::ctime(&now_c);
+		std::cout << "frl " << std::chrono::duration_cast<std::chrono::milliseconds>( now - start ).count() << " ms\t";
+		std::cout << "   delay=" << std::chrono::duration_cast<std::chrono::milliseconds>( delay ).count() << " ms";
+		std::cout << "   sleep=" << std::chrono::duration_cast<std::chrono::milliseconds>( sleep_time ).count() << " ms" << std::endl;
+	}
+	if( delay < min_duration ){
+		_sleep_time_per_frame.add( std::chrono::duration_cast<std::chrono::milliseconds>( sleep_time ).count() );
+		std::this_thread::sleep_for( sleep_time );
+		//if( _debug )std::cout << "s";
+	} else {
+		_sleep_time_per_frame.add( 0 );
+		//if( _debug )std::cout << "N";
+	}
+	//prev_time = now;
+	prev_time = std::chrono::high_resolution_clock::now();
+}

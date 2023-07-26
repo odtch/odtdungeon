@@ -48,6 +48,19 @@ public:
 	float fps() const{ return _current_fps; }
 };
 
+class FrameRateLimiter {
+private:
+	std::chrono::high_resolution_clock::time_point prev_time;
+	std::chrono::duration<double> min_duration;
+public:
+	FloatStatistic _sleep_time_per_frame;
+	bool _debug = false;
+public:
+	explicit FrameRateLimiter( float maxFramesPerSeconds );
+	~FrameRateLimiter();
+public:
+	void tick();
+};
 
 class SectionedStopClock {
 public:

@@ -76,7 +76,7 @@ void main(){
 		return; // If the pixel is outside of the image, don't do anything:
 	}
 	vec4 pixelcolor = vec4( 0 );
-	const int aa_count = 2;
+	const int aa_count = 1;
 	for( int aa = 0; aa < aa_count; aa++ ){
 		float px = pixel.x;
 		float py = pixel.y;

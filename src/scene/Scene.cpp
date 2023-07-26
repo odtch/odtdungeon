@@ -6,6 +6,7 @@
 
 Scene::Scene( Renderer* renderer )
     :_renderer( asserted( renderer ) )
+	,_frameratelimiter( FPS )
 {
 //	_root = new SceneRootNode( this );
 }
@@ -33,7 +34,7 @@ void Scene::clear(){
 //SceneNode* Scene::root() const{
 //	return _root;
 //}
-void Scene::animate( float dt ){
+void Scene::animate( float dt ){	
 //	_rest_dt += dt;
 //	dt = _rest_dt;
 //	static const float max_dt = 1.0f / 60.0f;
@@ -45,8 +46,15 @@ void Scene::animate( float dt ){
 }
 void Scene::run(){
     while( !should_stop() ){
-        logDebug( "Scene::run" );
-        sleep_ms( 1000 );
+		//logDebug( "Scene::run" );
+		//_frameratelimiter._debug = true;
+		_frameratelimiter.tick();
+		sleep_ms( 1 );
+		animate( 1.0f / FPS );
+		if( _fps.tick() ){
+			logDebug( "Scene::run", _fps.fps(), _frameratelimiter._sleep_time_per_frame.toString() );
+			_frameratelimiter._sleep_time_per_frame.reset();
+		}
     }
 }
 //void Scene::render( Renderer& renderer ){

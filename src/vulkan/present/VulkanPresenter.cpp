@@ -17,6 +17,7 @@
 
 VulkanPresenter::VulkanPresenter( VkImageUsageFlags swapchainImageUsage, Window* window )
 	:_window( asserted(window) )
+	,_frameratelimiter( 60 - 0 )
 	,_swapchainImageUsage( swapchainImageUsage )
 {
 	//_present_pc = PerformanceCounter::Create("VulkanPresenter");
@@ -37,8 +38,7 @@ void VulkanPresenter::run(){
 	createFramebuffer();
 	_state = Ready;
 	VkImage targetImage = 0;
-	std::chrono::high_resolution_clock::time_point prev_present_time = std::chrono::high_resolution_clock::now();
-	StopClock prev_present_clock;
+	//StopClock prev_present_clock;
 	while( !should_stop() ){
 		//logDebug("VulkanPresenter::run", _state );
 		device()->onIdle();
@@ -64,21 +64,8 @@ void VulkanPresenter::run(){
 			break;
 		case Presenting:
 			//logDebug( "pres" );
-			{
-				static const auto min_delay = std::chrono::milliseconds( 1000 / 60 +1 );
-				std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
-				auto delay = now - prev_present_time;
-				if( delay < min_delay ){
-					auto sleep_time = min_delay - delay;
-					//std::cout << "sl " << std::chrono::duration_cast<std::chrono::milliseconds>( sleep_time ).count() << " ms" << std::endl;
-					_sleep_time_per_frame.add( std::chrono::duration_cast<std::chrono::milliseconds>( sleep_time ).count() );
-					std::this_thread::sleep_for( sleep_time );
-				} else {
-					_sleep_time_per_frame.add( 0 );
-				}
-				present();
-				prev_present_time = std::chrono::high_resolution_clock::now();
-			}
+			_frameratelimiter.tick();
+			present();
 			//logDebug( "pres done" );
 			assert( _state != Presenting );
 			break;
@@ -292,8 +279,8 @@ void VulkanPresenter::present(){
 	case VK_SUCCESS:
 		//_performanceCounter.onImagePresented();
 		if( _fps.tick() ){
-			logDebug( "present fps=", _fps.fps(), "sleep=", _sleep_time_per_frame.toString() );
-			_sleep_time_per_frame.reset();
+			logDebug( "present fps=", _fps.fps(), "sleep=", _frameratelimiter._sleep_time_per_frame.toString() );
+			_frameratelimiter._sleep_time_per_frame.reset();
 		}
 		//if( _fps.frame_count() % 10 == 2
 		//_present_pc->stop();
