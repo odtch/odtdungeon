@@ -55,7 +55,7 @@ void Scene::run(){
 		}
 		_frameratelimiter.tick();
 		if( _fps.tick() ){
-			logDebug( "Scene::run", _fps.fps(), _frameratelimiter._sleep_time_per_frame.toString() );
+			//logDebug( "Scene::run", _fps.fps(), _frameratelimiter._sleep_time_per_frame.toString() );
 			_frameratelimiter._sleep_time_per_frame.reset();
 		}
     }

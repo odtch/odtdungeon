@@ -6,6 +6,7 @@
 #include "window/Window.h"
 #include "vulkan/raytracer/VulkanRaytracer.h"
 #include "dungeon/DungeonScene.h"
+#include "dungeon/DungeonWindow.h"
 #include "converter/Converter.h"
 
 int main( int argc, char** argv ) {
@@ -23,11 +24,12 @@ int main( int argc, char** argv ) {
         {
             Modules modules;
             modules.start();
-            Window window;
+			DungeonWindow window;
 			window.create( 1600, 1200, String( "ODT-Dungeon" ));
             VulkanRaytracer renderer( &window );
             renderer.start();
             DungeonScene scene( &renderer );
+			window.setScene( &scene );
             scene.start();
             window.main();
             renderer.requestStop();

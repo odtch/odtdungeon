@@ -4,6 +4,15 @@
 
 class DungeonScene : public Scene
 {
+public:
+	struct {
+		float cameraMoveX = 0;
+		float cameraMoveY = 0;
+		float cameraMoveZ = 0;
+		float cameraRotateX = 0;
+		float cameraRotateY = 0;
+		float cameraRotateZ = 0;
+	} control;
 private:
 	RenderLayer* _uilayer = null;
 	Camera* _camera = null;

@@ -24,9 +24,17 @@ void DungeonScene::animate( float dt ){
 	_camera->setPosOri( PosOri( camera_pos, camera_dir, Vec3::Up ) );
 	_camera->posori().ro
 	*/
-	_camera->setPosOri( PosOri( co.direction() * -7.0f, co ) );
-	_camera->recalcMatrices( vec2( 600, 400 ));
-	_camera->recalcTest();
+	_camera->translate(
+		_camera->right() * ( control.cameraMoveX * 30 * dt )
+		+ _camera->direction() * ( control.cameraMoveY * 30 * dt )
+		+ _camera->up() * ( control.cameraMoveZ * 30 * dt )
+	);
+	_camera->rotate( control.cameraRotateX * 100 * dt, _camera->right() );
+	_camera->rotate( control.cameraRotateY * 100 * dt, _camera->direction() );
+	_camera->rotate( control.cameraRotateZ * 100 * dt, _camera->up() );
+//	_camera->setPosOri( PosOri( co.direction() * -7.0f, co ) );
+//	_camera->recalcMatrices( vec2( 600, 400 ));
+//	_camera->recalcTest();
 	_uilayer->setNextFixedCamera( *_camera );
 	Scene::animate( dt );
 }

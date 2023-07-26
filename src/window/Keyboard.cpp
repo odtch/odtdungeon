@@ -35,9 +35,9 @@ void Keyboard::onKey( int key, int scancode, int action, int mods ){
 		//std::cout << "key.relea k=" << key << " s=" << scancode << " m=" << mods << "\n";
 		break;
 	default:
-		std::cout << "Keyboard::onKey unhandled action" << action << "\n";
+		logError( "Keyboard::onKey unhandled action", action );
+		break;
 	}
-	std::cout.flush();
 }
 bool Keyboard::isKeyDown( Keys::Key key ) const {
 	/*
