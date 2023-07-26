@@ -58,8 +58,8 @@ void DungeonScene::run(){
 			renderer().createInstance( _uilayer, PosOri().translated( Vec3( 800, 6, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ), mesh, material );
 		}
 		{
-			renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.01f, 0.01f, 0.01f, 1.0f ) ) );
-			renderer().addLight( layer, RenderLight::CreateDirectional( Vec3( -110.1f, 0.51f, -1.0f ).normalized(), vec4( 0.9f, 0.9f, 0.9f, 1.0f ) ) );
+			renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.2f, 0.2f, 0.2f, 1.0f ) ) );
+			renderer().addLight( layer, RenderLight::CreateDirectional( Vec3( -0.1f, 0.1f, -2.0f ).normalized(), vec4( 0.8f, 0.8f, 0.8f, 1.0f ) ) );
 			MeshPNT* mesh = renderer().createDynamicMeshPNT( "dungeonboxmesh2" );
 			MeshBuilder::CreateBox( *mesh, PosOri(), Vec3( 1, 1, 1 ), VertexPNT() );
 			renderer().createInstance( layer, PosOri().translated( Vec3( 0, 0, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ), mesh, material );
@@ -69,6 +69,12 @@ void DungeonScene::run(){
 			mesh = renderer().createDynamicMeshPNT( "dungeonboxmesh3" );
 			MeshBuilder::CreateSphere( *mesh, Vec3::Null, 0.4f, 2, VertexPNT() );
 			renderer().createInstance( layer, PosOri().translated( Vec3( -3, 0, 0 ) ), mesh, material );
+		}
+		{
+			MeshPNT* mesh = renderer().loadMeshPNT( "platform5" );
+			renderer().createInstance( layer, PosOri().translated( Vec3( -8, 0, 0 ) ), mesh, material );
+			renderer().createInstance( layer, PosOri().translated( Vec3( -9.9, 0.1f, -0.1f ) ), mesh, material );
+			renderer().createInstance( layer, PosOri().translated( Vec3( -11.8, 0, -0.0f ) ), mesh, material );
 		}
     }
     Scene::run();

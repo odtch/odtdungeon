@@ -202,29 +202,29 @@ public:
 	virtual const void* abstractIndexData() const override { return indicesData(); }
 //public:
 //	virtual ResourceType* type() const{ return asserted( V::GetResourceType() ); }
-//public:
-//	virtual void load( BinaryFileReader& reader ) override {
-//		AbstractMesh::load( reader );
-//		reader.read_magicnumber( 19176 );
-//		assert( _vertices.size() == 0 );
-//		uint vertex_count = reader.read_uint32();
-//		uint index_count = reader.read_uint32();
-//		_vertices.resize( vertex_count );
-//		_indices.resize( index_count );
-//		reader.read_block( _vertices.data(), sizeof( V ) * vertex_count );
-//		reader.read_block( _indices.data(), sizeof( uint32_t ) * index_count );
-//		reader.read_magicnumber( 19177 );
-//	}
-//	virtual void save( BinaryFileWriter& writer ) const override {
-//		AbstractMesh::save( writer );
-//		writer.write_uint32( 19176 );
-//		assert( 0 < vertexCount() ); assert( 0 < indexCount() );
-//		writer.write_uint32( vertexCount() );
-//		writer.write_uint32( indexCount() );
-//		writer.write_block( _vertices.data(), sizeof( V ) * _vertices.size() );
-//		writer.write_block( _indices.data(), sizeof( uint32_t ) * _indices.size() );
-//		writer.write_uint32( 19177 );
-//	}
+public:
+	virtual void load( BinaryFileReader& reader ) override {
+		//AbstractMesh::load( reader );
+		reader.read_magicnumber( 19176 );
+		assert( _vertices.size() == 0 );
+		uint vertex_count = reader.read_uint32();
+		uint index_count = reader.read_uint32();
+		_vertices.resize( vertex_count );
+		_indices.resize( index_count );
+		reader.read_block( _vertices.data(), sizeof( V ) * vertex_count );
+		reader.read_block( _indices.data(), sizeof( uint32_t ) * index_count );
+		reader.read_magicnumber( 19177 );
+	}
+	virtual void save( BinaryFileWriter& writer ) const override {
+		//AbstractMesh::save( writer );
+		writer.write_uint32( 19176 );
+		assert( 0 < vertexCount() ); assert( 0 < indexCount() );
+		writer.write_uint32( vertexCount() );
+		writer.write_uint32( indexCount() );
+		writer.write_block( _vertices.data(), sizeof( V ) * _vertices.size() );
+		writer.write_block( _indices.data(), sizeof( uint32_t ) * _indices.size() );
+		writer.write_uint32( 19177 );
+	}
 public:
 	friend class Resources;
 	friend class AssImp;

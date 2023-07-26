@@ -3,20 +3,15 @@
 #include "Converter.h"
 #include "utils/File.h"
 #include "utils/Logger.h"
-
 //#include "resource/Resources.h"
 //#include "resource/MeshModel.h"
 //#include "resource/Texture.h"
 #include "resource/Image.h"
+#include "AssImp.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "external/stb/stb_image.h"
 #include <filesystem>
-
-//#include "AssImp.h"
-
-
-//#include "collection/SyntyNature.h"
 
 //#define REBUILD_ALL
 
@@ -47,6 +42,7 @@ void Converter::run(){
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rchit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rmiss.glsl" );
 	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
+	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx" );
 }
 #ifdef ooold
 
@@ -309,6 +305,25 @@ void Converter::convertImage( const String& trgname, const String& srcpath ){
 	writer.close();
 	stbi_image_free( pixels );
 }
+void Converter::convertMesh( const String& name, const String& srcpath ){
+	String trgpath = _targetpath + "/" + name;
+#ifndef REBUILD_ALL
+	if( File::Exists( trgpath ) )
+		return;
+	AssImp assimp;
+	assimp.open( srcpath );
+	assimp.trace();
+	MeshPNT* mesh = assimp.loadMeshPNT( 0 );
+	//MeshModel* model = assimp.loadModel();
+	BinaryFileWriter writer( trgpath );
+	mesh->save( writer );
+	writer.close();
+	std::cout << "m" <<  mesh->calcBoundingBox();
+	odelete( mesh );
+#endif
+}
+
+
 #ifdef old
 void Converter::copy( const String& trgpath, const String& srcpath ){
 	if( File::Exists( trgpath ) )

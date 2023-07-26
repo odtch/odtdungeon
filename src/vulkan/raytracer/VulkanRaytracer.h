@@ -97,6 +97,7 @@ public:
 	virtual Texture* loadTexture( const String& name ) override;
 public:
 	virtual MeshPNT* createDynamicMeshPNT( const String& name ) override;
+	virtual MeshPNT* loadMeshPNT( const String& name ) override;
 public:
 	virtual RenderLayer* createRootLayer() override;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) override;

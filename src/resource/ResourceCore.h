@@ -3,6 +3,7 @@
 #include "utils/Debugging.h"
 #include "utils/Logger.h"
 #include "utils/String.h"
+#include "utils/File.h"
 #include "math/Vec3.h"
 #include "math/Vec4.h"
 #include "math/Mat4.h"
@@ -25,8 +26,9 @@ class Texture;
 class Material;
 ////class MaterialAlternatives;
 //class AbstractMesh;
-//class MeshModel;
-//class MeshModelNode;
+
+class MeshModel;
+class MeshModelNode;
 
 ////class Skin;
 ////class SkinSkeleton;

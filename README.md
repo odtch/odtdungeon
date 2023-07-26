@@ -12,10 +12,10 @@ One goal is to separate the main thread from the scene- and render-thread in the
 + renderer
 + vulkan
 + triangle
-- input
-- rock
-- char
++ input
++ rock
 
+- char
 - bones
 
 

@@ -104,6 +104,9 @@ String String::toLower() const {
 	}
 	return result;
 }
+void String::clear(){
+	_value.clear();
+}
 void String::operator=( const String& value ){
 	_value = value._value;
 }

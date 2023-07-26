@@ -16,7 +16,8 @@ public:
     virtual Material* createMaterial( const String& name ) = 0;
 	virtual Texture* loadTexture( const String& name ) = 0;
 public:
-    virtual MeshPNT* createDynamicMeshPNT( const String& name ) = 0;
+	virtual MeshPNT* createDynamicMeshPNT( const String& name ) = 0;
+	virtual MeshPNT* loadMeshPNT( const String& name ) = 0;
 public:
 	virtual RenderLayer* createRootLayer() = 0;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) = 0;

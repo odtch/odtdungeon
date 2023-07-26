@@ -25,6 +25,7 @@ public:
 private:
 	void compileShader( const String& vulkanLevel, const String& fn );
 	void convertImage( const String& trgpath, const String& srcpath );
+	void convertMesh( const String& name, const String& srcpath);
 	/*
 	void copy( const String& srcpath, const String& trgpath );
 	void convertCollection( const String& id, const String& srcpath );

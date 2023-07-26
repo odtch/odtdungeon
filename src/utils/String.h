@@ -34,6 +34,7 @@ public:
 public:
 	String toLower() const;
 public:
+	void clear();
 	void operator=( const String& value );
 public:
 	String operator+( const String& value ) const;

@@ -68,6 +68,16 @@ Mesh<VertexPNT>* VulkanRaytracer::createDynamicMeshPNT( const String& name ){
 	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
 	return mesh;
 }
+Mesh<VertexPNT>* VulkanRaytracer::loadMeshPNT( const String& name ){
+	MeshPNT* mesh = new MeshPNT( name );
+	{
+		String filename = String( "media/" ) + name;
+		BinaryFileReader reader( filename );
+		mesh->load( reader );
+	}
+	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
+	return mesh;
+}
 RenderLayer* VulkanRaytracer::createRootLayer(){
 	return createNextLayer( null );
 }

@@ -33,5 +33,6 @@ target_link_libraries(odtdungeon
     glfw
     #pthread
     vulkan
+	assimp
 )
 
