@@ -42,7 +42,7 @@ public:
 	~FpsCounter();
 public:
 	void reset();
-	void tick();
+	bool tick();
 public:
 	int frame_count() const{ return _frame_count; }
 	float fps() const{ return _current_fps; }

@@ -58,6 +58,10 @@ vec4 OTextureGetFromMaterial( uint material_index, vec2 texture_coord, float tex
 
 vec4 OHitCalcColor( in OHit hit ){
 	vec4 color = vec4( 1, 1, 1, 1 );
+	if( hit.material_index > globals.material_count ){
+		debugPrintfEXT( "OHitCalcColor hit.material_index to high %d %d\n", hit.material_index, hit.instance_index );
+		return vec4( 1, 0, 0, 1 );
+	}
 	if( 0 != ( hit.material_flags & MaterialFlag_UseTextCoordYasPower ) ){
 		float p0 = hit.barycentrics[0] * hit.vertex[0].txt.y;
 		float p1 = hit.barycentrics[1] * hit.vertex[1].txt.y;
@@ -119,14 +123,15 @@ vec4 OHitCalcColor( in OHit hit ){
 //			hit.color = vec4( 1, 0, 1, 1 );
 //			return hit;
 //		}
-		if( hit.material_index > 100 ){
-			return vec4( 1, 0, 0, 1 );
-		}
 		// hack: texture-coordinaten aus mesh.vertex.position
 		hit.texture_coord = hit.vertex[0].pos.xy * hit.barycentrics.x + hit.vertex[1].pos.xy * hit.barycentrics.y + hit.vertex[2].pos.xy * hit.barycentrics.z;
 	}
 	const int texture_index = materials[ hit.material_index ].texture1Index;
+
+
+
 	if( 0 <= texture_index ){
+		debugPrintfEXT( "t %d %d\n", hit.material_index, texture_index );
 		color *= OTextureGetFromMaterial(
 					hit.material_index,
 					hit.texture_coord,
@@ -134,6 +139,10 @@ vec4 OHitCalcColor( in OHit hit ){
 					);
 		//debugPrintfEXT( "vrt.t %d %f,%f \n", texture_index, hit.texture_coord.x * 512, hit.texture_coord.y * 512 );
 		//debugPrintfEXT( "vrt.t %d %f,%f is %f %f %f %f\n", texture_index, hit.texture_coord.x * 512, hit.texture_coord.y * 512, texture_color.r * 256, texture_color.g * 256, texture_color.b * 256, texture_color.a * 256 );
+		//return vec4( 0, 1, 0, 1 );
+	} else {
+		//return vec4( 0, 0, 1, 1 );
+
 	}
 	color *= materials[ hit.material_index ].color;
 	color *= instances[ hit.instance_index ].color;

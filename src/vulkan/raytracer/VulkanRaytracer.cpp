@@ -4,6 +4,7 @@
 #include "VulkanPipelineRaytracerExtension.h"
 #include "VulkanRaytracingPipelineExtension.h"
 #include "VulkanRaytracingPipelineProperties.h"
+#include "VulkanRaytracerRenderLayer.h"
 #include "vulkan/device/VulkanInstance.h"
 #include "vulkan/device/VulkanDevice.h"
 #include "vulkan/device/VulkanRequirement.h"
@@ -16,29 +17,16 @@
 #include "renderer/RenderLayer.h"
 #include "renderer/RenderLight.h"
 
-class xRenderLayer;
+class VulkanRaytracerRenderLayer;
 class xDummyRenderInstancePNT : public RenderInstancePNT
 {
 public:
-	xRenderLayer* _layer;
+	VulkanRaytracerRenderLayer* _layer;
 public:
-	explicit xDummyRenderInstancePNT( xRenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material )
+	explicit xDummyRenderInstancePNT( VulkanRaytracerRenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material )
 		:RenderInstancePNT( posori, mesh, material )
 		,_layer( asserted( layer ) ){}
     virtual ~xDummyRenderInstancePNT() override{}
-};
-class xRenderLayer : public RenderLayer
-{
-public:
-	List<xDummyRenderInstancePNT*> _instances;
-	List<RenderLight*> _lights;
-public:
-	explicit xRenderLayer(){}
-	virtual ~xRenderLayer() override{
-		_instances.deleteAll();
-		_lights.deleteAll();
-	}
-
 };
 
 //uint VulkanRaytracer::AntiAliasingCount = 3;
@@ -75,18 +63,22 @@ Texture* VulkanRaytracer::loadTexture( const String& name ){
 	_queue.post( VulkanTextureCreated, texture, null, this );
 	return texture;
 }
-RenderLayer* VulkanRaytracer::createLayer(){
-	RenderLayer* layer = new xRenderLayer();
-	_queue.post( VulkanLayerCreated, layer, null, this );
-	return layer;
-}
 Mesh<VertexPNT>* VulkanRaytracer::createDynamicMeshPNT( const String& name ){
     MeshPNT* mesh = new MeshPNT( name );
 	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
-    return mesh;
+	return mesh;
+}
+RenderLayer* VulkanRaytracer::createRootLayer(){
+	return createNextLayer( null );
+}
+RenderLayer* VulkanRaytracer::createNextLayer( RenderLayer* prev ){
+	RenderLayer* layer = new VulkanRaytracerRenderLayer();
+	_queue.post( VulkanLayerCreated, layer, prev, this );
+	return layer;
+
 }
 RenderInstancePNT* VulkanRaytracer::createInstance( RenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material ){
-	RenderInstancePNT* instance = new xDummyRenderInstancePNT( asserted( dynamic_cast<xRenderLayer*>( layer) ), posori, mesh, material );
+	RenderInstancePNT* instance = new xDummyRenderInstancePNT( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, mesh, material );
 	_queue.post( VulkanRenderInstancePNTCreated, instance, null, this );
 	return instance;
 }
@@ -199,6 +191,7 @@ void VulkanRaytracer::destroyDevice(){
 	VulkanPresenter::destroyDevice();
 }
 void VulkanRaytracer::run(){
+	//sleep_ms( 1000 ); // startup-sleep, give scene some time to initialize
 	VulkanPresenter::run();
 }
 void VulkanRaytracer::render( VkImage targetimage ){
@@ -221,7 +214,17 @@ bool VulkanRaytracer::handle( const Message& message ){
 		_textures.getTextureIndex( (Texture*) message.p1 );
 		return true;
 	case VulkanLayerCreated:
-		_layers.add( (RenderLayer*) message.p1 );
+		{
+			VulkanRaytracerRenderLayer* layer = asserted( (VulkanRaytracerRenderLayer*) message.p1 );
+			VulkanRaytracerRenderLayer* prev = (VulkanRaytracerRenderLayer*) message.p2;
+			assert( ( _layers.size() == 0 && prev == null ) || ( _layers.size() > 0 && prev != null ) );
+			if( prev ){
+				assert( prev->_nextLayer == null );
+				prev->_nextLayer = layer;
+			}
+			layer->_index = _layers.size();
+			_layers.add( layer );
+		}
 		return true;
 	case VulkanMeshPNTCreated:
 		{
@@ -238,7 +241,7 @@ bool VulkanRaytracer::handle( const Message& message ){
 		}
 		return true;
 	case VulkanLightAdded:
-		((xRenderLayer*)message.p1)->_lights.add( (RenderLight*) message.p2 );
+		((VulkanRaytracerRenderLayer*)message.p1)->_lights.add( (RenderLight*) message.p2 );
 		return true;
 	default:
 		logError( "VulkanRaytracer unhandled message", message.type );
@@ -272,7 +275,7 @@ void VulkanRaytracer::startLoadData(){
 	_globals->_data.target_half_width = _globals->_data.target_width / 2;
 	_globals->_data.target_half_height = _globals->_data.target_height / 2;
 	_globals->_data.layer_count = 0;
-	for( RenderLayer* layer : _layers ){
+	for( VulkanRaytracerRenderLayer* layer : _layers ){
 		uint layerindex = _globals->_data.layer_count;
 //		int layerindex = layer->index();
 //		assert( _globals->_data.layer_count == layer->index() );
@@ -289,27 +292,24 @@ void VulkanRaytracer::startLoadData(){
 //		} else {
 			layerdata.translucent_layer_index = -1;
 //		}
-		if( layer->hasNextLayer() == false ){
+		if( layer->_nextLayer == null ){
 			layerdata.next_layer_index = -1;
 			layerdata.next_camera_action = 0;
 		} else {
-			assert( false );
-//			layerdata.next_layer_index = layer->nextLayer()->index();
-//			assert( 0 < layerdata.next_layer_index );
-//			layerdata.next_camera_action = layer->nextCameraAction();
-//			if( layerdata.next_camera_action == VulkanLayer_NextCameraAction_2D_to_3D ){
-//				layerdata.next_camera_2d_fov_size = fmax( _target.size().width, _target.size().height )
-//						// * 1.1f problem beim mouse.ray....
-//						;
-//				_globals->_data.layers_next_camera_transform[ layerindex ] = Mat4::Translation( Vec3( 0,
-//																									0
-//																									// hu, mouse.ray??? -50
-//																									, 0 ) ).asGlm();
+			layerdata.next_layer_index = layer->_nextLayer->_index;
+			assert( 0 < layerdata.next_layer_index );
+			layerdata.next_camera_action = layer->_nextCameraAction;
+			if( layerdata.next_camera_action == VulkanLayer_NextCameraAction_2D_to_3D ){
+				layerdata.next_camera_2d_fov_size = fmax( _target.size().width, _target.size().height ); // * 1.1f problem beim mouse.ray....
+				//_globals->_data.layers_next_camera_transform[ layerindex ] = Mat4::Translation( Vec3( 0, 0, 0 ) ).asGlm(); // mouse.ray? y -50
+				_globals->_data.layers_next_camera_transform[ layerindex ] = layer->_nextCamera.posori().matrix().asGlm();
+				//Vec3 d = layer->_nextCamera.posori().matrix().mapNormal( Vec3( 0, 1, 0 ) );	logDebug( "d", d );
+
 //			} else if( layerdata.next_camera_action == VulkanLayer_NextCameraAction_Transform ){
 //				_globals->_data.layers_next_camera_transform[ layerindex ] = layer->nextCameraTransform().asGlm();
-//			} else {
-//				assert( false );
-//			}
+			} else {
+				assert( false );
+			}
 //			if( layer->hasNextCamera() ){
 //				_globals->_data.layers_next_camera_transform[ layerindex ] = Mat4::Translation( layer->nextCamera()->position() ).asGlm();
 //				_globals->_data.layers_next_camera_transform[ layerindex ] = layer->nextCamera()->posori().matrix().asGlm();
@@ -551,7 +551,7 @@ void VulkanRaytracer::startRender(){
 ////	}
 //}
 void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata, VulkanTLAS* tlas ){
-	xRenderLayer* layer = asserted( dynamic_cast<xRenderLayer*>( alayer ) );
+	VulkanRaytracerRenderLayer* layer = asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( alayer ) );
 	layerdata.first_instance_index = _instances.count();
 //	for( Renderable* renderable : layer->renderables() ){
 	for( xDummyRenderInstancePNT* renderable : layer->_instances ){
@@ -634,6 +634,7 @@ void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata
 void VulkanRaytracer::startCopyToFB( VkImage targetImage ){
 	//logDebug( "startCopyToFB" );
 	_pcs.copytofb->start();
+	_tasks.copytofb.clear();
 	_tasks.copytofb.create( "rt.copyToFB", VulkanTask::RunOnce, 10, computeCommandPool() );
 	_tasks.copytofb.addWaitFor( _tasks.render );
 	{

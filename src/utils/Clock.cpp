@@ -193,13 +193,16 @@ void FpsCounter::reset(){
 	_start_time = std::chrono::high_resolution_clock::now();
 	_frame_count = 0;
 }
-void FpsCounter::tick(){
+bool FpsCounter::tick(){
 	_frame_count++;
 	auto currentTime = std::chrono::high_resolution_clock::now();
 	float seconds = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - _start_time ).count();
 	_current_fps = _frame_count / seconds;
-	if( 60 < _frame_count ){
+	if( 160 < _frame_count ){
 		_start_time = currentTime;
 		_frame_count = 0;
+		return true;
+	} else {
+		return false;
 	}
 }

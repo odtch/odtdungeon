@@ -6,6 +6,8 @@
 #include "resource/Material.h"
 #include "resource/Mesh.h"
 
+class Camera;
+
 class Renderer;
 class RenderLayer;
 class RenderInstance;

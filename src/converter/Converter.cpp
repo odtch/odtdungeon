@@ -18,7 +18,7 @@
 
 //#include "collection/SyntyNature.h"
 
-//#define REBUILD_ALL
+#define REBUILD_ALL
 
 void Converter::Run(){
 	Converter converter;

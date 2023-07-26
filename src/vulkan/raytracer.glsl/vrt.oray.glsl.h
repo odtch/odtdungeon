@@ -42,7 +42,7 @@ ORayResult ORayCalc( in ORay ray ){
 		if( 0 != ( materials[ pld.hit.material_index ].flags & MaterialFlag_NoLightAffected ) ){
 		} else {
 			vec4 light_color = OCalcLights( ray.layer_index, result.hit_position, result.hit_normal );
-//			result.color.rgb *= light_color.rgb;
+			result.color.rgb *= light_color.rgb;
 		}
 //result.color = vec4( 0, 0, 1, 1 );
 	} else {
@@ -88,10 +88,13 @@ bool ORayNextLayer( vec2 pixel, uint layer_index, out ORay ray ){
 	} else if( globals.layers[ layer_index ].next_camera_action == VulkanLayer_NextCameraAction_2D_to_3D ){
 		ray.direction = vec3( -( globals.target_half_width - pixel.x ), globals.layers[ layer_index ].next_camera_2d_fov_size, ( globals.target_half_height - pixel.y ) );
 		ray.direction = normalize( ray.direction );
-		ray.origin = vec3( 0, 0, 0 );
+		ray.origin = vec3( ray.origin.x, 0, ray.origin.z );
 		ray.origin = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.origin, 1 ) ).xyz;
 		ray.direction = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.direction, 0 ) ).xyz;
 		ray.direction = normalize( ray.direction );
+//		if( pixel.x > 500 && pixel.x < 502 && pixel.y > 400 && pixel.y < 402 ){
+//			debugPrintfEXT( "r %f %f %f  %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z, ray.direction.x, ray.direction.y, ray.direction.z );
+//		}
 	} else if( globals.layers[ layer_index ].next_camera_action == VulkanLayer_NextCameraAction_Transform ){
 		ray.origin = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.origin, 1 ) ).xyz;
 		ray.direction = ( globals.layers_next_camera_transform[ layer_index ] * vec4( ray.direction, 0 ) ).xyz;

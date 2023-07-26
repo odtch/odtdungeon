@@ -291,13 +291,14 @@ void VulkanPresenter::present(){
 	switch( vulkanQueuePresent( _presentQueue, _prevRenderImageIndex, *swapchain() ) ){
 	case VK_SUCCESS:
 		//_performanceCounter.onImagePresented();
-		_fps.tick();
+		if( _fps.tick() ){
+			logDebug( "present fps=", _fps.fps(), "sleep=", _sleep_time_per_frame.toString() );
+			_sleep_time_per_frame.reset();
+		}
 		//if( _fps.frame_count() % 10 == 2
 		//_present_pc->stop();
-		if( _fps.frame_count() % 10 == 9 )
-			logDebug( "present fps=", _fps.fps(), _sleep_time_per_frame.toString() );
-		if( _fps.frame_count() % 60 == 59 )
-			_sleep_time_per_frame.reset();
+//		if( _fps.frame_count() % 10 == 9 )
+//		if( _fps.frame_count() % 60 == 59 )
 		_window->onNewFrame();
 		//_present_pc->start();
 		_state = Ready;

@@ -45,7 +45,7 @@ private:
 	VulkanMaterialArray _materials;
 	VulkanLightArray _lights;
 private:
-	List<RenderLayer*> _layers;
+	List<VulkanRaytracerRenderLayer*> _layers;
 //private:
 //	VulkanPipelineRaytracerExtension* _extension = null;
 //// private:
@@ -96,8 +96,10 @@ public:
     virtual Material* createMaterial( const String& name ) override;
 	virtual Texture* loadTexture( const String& name ) override;
 public:
-	virtual RenderLayer* createLayer() override;
 	virtual MeshPNT* createDynamicMeshPNT( const String& name ) override;
+public:
+	virtual RenderLayer* createRootLayer() override;
+	virtual RenderLayer* createNextLayer( RenderLayer* prev ) override;
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) override;
 	virtual void addLight( RenderLayer* layer, RenderLight* light ) override;

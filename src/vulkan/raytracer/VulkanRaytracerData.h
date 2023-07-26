@@ -58,9 +58,9 @@ struct VulkanRenderableData {
 //	int dummy_emissiveTextureIndex;
 //	int dummy_viewport_index;
 //	int dummy_effect;
-//	int reserve_7;
-//	int reserve_8;
-//	int reserve_9;
+	int reserve_7;
+	int reserve_8;
+	int reserve_9;
 	int last;
 };
 

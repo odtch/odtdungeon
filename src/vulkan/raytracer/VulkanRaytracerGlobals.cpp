@@ -36,6 +36,7 @@ void VulkanRaytracerGlobals::update( VulkanTask& task ){
 void VulkanRaytracerGlobals::updateData(){
 	{
 		uint mi = 0;
+		_data.material_count = _materials.size();
 		for( VulkanMaterial* material : _materials ){
 			if( mi < VuklanRaytracerGlobalsData_MaxMaterialCount ){
 				VulkanMaterialData& data = _data.materials[ mi ];
