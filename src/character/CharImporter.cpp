@@ -1094,7 +1094,8 @@ CharImporter::Bone* CharImporter::getBoneForSkeletonJoint( SkeletonJoint* aijoin
 }
 CharAnimation* CharImporter::loadAnimation( const AssImpAnimation& skinanimation ){
 	CharAnimation* charanimation = new CharAnimation();
-	CharRagdoll ragdoll( ragdolltype() );
+	SceneObject character;
+	CharRagdoll ragdoll( ragdolltype(), &character );
 	for( AssImpAnimationFrame* skinanimframe : skinanimation.frames() ){
 		Skeleton* skinskeleton = skinanimframe->skeleton();
 		mapSkeletonToRagdoll( *skinskeleton, ragdoll );

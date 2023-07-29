@@ -131,8 +131,9 @@ void CharRagdollType::trace() const{
 	_root->trace( 0 );
 }
 
-CharRagdoll::CharRagdoll( CharRagdollType *type )
-	:_type( asserted( type ) )
+CharRagdoll::CharRagdoll( CharRagdollType *type, SceneObject* object )
+	:SceneProperty( object )
+	,_type( asserted( type ) )
 {
 	for( CharJointType* jointtype : _type->joints() ){
 		CharJoint* joint = new CharJoint();
@@ -242,12 +243,11 @@ void CharRagdoll::savePose( CharPose& pose ) const {
 //}
 
 
-CharRagdollRenderer::CharRagdollRenderer( CharRagdoll* ragdoll, Material* material, SceneObject* object )
-	:SceneProperty( object )
-	,_object( asserted( object ) )
+CharRagdollSkin::CharRagdollSkin( CharRagdoll* ragdoll, Material* material, SceneObject* object )
+	:Skin( asserted(ragdoll)->type()->skin(), material, object )
 	,_ragdoll( asserted( ragdoll ) )
-	,_material( asserted( material ) )
 {
+	assert( _ragdoll->node() == node() );
 //	for( CharJoint* joint : _ragdoll->joints() ){
 //		if( !joint->type()->hasMesh() ){
 //			logDebug( "CharRagdoll joint no mesh", joint->type()->name() );
@@ -259,45 +259,23 @@ CharRagdollRenderer::CharRagdollRenderer( CharRagdoll* ragdoll, Material* materi
 //		_renderers.add( renderer );
 //	}
 }
-CharRagdollRenderer::~CharRagdollRenderer(){
+CharRagdollSkin::~CharRagdollSkin(){
 	//	_renderers.deleteAll();
 }
-void CharRagdollRenderer::onAddedToScene( Scene* scene ){
-	assert( _skeletonMesh == null );
-	//_skeletonMesh = scene->renderer().createDynamicMeshPNT( "crr" );
-	//_ragdoll->
-
-}
-void CharRagdollRenderer::onRemovedFromScene( Scene* scene ){
-
-}
-void CharRagdollRenderer::animate( float dt ){
+void CharRagdollSkin::animate( float dt ){
+	Mat4* bonematrix = & this->bone_matrix( 0 );
+	int boneindex = 0;
+	for( CharRagdollType::JointToSkin* joint2skin : _ragdoll->type()->joint2skins() ){
+		CharJoint* joint = _ragdoll->getJoint( joint2skin->joint );
+		ASSERT( bonematrix == &this->bone_matrix( boneindex ) );
+		(*bonematrix) = joint->absolutematrix() * joint2skin->relativematrix * this->type()->bones().get( boneindex )->bone2mesh;
+		bonematrix++;
+		boneindex++;
+	}
+	this->setBonesModified();
+	Skin::animate( dt );
 //	for( Renderer* renderer : _renderers ){
 //		renderer->_renderer->setPosOri( PosOri( _posori.matrix() * renderer->_joint->posori().matrix() ) );
 //	}
 }
 
-//CharRagdollSkinRenderer::CharRagdollSkinRenderer( CharRagdoll* ragdoll, Material* material, Object* object )
-//	:ObjectProperty( object )
-//	,_ragdoll( asserted( ragdoll ) )
-//{
-//	_skin = new Skin( ragdoll->type()->skin(), material, object );
-//	_renderer = new SkinRenderer( _skin, object );
-//}
-//CharRagdollSkinRenderer::~CharRagdollSkinRenderer(){
-//}
-//void CharRagdollSkinRenderer::setPosOri( const PosOri& posori ){
-//	_renderer->setPosOri( posori );
-//}
-//void CharRagdollSkinRenderer::animate( float dt ){
-//	Mat4* bonematrix = &_skin->bone_matrix( 0 );
-//	int boneindex = 0;
-//	for( CharRagdollType::JointToSkin* joint2skin : _ragdoll->type()->joint2skins() ){
-//		CharJoint* joint = _ragdoll->getJoint( joint2skin->joint );
-//		ASSERT( bonematrix == &_skin->bone_matrix( boneindex ) );
-//		(*bonematrix) = joint->absolutematrix() * joint2skin->relativematrix * _skin->type()->bones().get( boneindex )->bone2mesh;
-//		bonematrix++;
-//		boneindex++;
-//	}
-//	_skin->setBonesModified();
-//}

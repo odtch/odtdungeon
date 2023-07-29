@@ -552,7 +552,7 @@ void AssImp::loadSkeletonNode( Skeleton* skeleton, aiNode* node, SkeletonJoint* 
 uint AssImp::animationCount() const {
 	return _aiScene->mNumAnimations;
 }
-AssImpAnimation*AssImp::loadAnimation(){
+AssImpAnimation* AssImp::loadAnimation(){
 	assert( animationCount() == 1 );
 	uint animationIndex = 0;
 	aiAnimation* aiAnimation = aiscene()->mAnimations[ animationIndex ];

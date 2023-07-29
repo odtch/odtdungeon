@@ -44,16 +44,16 @@ private:
 	friend class CharImporter;
 };
 
-class CharRagdoll
+class CharRagdoll : public SceneProperty
 {
-	DEBUGCOUNTER(CharRagdoll)
+	DEBUGCOUNTER(CharRagdoll)	
 private:
 	CharRagdollType* _type;
 private:
 	CharJoint* _root = null;
 	List<CharJoint*> _joints;
 public:
-	explicit CharRagdoll( CharRagdollType* type );
+	explicit CharRagdoll( CharRagdollType* type, SceneObject* object );
 	virtual ~CharRagdoll();
 public:
 	CharRagdollType* type() const{ return _type; }
@@ -70,64 +70,13 @@ public:
 //	void load( const CharRagdoll& ragdoll );
 };
 
-class CharRagdollRenderer : public SceneProperty
+class CharRagdollSkin : public Skin
 {
 private:
-	SceneObject* _object;
 	CharRagdoll* _ragdoll;
-	Material* _material;
-	PosOri _posori;
-private:
-	MeshPNT* _skeletonMesh = null;
-//	struct Renderer {
-//		CharJoint* _joint = null;
-//		ObjectRenderableProperty* _renderer = null;
-//	};
-//	List<Renderer*> _renderers;
 public:
-	explicit CharRagdollRenderer( CharRagdoll* ragdoll, Material* material, SceneObject* object );
-	virtual ~CharRagdollRenderer() override;
-//public:
-//	void setPosOri( const PosOri& posori );
-protected:
-	virtual void onAddedToScene( Scene* scene ) override;
-	virtual void onRemovedFromScene( Scene* scene ) override;
+	explicit CharRagdollSkin( CharRagdoll* ragdoll, Material* material, SceneObject* object );
+	virtual ~CharRagdollSkin() override;
 protected:
 	virtual void animate( float dt ) override;
-//private:
-//	void rebuild();
 };
-/*
-class CharRagdollSkinRenderer : public ObjectProperty
-{
-private:
-	CharRagdoll* _ragdoll;
-private:
-	PosOri _posori;
-private:
-	Skin* _skin;
-	SkinRenderer* _renderer = null;
-public:
-	explicit CharRagdollSkinRenderer( CharRagdoll* ragdoll, Material* material, Object* object );
-	virtual ~CharRagdollSkinRenderer() override;
-public:
-	void setPosOri( const PosOri& posori );
-public:
-	virtual void animate( float dt ) override;
-};
-
-class CharRagdollSkeletonRenderer : public ObjectRenderableProperty
-{
-private:
-	CharRagdoll* _ragdoll;
-	MeshPNT _mesh;
-	Material _material;
-public:
-	explicit CharRagdollSkeletonRenderer( CharRagdoll* ragdoll, Object* object );
-	virtual ~CharRagdollSkeletonRenderer() override;
-public:
-	virtual void animate( float dt ) override;
-private:
-	void rebuild();
-};
-*/

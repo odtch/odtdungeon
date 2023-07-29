@@ -37,6 +37,7 @@ VulkanRaytracer::VulkanRaytracer( Window* window )
 }
 VulkanRaytracer::~VulkanRaytracer(){
 //	ASSERT( _extension == null );
+	_skininstances.removeAll();
 	_layers.deleteAll();
 	odelete( _globals );
 }

@@ -15,6 +15,7 @@
 //#include "renderer/OdtRender.h"
 //#include "physics/OdtPhysics.h"
 #include "skin/SkinCore.h"
+#include "skin/Skin.h"
 #include "skin/SkinRenderer.h"
 
 class CharCharacterType;
