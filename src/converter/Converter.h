@@ -24,6 +24,7 @@ public:
 public:
 	void run();
 private:
+	bool shouldConvert( const String& srcpath, const String& trgpath );
 	void compileShader( const String& vulkanLevel, const String& fn );
 	void convertImage( const String& trgpath, const String& srcpath );
 	void convertMesh( const String& name, const String& srcpath, const Mat4& transform );

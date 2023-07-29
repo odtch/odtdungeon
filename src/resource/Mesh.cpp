@@ -1,10 +1,7 @@
 #include "stdodt.h"
 #include "Mesh.h"
 
-AbstractMesh::AbstractMesh( const String& name )
-    :Resource( name )
-    ,_modificationState( ModifiedInCPU )
-{
+AbstractMesh::AbstractMesh(){
 //	static int nr = 0;
 //	setId( String( "mesh " ) + String::FromInt( ++nr ) );
 }

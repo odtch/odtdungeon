@@ -3,13 +3,14 @@
 #include "resource/Material.h"
 #include "vulkan/command/VulkanCommandPool.h"
 #include "vulkan/resource/VulkanTextureArray.h"
-#include "vulkan/resource/VulkanMaterial.h"
 #include "vulkan/command/VulkanTask.h"
 
 VulkanRaytracerGlobals::VulkanRaytracerGlobals()
 	:_commandPool( null )
+	,_materials( VuklanRaytracerGlobalsData_MaxMaterialCount )
 {
 	memset( &_data, 0, sizeof( _data ));
+	_materials.fill( null );
 }
 VulkanRaytracerGlobals::~VulkanRaytracerGlobals(){
 	ASSERT( _commandPool == null );
@@ -22,12 +23,17 @@ void VulkanRaytracerGlobals::create( VulkanCommandPool* commandPool ){
 void VulkanRaytracerGlobals::destroy(){
 	_buffer.clear();
 	_commandPool = null;
-	_materials.deleteAll();
 }
-void VulkanRaytracerGlobals::addMaterial( VulkanMaterial* material ){
-	assert( material );
-	assert( _materials.size()+1 < VuklanRaytracerGlobalsData_MaxMaterialCount );
-	_materials.add( material );
+void VulkanRaytracerGlobals::registerMaterial( Material* material ){
+	ASSERT( material );
+	ASSERT( material->materialindex() < _materials.size() );
+	if( _materials.get( material->materialindex() ) == null ){
+		_materials.set( material->materialindex(), material );
+		if( _materialCount <= material->materialindex() )
+			_materialCount = material->materialindex() +1;
+	} else {
+		ASSERT( _materials.get( material->materialindex() ) == material );
+	}
 }
 void VulkanRaytracerGlobals::update( VulkanTask& task ){
 	updateData();
@@ -35,11 +41,11 @@ void VulkanRaytracerGlobals::update( VulkanTask& task ){
 }
 void VulkanRaytracerGlobals::updateData(){
 	{
-		uint mi = 0;
-		_data.material_count = _materials.size();
-		for( VulkanMaterial* material : _materials ){
-			if( mi < VuklanRaytracerGlobalsData_MaxMaterialCount ){
-				VulkanMaterialData& data = _data.materials[ mi ];
+		_data.material_count = _materialCount;
+		for( int m = 0; m < _materials.size(); m++ ){
+			Material* material = _materials[ m ];
+			if( material ){
+				VulkanMaterialData& data = _data.materials[ m ];
 				data.color = material->color().asGlm();
 //				data.flags = material->flags();
 //				data.texture1Index = material->texture().;
@@ -47,9 +53,8 @@ void VulkanRaytracerGlobals::updateData(){
 //				data.tileCountY;
 //				data.reflection;
 			} else {
-				logError( "VulkanRaytracerGlobals too many materials" );
+				//logError( "VulkanRaytracerGlobals too many materials" );
 			}
-			mi++;
 		}
 	}
 }

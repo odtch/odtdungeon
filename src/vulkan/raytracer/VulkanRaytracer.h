@@ -94,7 +94,6 @@ public:
     explicit VulkanRaytracer( Window* window );
     virtual ~VulkanRaytracer() override;
 public:
-    virtual Material* createMaterial( const String& name ) override;
 	virtual Texture* loadTexture( const String& name ) override;
 public:
 	virtual MeshPNT* createDynamicMeshPNT( const String& name ) override;

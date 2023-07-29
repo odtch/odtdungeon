@@ -25,7 +25,7 @@ private:
 	List<CharAnimationFrame*> _frames;
 	float _duration = 0;
 public:
-	explicit CharAnimation( const String& id = String() );
+	explicit CharAnimation();
 	virtual ~CharAnimation() override;
 public:
 //	virtual ResourceType* type() const override;

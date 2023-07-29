@@ -456,7 +456,7 @@ Mesh<VertexPNT>* AssImp::loadMeshPNT( uint meshindex ){
 	assert( aimesh->mPrimitiveTypes & aiPrimitiveType_TRIANGLE );
 	int vertexCount = aimesh->mNumVertices;
 	int indexCount = calcIndexCountForMesh( aimesh );
-	Mesh<VertexPNT>* mesh = new Mesh<VertexPNT>( String( "imported from AssImp" ), vertexCount, indexCount );
+	Mesh<VertexPNT>* mesh = new Mesh<VertexPNT>( vertexCount, indexCount );
 	aiMaterial* aimaterial = _aiScene->mMaterials[ aimesh->mMaterialIndex ];
 	//mesh->setId( String( aimaterial->GetName().C_Str() ) );
 	unsigned int pTextureCoordsIndex = 0;

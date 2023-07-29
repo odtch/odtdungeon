@@ -1,18 +1,9 @@
 #include "stdodt.h"
 
 #include "Texture.h"
-//#include "ResourceStorage.h"
+#include "ResourceType.h"
+#include "ResourceStorage.h"
 
-//const char* TextureType::Id = "TextureType";
-//TextureType::TextureType()
-//	:ResourceType( 2, Id )
-//{
-//}
-//TextureType::~TextureType(){
-//}
-//Resource* TextureType::newInstance(){
-//	return new Texture();
-//}
 
 //Texture::Texture( const String& filename )
 //	:_filename( filename )
@@ -41,12 +32,13 @@
 ////	_tileCountY = y;
 ////}
 
-Texture::Texture( const String& name )
-    :Resource( name )
-{
+Texture::Texture(){
 }
 Texture::~Texture(){
 	_image = null;
+}
+ResourceType* Texture::type() const{
+	return Singleton::Get<TextureType>();
 }
 void Texture::setImage( Image* image ){
 	assert( _image == null );
@@ -56,12 +48,12 @@ void Texture::setImage( Image* image ){
 void Texture::load( BinaryFileReader& reader ){
 //	Resource::load( reader );
 	assert( _image == null );
-//	ResourceReader* rr = asserted( dynamic_cast<ResourceReader*>( &reader ) );
-//	_image = asserted( dynamic_cast<Image*>( rr->read_reference() ) );
+	ResourceReader* rr = asserted( dynamic_cast<ResourceReader*>( &reader ) );
+	_image = asserted( dynamic_cast<Image*>( rr->read_reference() ) );
 }
 void Texture::save( BinaryFileWriter& writer ) const {
 //	Resource::save( writer );
 	assert( _image );
-//	ResourceWriter* rw = asserted( dynamic_cast<ResourceWriter*>( &writer ) );
-//	rw->write_reference( _image );
+	ResourceWriter* rw = asserted( dynamic_cast<ResourceWriter*>( &writer ) );
+	rw->write_reference( _image );
 }

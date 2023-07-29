@@ -10,19 +10,17 @@
 #include "math/Mat4.h"
 #include "math/Box3.h"
 #include "math/PosOri.h"
-//#include "renderer/RenderCore.h"
-//#include "Shared.h"
 
-//class Collections;
-//class Collection;
-
-//class Resources;
+class Collections;
+class Collection;
+class CollectionImporter;
 
 class Resource;
-//class ResourceType;
-//class ResourceTypes;
-//class ResourceReader;
-//class ResourceWriter;
+class ResourceType;
+class ResourceTypes;
+class ResourceReader;
+class ResourceWriter;
+
 class Image;
 class Texture;
 class Material;

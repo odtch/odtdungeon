@@ -13,9 +13,7 @@ CharSkinPartType::CharSkinPartType( uint32_t jointindex, const String& jointname
 CharSkinPartType::~CharSkinPartType(){
 }
 
-CharSkinType::CharSkinType(const String &id)
-	:Resource( id )
-{
+CharSkinType::CharSkinType(){
 }
 CharSkinType::~CharSkinType(){
 	for( CharSkinPartType* part : _parts ){
@@ -33,7 +31,7 @@ void CharSkinType::load( BinaryFileReader& reader ){
 		uint32_t jointindex = reader.read_uint32();
 		String jointname;
 		reader.read_string( jointname );
-		MeshPNT* mesh = new MeshPNT( "CharSkinType" );
+		MeshPNT* mesh = new MeshPNT();
 		mesh->load( reader );
 		CharSkinPartType* part = new CharSkinPartType( jointindex, jointname, mesh );
 		_parts.add( part );

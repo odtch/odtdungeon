@@ -27,7 +27,7 @@ class CharSkinType : public Resource
 private:
 	List<CharSkinPartType*> _parts;
 public:
-	explicit CharSkinType( const String& id = String() );
+	explicit CharSkinType();
 	virtual ~CharSkinType() override;
 //public:
 //	virtual ResourceType* type() const override;

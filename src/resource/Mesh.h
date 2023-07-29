@@ -19,7 +19,7 @@ public:
 		ModifiedInGPU
 	};
 protected:
-	ModificationState _modificationState;
+	ModificationState _modificationState = ModifiedInCPU;
 //public:
 //	enum UpdateType {
 //		UpdateImmediate,
@@ -33,7 +33,7 @@ private:
 private:
 	VulkanMesh* _vulkanmesh = null;
 public:
-    explicit AbstractMesh( const String& name );
+	explicit AbstractMesh();
 	virtual ~AbstractMesh() override;
 //public:
 //	UpdateType updateType() const{ return _updateType; }
@@ -73,13 +73,9 @@ protected:
 	std::vector<V> _vertices;
 	std::vector<uint32_t> _indices;
 public:
-    explicit Mesh( const String& name )
-        :AbstractMesh( name )
-    {
+	explicit Mesh(){
     }
-    explicit Mesh(  const String& name, int maxVertexCount, int maxIndexCount )
-        :AbstractMesh( name )
-    {
+	explicit Mesh( int maxVertexCount, int maxIndexCount ){
 		_vertices.reserve( maxVertexCount );
 		_indices.reserve( maxIndexCount );
 	}

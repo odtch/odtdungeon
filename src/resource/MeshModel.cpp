@@ -15,9 +15,7 @@
 //	return new MeshModel();
 //}
 
-MeshModel::MeshModel( const String& name )
-	:Resource( name )
-{
+MeshModel::MeshModel(){
 }
 MeshModel::~MeshModel(){
 	_root_node = null;
@@ -94,7 +92,8 @@ void trace( MeshModel* model, int level, MeshModelNode* node ){
 				std::cout << "+- ";
 			}
 			//std::cout << "+- mesh " << model->meshes().indexOf( mesh->mesh() ) << " " << mesh->mesh()->id() << "\tmat " << ( mesh->hasMaterial() ? mesh->material()->id() : String() );
-			std::cout << "+- mesh " << model->meshes().indexOf( mesh ) << " " << mesh->name()
+			std::cout << "+- mesh " << model->meshes().indexOf( mesh )
+					  //<< " " << mesh->name()
 						 // << "\tmat " << ( mesh->hasMaterial() ? mesh->material()->id() : String()
 															 ;
 			std::cout << "\n";
@@ -109,7 +108,9 @@ void MeshModel::trace(){
 	::trace( this, 0, _root_node );
 	int index = 0;
 	for( MeshPNT* mesh : _meshes ){
-		std::cout << "Mesh " << index << "\t" << mesh->name() << "\tvc=" << mesh->vertexCount() << " ic=" << mesh->indexCount() << " bb=" << mesh->calcBoundingBox().toString() << "\n";
+		std::cout << "Mesh " << index
+				  //<< "\t" << mesh->name()
+				  << "\tvc=" << mesh->vertexCount() << " ic=" << mesh->indexCount() << " bb=" << mesh->calcBoundingBox().toString() << "\n";
 		index++;
 	}
 }
@@ -119,7 +120,7 @@ void MeshModel::load( BinaryFileReader& reader ){
 	uint32_t meshcount = reader.read_uint32();
 	assert( _meshes.isEmpty() );
 	while( _meshes.size() < meshcount ){
-		MeshPNT* mesh = new MeshPNT( String( "loaded from file" ));
+		MeshPNT* mesh = new MeshPNT();
 		mesh->load( reader );
 		_meshes.add( mesh );
 	}

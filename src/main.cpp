@@ -3,8 +3,10 @@
 #include "utils/Logger.h"
 #include "utils/Module.h"
 #include "utils/Clock.h"
+#include "resource/ResourceType.h"
 #include "window/Window.h"
 #include "vulkan/raytracer/VulkanRaytracer.h"
+#include "dungeon/DungeonCollection.h"
 #include "dungeon/DungeonScene.h"
 #include "dungeon/DungeonWindow.h"
 #include "converter/Converter.h"
@@ -25,8 +27,12 @@ int main( int argc, char** argv ) {
 		#endif
         {
             Modules modules;
+			new ResourceTypes();
 			Physics physics;
             modules.start();
+			new Collections();
+			new DungeonCollection();
+			Collections::Get()->load( String( "media" ) );
 			DungeonWindow window;
 			window.create( 1600, 1200, String( "ODT-Dungeon" ));
             VulkanRaytracer renderer( &window );

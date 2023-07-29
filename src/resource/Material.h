@@ -4,22 +4,12 @@
 #include "MaterialFlags.h"
 //#include "Texture.h"
 
-//class MaterialType : public ResourceType
-//{
-//public:
-//	static const char* Id;
-//public:
-//	explicit MaterialType();
-//	virtual ~MaterialType() override;
-//public:
-//	virtual Resource* newInstance() override;
-//};
 
 class Material : public Resource
 {
 	DEBUGCOUNTER( Material )
 private:
-//	uint32_t _index = 0;
+	uint32_t _materialindex = 0;
 private:
 	uint32_t _flags = 0;
 //private:
@@ -44,12 +34,12 @@ public:
 //private:
 //	MaterialAlternatives* _alternatives = null;
 public:
-    explicit Material( const String& name );
+	explicit Material();
 	virtual ~Material() override;
-//public:
-//	virtual ResourceType* type() const override { return Singleton::Get<MaterialType>(); }
-//public:
-//	uint32_t index() const{ ASSERT( _index < 201 ); return _index; }
+public:
+	virtual ResourceType* type() const override;
+public:
+	uint32_t materialindex() const{ return _materialindex; }
 public:
 	uint32_t flags() const{ return _flags; }
 //	bool hasFlag( uint flag ) const;
@@ -104,9 +94,9 @@ public:
 ////public:
 ////	bool hasAlternatives() const{ return _alternatives != null; }
 ////	const List<Material*>& alternatives() const;
-//public:
-//	virtual void load( BinaryFileReader& reader ) override;
-//	virtual void save( BinaryFileWriter& writer ) const override;
+public:
+	virtual void load( BinaryFileReader& reader ) override;
+	virtual void save( BinaryFileWriter& writer ) const override;
 public:
 	bool isModified() const{ return _modified; }
 	void setModified( bool modified = true );

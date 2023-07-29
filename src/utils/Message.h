@@ -13,7 +13,7 @@ enum MessageType {
 	WindowResized,
 	WindowDestroyed,
 	// Vulkan
-	VulkanMaterialCreated,
+	//VulkanMaterialCreated,
 	VulkanTextureCreated,
 	VulkanLayerCreated,
 	VulkanMeshPNTCreated,

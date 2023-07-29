@@ -36,7 +36,7 @@ private:
 	MeshModelNode* _root_node = null;
 	List<MeshModelNode*> _allnodes;
 public:
-	explicit MeshModel( const String& name );
+	explicit MeshModel();
 	virtual ~MeshModel() override;
 public:
 //	virtual ResourceType* type() const override { return Singleton::Get<MeshModelType>(); }

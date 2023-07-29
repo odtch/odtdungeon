@@ -22,7 +22,6 @@ void main(){
 //	if( pld.anyhitcount == 3 ){
 //	//if( gl_InstanceID != 13 ){
 //		ignoreIntersectionEXT;
-
 //	}
 }
 

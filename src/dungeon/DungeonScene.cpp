@@ -1,6 +1,7 @@
 #include "stdodt.h"
 
 #include "DungeonScene.h"
+#include "DungeonCollection.h"
 #include "math/Camera.h"
 #include "scene/SceneArea.h"
 #include "scene/SceneObject.h"
@@ -28,6 +29,7 @@ Skin* _skin = null;
 AssImpAnimation* anim3  = null;
 MeshPNT* skeleton_mesh = null;
 CharRagdoll* charragdoll1 = null;
+CharRagdoll* charragdoll2 = null;
 CharAnimation* charanim1 = null;
 
 DungeonScene::DungeonScene( Renderer* renderer )
@@ -57,6 +59,9 @@ void DungeonScene::animate( float dt ){
 		if( charragdoll1 ){
 			charragdoll1->loadPose( p );
 		}
+		if( charragdoll2 ){
+			charragdoll2->loadPose( p );
+		}
 	}
 	if( anim3 ){
 		static float at = 0;
@@ -76,10 +81,10 @@ void DungeonScene::animate( float dt ){
 }
 void DungeonScene::run(){
     {
-		Material* material = renderer().createMaterial( "dungeonboxmaterial" );
+		Material* material = new Material();
 		material->setColor( Vec4( 0.8f, 0.8f, 0.8f, 1.0f ) );
 		Texture* texture_red = renderer().loadTexture( "test_red" );
-		_camera->setPosOri( PosOri().translated( Vec3( 0, -40, 0 ) ) );
+		_camera->setPosOri( PosOri().translated( Vec3( 0, 10, 2 ) ).rotated( 180, Vec3::Up ) );
 		_uilayer = renderer().createRootLayer();
 		_uilayer->setNextFixedCamera( *_camera );
 		RenderLayer* layer = renderer().createNextLayer( _uilayer );
@@ -126,9 +131,7 @@ void DungeonScene::run(){
 		}
 		{
 			MeshPNT* mesh = renderer().loadMeshPNT( "banner02" );
-			Material* material = renderer().createMaterial( "m2" );
-			material->setTexture( renderer().loadTexture( "dt01" ) );
-			renderer().createInstance( layer, PosOri().translated( Vec3( -8, -5, 0 ) ), mesh, material );
+			renderer().createInstance( layer, PosOri().translated( Vec3( -8, -5, 0 ) ), mesh, DungeonCollection::Get()->getMaterial( "dt01" ));
 		}
 		{
 //			Material* material = renderer().createMaterial( "m" );
@@ -150,7 +153,7 @@ void DungeonScene::run(){
 		}
 		{
 			{
-				Material* material = renderer().createMaterial( "m" );
+				Material* material = new Material();
 				material->setTexture( renderer().loadTexture( "mcg_diff" ) );
 				CharImporter charimporter( CharImporter::MocapFormat );
 				charimporter.createRagdoll();
@@ -180,6 +183,33 @@ void DungeonScene::run(){
 				}
 			}
 		}
-    }
+		{
+			Material* material = DungeonCollection::Get()->getMaterial( "fk01" );
+			CharImporter charimporter( CharImporter::MecanimFormat );
+			charimporter.createRagdoll();
+			{
+				AssImp assimp;
+				assimp.open(
+							//"/home/rt/media/Polygon_SciFi_Space/Characters/SK_Chr_Crew_Female_01.fbx"
+							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Jester_01.fbx"
+							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Prince_01.fbx"
+							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Rider_01.fbx"
+							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Male_01.fbx"
+							"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Female_01.fbx"
+							, AssImp::YUp_to_ZUp_Synty2() );
+				Skeleton* skeleton = assimp.loadSkeleton();
+				charimporter.setupRagdollFromSkeleton( *skeleton );
+				charimporter.loadSkin( *skeleton, assimp, 0 );
+				odelete( skeleton );
+				CharRagdollType* motusman_type = charimporter.ragdolltype();
+				SceneObject* r = new SceneObject();
+				CharRagdoll* ragdoll = new CharRagdoll( motusman_type, r );
+				r->setPosOri( PosOri().translated( Vec3( 0, 2, 0 ) ) );
+				new CharRagdollSkin( ragdoll, material, r );
+				_area1->addChild( r );
+				charragdoll2 = ragdoll;
+			}
+		}
+	}
     Scene::run();
 }

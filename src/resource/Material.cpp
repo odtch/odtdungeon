@@ -1,32 +1,22 @@
 #include "stdodt.h"
 
 #include "Material.h"
+#include "Texture.h"
+#include "ResourceType.h"
+#include "ResourceStorage.h"
 //#include "MaterialAlternatives.h"
-//#include "Resources.h"
-//#include "ResourceStorage.h"
 //#include "vulkan/raytracing/VulkanRaytracerFlags.h"
 
-//const char* MaterialType::Id = "MaterialType";
-//MaterialType::MaterialType()
-//	:ResourceType( 3, Id )
-//{
-//}
-//MaterialType::~MaterialType(){
-//}
-//Resource* MaterialType::newInstance(){
-//	return new Material();
-//}
-
-
-
-Material::Material( const String& name )
-    :Resource( name )
+Material::Material()
+	:
 ////	,_texture_has_transparency( false )
 ////	,_emissiveTexture( null )
-    ,_color( 1, 1, 1, 1 )
+	_color( 1, 1, 1, 1 )
 ////	,_transparency( 0, 0, 0, 0 )
 //	,_reflection( 0, 0, 0, 0 )
 {
+	static std::atomic<uint32_t> next_materialindex( 0 );
+	_materialindex = next_materialindex.fetch_add( 1, std::memory_order_relaxed );
 //	_index = Resources::Get()->registerMaterial( this );
 ////	if( _index == 57 ){
 ////		logDebug( "material 57" );
@@ -39,7 +29,10 @@ Material::Material( const String& name )
 Material::~Material(){
 //	//_alternatives = null;
 //	Resources::Get()->unregisterMaterial( this );
-////	logDebug( "~Material", this );
+	////	logDebug( "~Material", this );
+}
+ResourceType* Material::type() const {
+	return Singleton::Get<MaterialType>();
 }
 //bool Material::hasFlag( uint flag ) const{
 //	return _flags & flag;
@@ -108,40 +101,39 @@ void Material::setModified( bool modified ){
 //	_tileCount.y = y;
 //	_modified = true;
 //}
-//void Material::load( BinaryFileReader& reader ){
+void Material::load( BinaryFileReader& reader ){
 //	Resource::load( reader );
-//	_flags = reader.read_uint32();
+	_flags = reader.read_uint32();
 //	_translucent = reader.read_bool();
-//	uint8_t t = reader.read_uint8();
-//	assert( _texture == null );
-//	if( t == 0 ){
-//	} else if( t == 1 ){
-//		_texture = asserted( dynamic_cast<Texture*>( asserted( dynamic_cast<ResourceReader*>( &reader ) )->read_reference() ) );
-//	} else {
-//		assert( false );
-//	}
-//	_color = reader.read_vec4();
+	assert( _texture == null );
+	uint8_t t = reader.read_uint8();
+	if( t == 0 ){
+	} else if( t == 1 ){
+		_texture = asserted( dynamic_cast<Texture*>( asserted( dynamic_cast<ResourceReader*>( &reader ) )->read_reference() ) );
+	} else {
+		assert( false );
+	}
+	_color = reader.read_vec4();
 //	_reflection = reader.read_vec4();
-//	_tileCount.x = reader.read_uint32();
-//	_tileCount.y = reader.read_uint32();
-//	_modified = true;
-//}
-//void Material::save( BinaryFileWriter& writer ) const {
+	_tileCount.x = reader.read_uint32();
+	_tileCount.y = reader.read_uint32();
+	_modified = true;
+}
+void Material::save( BinaryFileWriter& writer ) const {
 //	Resource::save( writer );
-//	writer.write_uint32( _flags );
+	writer.write_uint32( _flags );
 //	writer.write_bool( _translucent );
-//	if( _texture == null ){
-//		writer.write_uint8( 0 );
-//	} else {
-//		writer.write_uint8( 1 );
-//		asserted( dynamic_cast<ResourceWriter*>( &writer ) )->write_reference( _texture );
-//	}
-//	writer.write_vec4( _color );
+	if( _texture == null ){
+		writer.write_uint8( 0 );
+	} else {
+		writer.write_uint8( 1 );
+		asserted( dynamic_cast<ResourceWriter*>( &writer ) )->write_reference( _texture );
+	}
+	writer.write_vec4( _color );
 //	writer.write_vec4( _reflection );
-//	writer.write_uint32( _tileCount.x );
-//	writer.write_uint32( _tileCount.y );
-//}
-
+	writer.write_uint32( _tileCount.x );
+	writer.write_uint32( _tileCount.y );
+}
 ////const List<Material*>& Material::alternatives() const
 ////{
 ////	assert( _alternatives );

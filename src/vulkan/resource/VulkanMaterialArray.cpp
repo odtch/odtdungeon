@@ -4,7 +4,6 @@
 #include "vulkan/command/VulkanCommandPool.h"
 #include "vulkan/command/VulkanTask.h"
 #include "vulkan/raytracer/VulkanRaytracerGlobals.h"
-#include "vulkan/resource/VulkanMaterial.h"
 
 VulkanMaterialArray::VulkanMaterialArray(){
 	memset( &_materials, 0, sizeof( _materials ) );
@@ -31,8 +30,7 @@ void VulkanMaterialArray::destroy(){
 }
 void VulkanMaterialArray::update( VulkanRaytracerGlobals& globals, VulkanTask& task ){
 	_materials[1].last = 1212;
-	//Resources* resources = Resources::Get();
-	_materialCount = globals.materials().size(); //. resources->materialCount();
+	_materialCount = globals.materialCount();
 	assert( _materialCount <= MaxMaterialCount );
 	if( _materialCount == 0 ){
 		logError( "VulkanMaterialArray no materials" );
@@ -40,9 +38,9 @@ void VulkanMaterialArray::update( VulkanRaytracerGlobals& globals, VulkanTask& t
 	}
 	for( uint32_t index = 0; index < _materialCount; index++ ){
 		//Material* material = resources->materials()[ index ];
-		VulkanMaterial* material = globals.materials().get( index ); //resources->materials()[ index ];
+		Material* material = globals.materials().get( index ); //resources->materials()[ index ];
 		if( material == null ){
-			logError( "VulkanMaterialArray destroyed material", index );
+			logError( "VulkanMaterialArray null material", index );
 		} else if( !material->_modified ){
 		} else {
 			VulkanMaterialData& data = _materials[ index ];

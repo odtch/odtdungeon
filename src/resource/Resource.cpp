@@ -3,17 +3,10 @@
 #include "Resource.h"
 //#include "ResourceStorage.h"
 
-Resource::Resource( const String& name )
-    :_name( name )
-{
+Resource::Resource(){
+	static uint nextDebugNo = 0;
+	_debugno = ( nextDebugNo ++ );
 }
-//Resource::Resource( const String& id )
-//	:_id( id )
-//{
-////	static uint nextDebugNo = 0;
-////	_debugno = ( nextDebugNo ++ );
-////	logDebug( _debugno );
-//}
 Resource::~Resource(){
 }
 void Resource::load( BinaryFileReader& reader ){

@@ -13,7 +13,6 @@ public:
 	explicit Renderer();
 	virtual ~Renderer();
 public:
-    virtual Material* createMaterial( const String& name ) = 0;
 	virtual Texture* loadTexture( const String& name ) = 0;
 public:
 	virtual MeshPNT* createDynamicMeshPNT( const String& name ) = 0;

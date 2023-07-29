@@ -105,7 +105,7 @@ SkinType::~SkinType(){
 }
 void SkinType::load( BinaryFileReader& reader ){
 	assert( _mesh == null && _bones.isEmpty() );
-	_mesh = new SkinMesh( String( "SkinType::load" ) );
+	_mesh = new SkinMesh();
 	_mesh->load( reader );
 	uint32_t bonecount = reader.read_uint32();
 	assert( 0 < bonecount && bonecount <= SkinMaxBoneCount );

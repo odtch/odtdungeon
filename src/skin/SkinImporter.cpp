@@ -16,7 +16,7 @@ SkinType* SkinImporter::Import( AssImp& assimp, uint meshindex ){
 	assert( aimesh->mPrimitiveTypes & aiPrimitiveType_TRIANGLE );
 	int vertexCount = aimesh->mNumVertices;
 	int indexCount = assimp.calcIndexCountForMesh( aimesh );
-	SkinMesh* mesh = new SkinMesh( "SkinImporter", vertexCount, indexCount );
+	SkinMesh* mesh = new SkinMesh( vertexCount, indexCount );
 	SkinVertex vertex;
 	for( int v = 0; v < vertexCount; v++ ){
 		aiVector3D& aiPos = aimesh->mVertices[v];

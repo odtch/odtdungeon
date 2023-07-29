@@ -7,19 +7,15 @@ class Resource
 	DEBUGCOUNTER( Resource )
 	ODTNOCOPY( Resource )
 private:
-//	uint _debugno = 0;
-//	String _id;
-    String _name;
+	uint _debugno = 0;
+	String _id;
 public:
-    explicit Resource( const String& name );
-//	explicit Resource( const String& id );
+	explicit Resource();
 	virtual ~Resource();
 public:
-    const String& name() const{ return _name; }
-//	const String& id() const{ return _id; }
-//	void setId( const String& id );
+	const String& id() const{ return _id; }
 public:
-//    virtual ResourceType* type() const{ assert( false ); }
+	virtual ResourceType* type() const{ assert( false ); }
 public:
 	virtual void load( BinaryFileReader& reader );
 	virtual void save( BinaryFileWriter& writer ) const;
@@ -33,4 +29,6 @@ public:
 //public:
 //	virtual bool isObjectType() const{ return false; }
 //	virtual ObjectType* asObjectType(){ assert( false ); }
+public:
+	friend class Collection;
 };

@@ -20,8 +20,10 @@ ODT-Dungeon is the Summer Week 2023 practice project aimed at extending the real
 - [x] triangle
 - [x] input
 - [x] rock
-
+- [x] collection
+- [ ] mesh in collection
 - [ ] char
+- [ ] animation
 - [ ] bones
 
 ## Todoes

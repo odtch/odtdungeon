@@ -44,4 +44,9 @@ public:
 			func( it.second );
 		}
 	}
+	void foreachKeyValue( std::function<void( K key, T value )> func ) const {
+		for( auto it : _map ){
+			func( it.first, it.second );
+		}
+	}
 };

@@ -456,7 +456,7 @@ namespace MeshBuilder
     Mesh<V>* FilteredByVertex( const MeshPNT& src, std::function<bool( int v, const VertexPNT& vertex )> filter, bool assertAllTrianglesAreSame = true ){
 		bool oks[ src.vertexCount() ];
 		uint32_t v2trg[ src.vertexCount() ];
-		Mesh<V>* trg = new Mesh<V>( src.name() + String( ".filtered" ) );
+		Mesh<V>* trg = new Mesh<V>();
 		for( int v = 0; v < src.vertexCount(); v++ ){
 			const VertexPNT& vertex = src.vertex( v );
 			bool ok = filter( v, vertex );

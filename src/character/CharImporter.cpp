@@ -936,7 +936,7 @@ this->_r.foot.absoluteTposori.setPosition( this->_r.foot.absoluteTposori.positio
 
 }
 void CharImporter::loadSkin( const Skeleton& skeleton, AssImp& assimp, uint meshindex ){
-	_testmesh = new MeshPNT( "CharImporter.loadSkin" );
+	_testmesh = new MeshPNT();
 	assert( _ragdolltype );
 	assert( _ragdolltype->_skin == null );
 	_ragdolltype->_skin = SkinImporter::Import( assimp, 0 );

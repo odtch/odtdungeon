@@ -6,9 +6,7 @@
 #include "skin/SkinMesh.h"
 #include "scene/Scene.h"
 
-CharRagdollType::CharRagdollType(const String &id)
-	:Resource( id )
-{
+CharRagdollType::CharRagdollType(){
 }
 CharRagdollType::~CharRagdollType(){
 	_root = null;
@@ -32,7 +30,7 @@ CharJointType* CharRagdollType::getJointByName( const String& name ) const {
 	CharJointType* joint = findJointByName( name );
 	if( joint )
 		return joint;
-	logError( "CharRagdollType", this->name(), "getJointByName", name, "not found" );
+	logError( "CharRagdollType", "getJointByName", name, "not found" );
 	assert( false );
 }
 CharJointType* CharRagdollType::createJoint( CharJointType* parent ){
@@ -67,7 +65,7 @@ void CharRagdollType::collectPreLoad( List<AbstractMesh*>& meshes ){
 //	return joint;
 //}
 void CharRagdollType::load( BinaryFileReader& reader ){
-	Resource::load( reader );
+	//Resource::load( reader );
 	uint jointcount = reader.read_uint32();
 	while( _joints.size() < jointcount ){
 		CharJointType* parent = null;
@@ -81,7 +79,7 @@ void CharRagdollType::load( BinaryFileReader& reader ){
 		joint->_relativeTposori.load( reader );
 		assert( joint->_mesh == null );
 		if( reader.read_bool() ){
-			joint->_mesh = new MeshPNT( "CharRagdollType");
+			joint->_mesh = new MeshPNT();
 			joint->_mesh->load( reader );
 		}
 	}
@@ -99,7 +97,7 @@ void CharRagdollType::load( BinaryFileReader& reader ){
 	reader.read_magicnumber( 'e' );
 }
 void CharRagdollType::save( BinaryFileWriter& writer ) const {
-	Resource::save( writer );
+	//Resource::save( writer );
 	writer.write_uint32( _joints.size() );
 	for( CharJointType* joint : _joints ){
 		if( joint == _root ){
@@ -127,7 +125,7 @@ void CharRagdollType::save( BinaryFileWriter& writer ) const {
 	writer.write_uint32( 'e' );
 }
 void CharRagdollType::trace() const{
-	logDebug( "CharRagdoll", name() );
+	logDebug( "CharRagdoll" );
 	_root->trace( 0 );
 }
 
@@ -173,7 +171,7 @@ CharJoint*CharRagdoll::getJointByName( const String& name ) const {
 	CharJoint* joint = findJointByName( name );
 	if( joint )
 		return joint;
-	logError( "CharRagdoll", _type->name(), "getJointByName", name, "not found" );
+	logError( "CharRagdoll", _type, "getJointByName", name, "not found" );
 	assert( false );
 }
 void CharRagdoll::loadPose( const CharPose& pose ){

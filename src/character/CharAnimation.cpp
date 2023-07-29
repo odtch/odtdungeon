@@ -75,9 +75,7 @@
 //	pose.interpolate( i.step0()->_pose, i.factor01(), i.step1()->_pose );
 //}
 
-CharAnimation::CharAnimation( const String& id )
-	:Resource( id )
-{
+CharAnimation::CharAnimation(){
 }
 CharAnimation::~CharAnimation(){
 	_frames.deleteAll();

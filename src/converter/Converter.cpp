@@ -9,6 +9,9 @@
 #include "resource/Image.h"
 #include "resource/Skeleton.h"
 #include "AssImp.h"
+#include "converter/AssImpAnimation.h"
+#include "character/CharImporter.h"
+#include "character/CharRagdoll.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "external/stb/stb_image.h"
@@ -45,10 +48,25 @@ void Converter::run(){
 	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
 	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx", AssImp::YUp_to_ZUp_Synty1() );
 	convertMesh( "banner02", "/home/rt/media/Polygon_Dungeon/FBX/SM_Wep_Banner_02.fbx", AssImp::YUp_to_ZUp_Synty1() );
-	///home/rt/media/Polygon_Dungeon/Characters/SK_Character_Rock_Golem.fbx
-	convertImage( "dt01", "/home/rt/media/Polygon_Dungeon/Textures/Dungeons_Texture_01.png" );
-
 	convertImage( "mcg_diff", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
+
+	if( shouldConvert( String( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx" ), _targetpath + "/motusman_ragdoll" ) == true ){
+		CharImporter charimporter( CharImporter::MocapFormat );
+		charimporter.createRagdoll();
+		AssImp assimp;
+		assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
+		Skeleton* skeleton = assimp.loadSkeleton();
+		charimporter.setupRagdollFromSkeleton( *skeleton );
+		charimporter.loadSkin( *skeleton, assimp, 0 );
+		odelete( skeleton );
+		CharRagdollType* ragdolltype = charimporter.ragdolltype();
+		BinaryFileWriter writer( _targetpath + "/motusman_ragdoll" );
+		ragdolltype->save( writer );
+		writer.close();
+		odelete( ragdolltype );
+	}
+
+
 	//material->setFlag( MaterialFlag_CalcNormalFromTriangle );
 //	{
 //		AssImp assimp;
@@ -61,7 +79,7 @@ void Converter::run(){
 //		//skeleton->trace();
 //		odelete( skeleton );
 ////		addResource( "MotusMan", charimporter.ragdolltype() );
-//	}
+	//	}
 }
 #ifdef ooold
 
@@ -218,14 +236,27 @@ void Converter::convertMeshFile( const String& id, const String& filename){
 }
 */
 #endif
+bool Converter::shouldConvert( const String& srcpath, const String& trgpath ){
+	if( File::Exists( trgpath ) == false )
+		return true;
+	auto srctime = std::filesystem::last_write_time( srcpath.asStd() );
+	auto trgtime = std::filesystem::last_write_time( trgpath.asStd() );
+	bool src_is_newer = ( srctime > trgtime );
+#ifdef REBUILD_ALL
+	src_is_newer = true;
+#endif
+	if( src_is_newer ){
+		File::DeleteFile( trgpath );
+		return true;
+	} else {
+		return false;
+	}
+}
 void Converter::compileShader( const String& vulkanLevel, const String& fn ){
 	std::filesystem::path path( fn.asStd() );
-	if( File::Exists( _targetpath + "/" + path.filename().generic_string() + ".spv" ) ){
-#ifdef REBUILD_ALL
-#else
+	String trgpath = _targetpath + "/" + path.filename().generic_string() + ".spv";
+	if( shouldConvert( fn, trgpath ) == false )
 		return;
-#endif
-	}
 	logInfo( "compile shader", vulkanLevel, path.filename().c_str() );
     String filename( fn );
     String shader_stage;
@@ -298,7 +329,7 @@ void Converter::convertImage( const String& trgname, const String& srcpath ){
 		logError( "load image failed", srcpath );
 		assert( false );
 	}
-	Image image( trgname );
+	Image image;
 	image.create( texWidth, texHeight );
 	for( uint y = 0; y < texHeight; y++ ){
 		for( uint x = 0; x < texWidth; x++ ){

@@ -18,7 +18,7 @@ public:
 private:
 	List<JointToSkin*> _joint2skins;
 public:
-	explicit CharRagdollType( const String& id = String() );
+	explicit CharRagdollType();
 	virtual ~CharRagdollType() override;
 public:
 //	virtual ResourceType* type() const override;

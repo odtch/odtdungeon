@@ -2,22 +2,11 @@
 
 #include "Image.h"
 #include "utils/File.h"
+#include "ResourceType.h"
 //#include "ResourceStorage.h"
 
-//const char* ImageType::Id = "ImageType";
-//ImageType::ImageType()
-//	:ResourceType( 1, Id )
-//{
-//}
-//ImageType::~ImageType(){
-//}
-//Resource* ImageType::newInstance(){
-//	return new Image();
-//}
 
-Image::Image( const String& name )
-    :Resource( name )
-{
+Image::Image(){
 }
 Image::~Image(){
 	if( _pixels ){
@@ -75,6 +64,9 @@ void Image::fill( const glm::vec4& color ){
 		}
 	}
 }
+ResourceType* Image::type() const {
+	return Singleton::Get<ImageType>();
+}
 void Image::create( uint width, uint height ){
 	assert( 0 < width ); assert( 0 < height );
 	assert( _width == 0 && _height == 0 && _pixels == null );
@@ -108,21 +100,21 @@ void Image::save( BinaryFileWriter& writer ) const {
 	writer.write_block( _pixels, texSize );
 	writer.write_uint8( 'I' );
 }
-//#ifdef ODTDEBUG
-//#include "external/stb/stb_image.h"
-//void Image::import( const String& filename ){
-//	assert( _width == 0 && _height == 0 && _pixels == null );
-//	int texWidth, texHeight, texChannels;
-//	stbi_uc* pixels = stbi_load( filename.asCStr(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha );
-//	if( !pixels ){
-//		logError( "import image failed", filename );
-//		assert( false );
-//	}
-//	_pixels = pixels;
-//	_width = texWidth;
-//	_height = texHeight;
-//	logDebug( "Image::import\t   b: ", ( _width * _height * 4 ), "\tkb: ", ( _width * _height * 4 / 1024 ), "\tmb: ", ( _width * _height * 4 / 1024  / 1024  ), "\tfn: ", filename );
-//}
+#ifdef ODTDEBUG
+#include "external/stb/stb_image.h"
+void Image::import( const String& filename ){
+	assert( _width == 0 && _height == 0 && _pixels == null );
+	int texWidth, texHeight, texChannels;
+	stbi_uc* pixels = stbi_load( filename.asCStr(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha );
+	if( !pixels ){
+		logError( "import image failed", filename );
+		assert( false );
+	}
+	_pixels = pixels;
+	_width = texWidth;
+	_height = texHeight;
+	logDebug( "Image::import\t   b: ", ( _width * _height * 4 ), "\tkb: ", ( _width * _height * 4 / 1024 ), "\tmb: ", ( _width * _height * 4 / 1024  / 1024  ), "\tfn: ", filename );
+}
 //float i16toc( stbi_us i16 ){
 //	// stbi_us = unsigned short = 0 to 65535
 //	float f = i16;
@@ -154,7 +146,7 @@ void Image::save( BinaryFileWriter& writer ) const {
 //	stbi_image_free( pixels );
 //	return data;
 //}
-//#endif
+#endif
 
 //void Image::fixAlphaErrorToBlack(){
 //	for( uint x = 0; x < width(); x++ ){

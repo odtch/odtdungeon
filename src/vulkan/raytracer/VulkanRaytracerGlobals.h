@@ -13,7 +13,8 @@ private: public:
 private:
 	VulkanBuffer _buffer;
 private:
-	List<VulkanMaterial*> _materials;
+	uint _materialCount = 0;
+	Array<Material*> _materials;
 public:
     explicit VulkanRaytracerGlobals();
     ~VulkanRaytracerGlobals();
@@ -21,8 +22,9 @@ public:
 	void create( VulkanCommandPool* commandPool );
 	void destroy();
 public:
-	const List<VulkanMaterial*>& materials(){ return _materials; }
-	void addMaterial( VulkanMaterial* material );
+	uint materialCount() const{ return _materialCount; }
+	const Array<Material*>& materials(){ return _materials; }
+	void registerMaterial( Material* material );
 public:
 	void begin();
 //	void addDecal( const Decal& decal, VulkanTextureArray& textures );

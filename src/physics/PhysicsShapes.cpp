@@ -104,9 +104,7 @@ PhysicsShape* PhysicsShape::CreateBySettings( JPH::ShapeSettings& settings ){
 	return shape;
 }
 
-PhysicsShape::PhysicsShape()
-	:Resource( "PhysicsShape" )
-{
+PhysicsShape::PhysicsShape(){
 }
 PhysicsShape::~PhysicsShape(){
 	_jph = null;

@@ -3,17 +3,6 @@
 #include "Resource.h"
 #include "Image.h"
 
-//class TextureType : public ResourceType
-//{
-//public:
-//	static const char* Id;
-//public:
-//	explicit TextureType();
-//	virtual ~TextureType() override;
-//public:
-//	virtual Resource* newInstance() override;
-//};
-
 class Texture : public Resource
 {
 	DEBUGCOUNTER(Texture)
@@ -26,12 +15,12 @@ private:
 //public:
 //	int _vulkanIndex = -1;
 public:
-    explicit Texture( const String& name );
+	explicit Texture();
 //	explicit Texture( const String& filename );
 //	explicit Texture( Image* data );
 	virtual ~Texture();
-//public:
-//	virtual ResourceType* type() const override { return Singleton::Get<TextureType>(); }
+public:
+	virtual ResourceType* type() const override;
 public:
 	Image* image() const{ assert( _image ); return _image; }
 	void setImage( Image* image );

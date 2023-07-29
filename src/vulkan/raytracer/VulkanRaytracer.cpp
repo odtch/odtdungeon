@@ -12,15 +12,12 @@
 #include "vulkan/device/VulkanRequirement.h"
 #include "vulkan/command/VulkanQueue.h"
 #include "vulkan/command/VulkanCommandBuffer.h"
-#include "vulkan/resource/VulkanMaterial.h"
 #include "vulkan/resource/VulkanMesh.h"
 #include "vulkan/as/VulkanAccelerationStructureExtension.h"
 #include "utils/File.h"
 #include "renderer/RenderLayer.h"
 #include "renderer/RenderLight.h"
 #include "skin/OdtSkin.h"
-
-
 
 //uint VulkanRaytracer::AntiAliasingCount = 3;
 
@@ -41,29 +38,24 @@ VulkanRaytracer::~VulkanRaytracer(){
 	_layers.deleteAll();
 	odelete( _globals );
 }
-Material* VulkanRaytracer::createMaterial( const String& name ){
-	VulkanMaterial* material = new VulkanMaterial( name );
-	_queue.post( VulkanMaterialCreated, material, null, this );
-	return material;
-}
 Texture* VulkanRaytracer::loadTexture( const String& name ){
 	String filename = String( "media/" ) + name;
 	BinaryFileReader reader( filename );
-	Image* image = new Image( name );
+	Image* image = new Image();
 	image->load( reader );
-	Texture* texture = new Texture( name );
+	Texture* texture = new Texture();
 	//texture->load( reader );
 	texture->setImage( image );
 	_queue.post( VulkanTextureCreated, texture, null, this );
 	return texture;
 }
 Mesh<VertexPNT>* VulkanRaytracer::createDynamicMeshPNT( const String& name ){
-    MeshPNT* mesh = new MeshPNT( name );
+	MeshPNT* mesh = new MeshPNT();
 	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
 	return mesh;
 }
 Mesh<VertexPNT>* VulkanRaytracer::loadMeshPNT( const String& name ){
-	MeshPNT* mesh = new MeshPNT( name );
+	MeshPNT* mesh = new MeshPNT();
 	{
 		String filename = String( "media/" ) + name;
 		BinaryFileReader reader( filename );
@@ -223,9 +215,6 @@ void VulkanRaytracer::render( VkImage targetimage ){
 
 bool VulkanRaytracer::handle( const Message& message ){
 	switch( message.type ){
-	case VulkanMaterialCreated:
-		_globals->addMaterial( (VulkanMaterial*) message.p1 );
-		return true;
 	case VulkanTextureCreated:
 		_textures.getTextureIndex( (Texture*) message.p1 );
 		return true;
@@ -253,13 +242,15 @@ bool VulkanRaytracer::handle( const Message& message ){
 	case VulkanRenderInstancePNTCreated:
 		{
 			VulkanRaytracerInstancePNT* instance = (VulkanRaytracerInstancePNT*)message.p1;
+			_globals->registerMaterial( instance->material() );
 			instance->_layer->_instances.add( instance );
 		}
 		return true;
 	case VulkanRaytracerSkinInstanceCreated:
 		{
 			VulkanRaytracerSkinInstance* skininstance = (VulkanRaytracerSkinInstance*)message.p1;
-			MeshPNT* mesh = new MeshPNT( "SkinMesh" );
+			_globals->registerMaterial( skininstance->skin()->material() );
+			MeshPNT* mesh = new MeshPNT();
 			skininstance->createMesh( mesh );
 			auto vm = new VulkanMesh( mesh, &this->_meshPool );
 			mesh->setVulkanMesh( vm );
@@ -593,8 +584,8 @@ void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata
 			ASSERT( mesh->hasVulkanMesh() );
 			VulkanMesh* vulkanmesh = mesh->vulkanMesh();
 			ASSERT( vulkanmesh );
-			VulkanMaterial* material = dynamic_cast<VulkanMaterial*>( renderable->material() );
-			ASSERT( material );
+			//VulkanMaterial* material = dynamic_cast<VulkanMaterial*>( renderable->material() );
+			//ASSERT( material );
 //			//logDebug( "Raytracer check", vulkanmesh );
 //			if( mesh->updateType() == AbstractMesh::UpdateImmediate ){
 				_meshLoaderImmediate.tryUpdateIfNeeded( vulkanmesh );
@@ -611,9 +602,10 @@ void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata
 			VulkanMeshDataPointer& current = vulkanmesh->current();
 			VulkanMeshData* data = current.data();
 			uint meshIndex = data->index();
-			int materialIndexi = this->_globals->materials().indexOf( material );
-			assert( 0 <= materialIndexi );
-			uint materialIndex = materialIndexi;
+			//int materialIndexi = this->_globals->materials().indexOf( material );
+			//assert( 0 <= materialIndexi );
+			//uint materialIndex = materialIndexi;
+			uint materialIndex = renderable->material()->materialindex();
 			//materials._materials.
 			//uint materialIndex = pntr->material()->index();
 //			//std::cout << "VulkanRaytracer::add " << meshIndex << " at " << glm::to_string( posori.position() ) << "\n";
