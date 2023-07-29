@@ -2,6 +2,7 @@
 
 #include "VulkanRaytracerRenderLayer.h"
 #include "VulkanRaytracerData.h"
+#include "VulkanRaytracerInstance.h"
 #include "renderer/RenderInstance.h"
 #include "renderer/RenderLight.h"
 

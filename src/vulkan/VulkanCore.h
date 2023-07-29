@@ -105,6 +105,9 @@ class VulkanBLAS;
 class VulkanTLAS;
 class VulkanTLASes;
 class VulkanRayQueryExtension;
+class VulkanRaytracerInstance;
+class VulkanRaytracerInstancePNT;
+class VulkanRaytracerSkinInstance;
 
 class VulkanBackgroundThread;
 

@@ -5,6 +5,8 @@
 #include "VulkanRaytracingPipelineExtension.h"
 #include "VulkanRaytracingPipelineProperties.h"
 #include "VulkanRaytracerRenderLayer.h"
+#include "VulkanRaytracerInstance.h"
+#include "VulkanRaytracerSkinInstance.h"
 #include "vulkan/device/VulkanInstance.h"
 #include "vulkan/device/VulkanDevice.h"
 #include "vulkan/device/VulkanRequirement.h"
@@ -16,18 +18,9 @@
 #include "utils/File.h"
 #include "renderer/RenderLayer.h"
 #include "renderer/RenderLight.h"
+#include "skin/OdtSkin.h"
 
-class VulkanRaytracerRenderLayer;
-class xDummyRenderInstancePNT : public RenderInstancePNT
-{
-public:
-	VulkanRaytracerRenderLayer* _layer;
-public:
-	explicit xDummyRenderInstancePNT( VulkanRaytracerRenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material )
-		:RenderInstancePNT( posori, mesh, material )
-		,_layer( asserted( layer ) ){}
-    virtual ~xDummyRenderInstancePNT() override{}
-};
+
 
 //uint VulkanRaytracer::AntiAliasingCount = 3;
 
@@ -88,8 +81,13 @@ RenderLayer* VulkanRaytracer::createNextLayer( RenderLayer* prev ){
 
 }
 RenderInstancePNT* VulkanRaytracer::createInstance( RenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material ){
-	RenderInstancePNT* instance = new xDummyRenderInstancePNT( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, mesh, material );
+	RenderInstancePNT* instance = new VulkanRaytracerInstancePNT( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, mesh, material );
 	_queue.post( VulkanRenderInstancePNTCreated, instance, null, this );
+	return instance;
+}
+RenderSkinInstance* VulkanRaytracer::createSkinInstance( RenderLayer* layer, const PosOri& posori, Skin* skin ){
+	VulkanRaytracerSkinInstance* instance = new VulkanRaytracerSkinInstance( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, skin );
+	_queue.post( VulkanRaytracerSkinInstanceCreated, instance, null, this );
 	return instance;
 }
 void VulkanRaytracer::addLight( RenderLayer* layer, RenderLight* light ){
@@ -210,6 +208,9 @@ void VulkanRaytracer::render( VkImage targetimage ){
 	{
 		MutexLocker locker;
 		locker.lock( writeMutex() );
+		for( VulkanRaytracerSkinInstance* skininstance : _skininstances ){
+			skininstance->updateMeshInCPU();
+		}
 		startLoadData();
 	}
 	startRender();
@@ -250,8 +251,21 @@ bool VulkanRaytracer::handle( const Message& message ){
 		return true;
 	case VulkanRenderInstancePNTCreated:
 		{
-		xDummyRenderInstancePNT* i = (xDummyRenderInstancePNT*)message.p1;
-		i->_layer->_instances.add( i );
+			VulkanRaytracerInstancePNT* instance = (VulkanRaytracerInstancePNT*)message.p1;
+			instance->_layer->_instances.add( instance );
+		}
+		return true;
+	case VulkanRaytracerSkinInstanceCreated:
+		{
+			VulkanRaytracerSkinInstance* skininstance = (VulkanRaytracerSkinInstance*)message.p1;
+			MeshPNT* mesh = new MeshPNT( "SkinMesh" );
+			skininstance->createMesh( mesh );
+			auto vm = new VulkanMesh( mesh, &this->_meshPool );
+			mesh->setVulkanMesh( vm );
+			_vulkanmeshes.add( vm );
+			VulkanRaytracerInstancePNT* pntinstance = new VulkanRaytracerInstancePNT( skininstance->_layer, skininstance->posori(), mesh, skininstance->skin()->material() );
+			skininstance->_layer->_instances.add( pntinstance );
+			_skininstances.add( skininstance );
 		}
 		return true;
 	case VulkanLightAdded:
@@ -568,7 +582,7 @@ void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata
 	VulkanRaytracerRenderLayer* layer = asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( alayer ) );
 	layerdata.first_instance_index = _instances.count();
 //	for( Renderable* renderable : layer->renderables() ){
-	for( xDummyRenderInstancePNT* renderable : layer->_instances ){
+	for( VulkanRaytracerInstancePNT* renderable : layer->_instances ){
 //		//add( _current_solid_tlas, renderable->posori(), renderable );
 //		if( renderable->isPNT() )
 		{

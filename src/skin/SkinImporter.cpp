@@ -4,8 +4,7 @@
 #include "converter/AssImp.h"
 #include "converter/AssImpUtils.h"
 
-SkinType* SkinImporter::Import( AssImp& assimp, uint meshindex )
-{
+SkinType* SkinImporter::Import( AssImp& assimp, uint meshindex ){
 	assert( meshindex < assimp.meshCount() );
 	aiMesh* aimesh = assimp.aimesh( meshindex );
 	assert( aimesh->mVertices );

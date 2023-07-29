@@ -427,17 +427,6 @@ void Skin::loadBones( const Skeleton& skeleton ){
 void Skin::setBonesModified(){
 	_bones_modified = true;
 }
-
-RenderInstance* Skin::createInstance(Renderer& renderer, RenderLayer* layer)
-{
-	assert( _mesh == null );
-	_mesh = renderer.createDynamicMeshPNT( "Skin" );
-	for( uint v = 0; v < _type->mesh().vertexCount(); v++ ){
-		const SkinVertex& src = _type->mesh().vertex( v );
-		_mesh->addVertex( VertexPNT( src.position, src.normal, src.texcoord ) );
-	}
-	for( uint i = 0; i < _type->mesh().indexCount(); i++ ){
-		_mesh->addIndex( _type->mesh().index( i ) );
-	}
-	return renderer.createInstance( layer, posori(), _mesh, _material );
+RenderInstance* Skin::createInstance( Renderer& renderer, RenderLayer* layer ){
+	return renderer.createSkinInstance( layer, posori(), this );
 }

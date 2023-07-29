@@ -22,3 +22,11 @@ RenderInstancePNT::RenderInstancePNT( const PosOri& posori, Mesh<VertexPNT>* mes
 RenderInstancePNT::~RenderInstancePNT(){
 }
 
+RenderSkinInstance::RenderSkinInstance( const PosOri& posori, Skin* skin )
+	:RenderInstance( posori )
+	,_skin( asserted( skin ) )
+{
+}
+RenderSkinInstance::~RenderSkinInstance(){
+}
+

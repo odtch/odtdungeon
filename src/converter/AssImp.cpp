@@ -549,157 +549,157 @@ void AssImp::loadSkeletonNode( Skeleton* skeleton, aiNode* node, SkeletonJoint* 
 		loadSkeletonNode( skeleton, child, joint );
 	}
 }
-//uint AssImp::animationCount() const {
-//	return _aiScene->mNumAnimations;
-//}
-//AssImpAnimation*AssImp::loadAnimation(){
-//	assert( animationCount() == 1 );
-//	uint animationIndex = 0;
-//	aiAnimation* aiAnimation = aiscene()->mAnimations[ animationIndex ];
-//	//stream << "AssImp::loadAnimation " << animationIndex << " " << aiAnimation->mName.C_Str() << "\n";
-//	assert( aiAnimation->mNumMeshChannels == 0 );
-//	assert( aiAnimation->mNumMorphMeshChannels == 0 );
-//	//  duration=" << aianimation->mDuration
-//	//  ticks per second=" << aianimation->mTicksPerSecond
-//	//float durationInTicks = aiAnimation->mDuration;
-//	ASSERT( 0 < aiAnimation->mTicksPerSecond ); // wenn 0 könnte es 25 sein https://www.youtube.com/watch?v=gnnoPaStVzg 5:25)
-//	//float duration = durationInTicks / aiAnimation->mTicksPerSecond;
-//	float tick_to_sec_factor = 1.0f  / aiAnimation->mTicksPerSecond;
-//	//AssImpSkeleton* sourceSkeleton = loadSkeleton();
-//	AssImpAnimation* animation = new AssImpAnimation();
-//	//logDebug( "animation", aiAnimation->mName.C_Str() );
-//	for( uint c = 0; c < aiAnimation->mNumChannels; c++ ){
-//		aiNodeAnim* aichannel = aiAnimation->mChannels[c];
-//		ASSERT( aichannel->mPreState == 0 && aichannel->mPostState == 0 );
-//		//logDebug( "  c ", c, aichannel->mNodeName.C_Str(), aichannel->mNumPositionKeys, aichannel->mNumRotationKeys, aichannel->mNumScalingKeys );
-//		for( unsigned int p = 0; p < aichannel->mNumScalingKeys; p++ ){
-//			aiVectorKey& scalkey = aichannel->mScalingKeys[p];
-//			ASSERT( 0 <= scalkey.mTime );
-//			ASSERT( glm::abs( scalkey.mValue.x - 1.0f ) < 0.001f );
-//			ASSERT( glm::abs( scalkey.mValue.y - 1.0f ) < 0.001f );
-//			ASSERT( glm::abs( scalkey.mValue.z - 1.0f ) < 0.001f );
-//		}
-//		for( unsigned int p = 0; p < aichannel->mNumPositionKeys; p++ ){
-//			aiVectorKey& poskey = aichannel->mPositionKeys[p];
-//			if( poskey.mValue.x < 0.00001f && poskey.mValue.y < 0.00001f && poskey.mValue.z < 0.00001f ){
-//			} else {
-//				//logDebug( "    p ", p, poskey.mValue.x, poskey.mValue.y, poskey.mValue.z );
-//				//assert( false );
-//			}
-//		}
-//		for( unsigned int r = 0; r < aichannel->mNumRotationKeys; r++ ){
-//			aiQuatKey& rotkey = aichannel->mRotationKeys[r];
-//			float time = rotkey.mTime * tick_to_sec_factor;
-//			AssImpAnimationFrame* frame = animation->findFrameStartingAt( time );
-//			if( frame == null ){
-//				frame = new AssImpAnimationFrame();
-//				frame->_starttime = time;
-//				animation->_frames.add( frame );
-//			}
-//		}
-//	}
-//	animation->_frames.sort( []( AssImpAnimationFrame* a, AssImpAnimationFrame* b ){
-//		if( a->_starttime < b->_starttime )return -1;return 1;
-//	});
-//	for( int a = 0; a < animation->_frames.size(); a++ ){
-//		AssImpAnimationFrame* frame = animation->_frames.get( a );
-//		if( a + 1 < animation->_frames.size() ){
-//			frame->_next = animation->_frames.get( a + 1 );
-//			frame->_duration = frame->_next->_starttime - frame->_starttime;
-//			assert( 0 < frame->_duration );
-//			frame->_endtime = frame->_starttime + frame->_duration;
-//		} else {
-//			frame->_next = null;
-//			frame->_duration = 0;
-//			frame->_endtime = frame->_starttime + frame->_duration;
-//		}
-//	}
-//	animation->_duration = animation->_frames.last()->_starttime;
-//	assert( animation->_frames.first()->_starttime == 0 ); assert( animation->_duration > 0 );
-//	/*
-//	for( uint c = 0; c < aiAnimation->mNumChannels; c++ ){
-//		SkinAnimationChannel* skinChannel = skinAnimation->_channels.get( c );
-//		SkinJoint* joint = sourceSkeleton->getJointByName( skinChannel->name() );
-//		if( root_channel == null ){
-//			root_channel = skinChannel;
-//			root_source_joint = joint;
-//		} else {
-//			if( joint->isChildOf( root_source_joint ) ){
-//			} else {
-//				root_channel = skinChannel;
-//				root_source_joint = joint;
-//			}
-//		}
-//	}
-//	*/
-//	//logDebug( "  a", animation->_frames.size() );
-//	for( AssImpAnimationFrame* frame : animation->_frames ){
-//		//logDebug( "    ", frame->_starttime );
-//		double ticktime = frame->_starttime / tick_to_sec_factor;
-//		frame->_skeleton = new Skeleton();
-//		loadSkeletonNode( frame->_skeleton, _aiScene->mRootNode, null );
-//		for( uint c = 0; c < aiAnimation->mNumChannels; c++ ){
-//			aiNodeAnim* aichannel = aiAnimation->mChannels[c];
-//			SkeletonJoint* joint = frame->_skeleton->getJointByName( String( aichannel->mNodeName.C_Str() ) );
-//			glm::quat rotation = aiAnimGetRotationAt( aichannel, ticktime );
-//			Vec3 translation = aiAnimGetPositionAt( aichannel, ticktime );
-//			joint->setRelativeMatrix( Mat4::Translation( translation ) * Mat4::Rotation( rotation ) );
-//		}
-//		frame->_skeleton->transform( _transform );
-//	}
-//	return animation;
-//}
-//glm::quat AssImp::aiAnimGetRotationAt( aiNodeAnim* aichannel, double time ){
-//	ASSERT( aichannel );
-//	ASSERT( 0 < aichannel->mNumRotationKeys );
-//	if( time < aichannel->mRotationKeys[0].mTime ){
-//		return glm::quat();
-//	}
-//	for( unsigned int r = 1; r < aichannel->mNumRotationKeys; r++ ){
-//		aiQuatKey& rotkey0 = aichannel->mRotationKeys[r-1];
-//		aiQuatKey& rotkey1 = aichannel->mRotationKeys[r];
-//		if( rotkey0.mTime <= time && time <= rotkey1.mTime ){
-//			double duration = rotkey1.mTime - rotkey0.mTime;
-//			ASSERT( 0 < duration );
-//			double localtime = time - rotkey0.mTime;
-//			ASSERT( 0 <= localtime && localtime <= duration );
-//			double f1 = localtime / duration;
-//			aiQuaternion v;
-//			aiQuaternion::Interpolate( v, rotkey0.mValue, rotkey1.mValue, f1 );
-//			return glm::quat( v.w, v.x, v.y, v.z );
-//		}
-//	}
-//	aiQuatKey& rotkeylast = aichannel->mRotationKeys[ aichannel->mNumRotationKeys -1 ];
-//	ASSERT( rotkeylast.mTime <= time );
-//	return glm::quat( rotkeylast.mValue.w, rotkeylast.mValue.x, rotkeylast.mValue.y, rotkeylast.mValue.z );
-//}
-//Vec3 AssImp::aiAnimGetPositionAt( aiNodeAnim* aichannel, double time ){
-//	ASSERT( aichannel );
-//	ASSERT( 0 < aichannel->mNumPositionKeys );
-//	for( unsigned int p = 1; p < aichannel->mNumPositionKeys; p++ ){
-//		aiVectorKey& poskey0 = aichannel->mPositionKeys[p-1];
-//		aiVectorKey& poskey1 = aichannel->mPositionKeys[p];
-//		if( poskey0.mTime <= time && time <= poskey1.mTime ){
-//			double duration = poskey1.mTime - poskey0.mTime;
-//			ASSERT( 0 < duration );
-//			double localtime = time - poskey0.mTime;
-//			ASSERT( 0 <= localtime && localtime <= duration );
-//			double f1 = localtime / duration;
-//			double f0 = 1.0 - f1;
-//			aiVector3D v0 = poskey0.mValue;
-//			v0 *= f0;
-//			aiVector3D v1 = poskey1.mValue;
-//			v1 *= f1;
-//			aiVector3D v;
-//			v += v0;
-//			v += v1;
-//			return Vec3( v.x, v.y, v.z );
-//		}
-//	}
-//	aiVectorKey& poskeylast = aichannel->mPositionKeys[ aichannel->mNumPositionKeys -1 ];
-//	ASSERT( poskeylast.mTime <= time );
-//	return Vec3( poskeylast.mValue.x, poskeylast.mValue.y, poskeylast.mValue.z );
-//}
+uint AssImp::animationCount() const {
+	return _aiScene->mNumAnimations;
+}
+AssImpAnimation*AssImp::loadAnimation(){
+	assert( animationCount() == 1 );
+	uint animationIndex = 0;
+	aiAnimation* aiAnimation = aiscene()->mAnimations[ animationIndex ];
+	//stream << "AssImp::loadAnimation " << animationIndex << " " << aiAnimation->mName.C_Str() << "\n";
+	assert( aiAnimation->mNumMeshChannels == 0 );
+	assert( aiAnimation->mNumMorphMeshChannels == 0 );
+	//  duration=" << aianimation->mDuration
+	//  ticks per second=" << aianimation->mTicksPerSecond
+	//float durationInTicks = aiAnimation->mDuration;
+	ASSERT( 0 < aiAnimation->mTicksPerSecond ); // wenn 0 könnte es 25 sein https://www.youtube.com/watch?v=gnnoPaStVzg 5:25)
+	//float duration = durationInTicks / aiAnimation->mTicksPerSecond;
+	float tick_to_sec_factor = 1.0f  / aiAnimation->mTicksPerSecond;
+	//AssImpSkeleton* sourceSkeleton = loadSkeleton();
+	AssImpAnimation* animation = new AssImpAnimation();
+	//logDebug( "animation", aiAnimation->mName.C_Str() );
+	for( uint c = 0; c < aiAnimation->mNumChannels; c++ ){
+		aiNodeAnim* aichannel = aiAnimation->mChannels[c];
+		ASSERT( aichannel->mPreState == 0 && aichannel->mPostState == 0 );
+		//logDebug( "  c ", c, aichannel->mNodeName.C_Str(), aichannel->mNumPositionKeys, aichannel->mNumRotationKeys, aichannel->mNumScalingKeys );
+		for( unsigned int p = 0; p < aichannel->mNumScalingKeys; p++ ){
+			aiVectorKey& scalkey = aichannel->mScalingKeys[p];
+			ASSERT( 0 <= scalkey.mTime );
+			ASSERT( glm::abs( scalkey.mValue.x - 1.0f ) < 0.001f );
+			ASSERT( glm::abs( scalkey.mValue.y - 1.0f ) < 0.001f );
+			ASSERT( glm::abs( scalkey.mValue.z - 1.0f ) < 0.001f );
+		}
+		for( unsigned int p = 0; p < aichannel->mNumPositionKeys; p++ ){
+			aiVectorKey& poskey = aichannel->mPositionKeys[p];
+			if( poskey.mValue.x < 0.00001f && poskey.mValue.y < 0.00001f && poskey.mValue.z < 0.00001f ){
+			} else {
+				//logDebug( "    p ", p, poskey.mValue.x, poskey.mValue.y, poskey.mValue.z );
+				//assert( false );
+			}
+		}
+		for( unsigned int r = 0; r < aichannel->mNumRotationKeys; r++ ){
+			aiQuatKey& rotkey = aichannel->mRotationKeys[r];
+			float time = rotkey.mTime * tick_to_sec_factor;
+			AssImpAnimationFrame* frame = animation->findFrameStartingAt( time );
+			if( frame == null ){
+				frame = new AssImpAnimationFrame();
+				frame->_starttime = time;
+				animation->_frames.add( frame );
+			}
+		}
+	}
+	animation->_frames.sort( []( AssImpAnimationFrame* a, AssImpAnimationFrame* b ){
+		if( a->_starttime < b->_starttime )return -1;return 1;
+	});
+	for( int a = 0; a < animation->_frames.size(); a++ ){
+		AssImpAnimationFrame* frame = animation->_frames.get( a );
+		if( a + 1 < animation->_frames.size() ){
+			frame->_next = animation->_frames.get( a + 1 );
+			frame->_duration = frame->_next->_starttime - frame->_starttime;
+			assert( 0 < frame->_duration );
+			frame->_endtime = frame->_starttime + frame->_duration;
+		} else {
+			frame->_next = null;
+			frame->_duration = 0;
+			frame->_endtime = frame->_starttime + frame->_duration;
+		}
+	}
+	animation->_duration = animation->_frames.last()->_starttime;
+	assert( animation->_frames.first()->_starttime == 0 ); assert( animation->_duration > 0 );
+	/*
+	for( uint c = 0; c < aiAnimation->mNumChannels; c++ ){
+		SkinAnimationChannel* skinChannel = skinAnimation->_channels.get( c );
+		SkinJoint* joint = sourceSkeleton->getJointByName( skinChannel->name() );
+		if( root_channel == null ){
+			root_channel = skinChannel;
+			root_source_joint = joint;
+		} else {
+			if( joint->isChildOf( root_source_joint ) ){
+			} else {
+				root_channel = skinChannel;
+				root_source_joint = joint;
+			}
+		}
+	}
+	*/
+	//logDebug( "  a", animation->_frames.size() );
+	for( AssImpAnimationFrame* frame : animation->_frames ){
+		//logDebug( "    ", frame->_starttime );
+		double ticktime = frame->_starttime / tick_to_sec_factor;
+		frame->_skeleton = new Skeleton();
+		loadSkeletonNode( frame->_skeleton, _aiScene->mRootNode, null );
+		for( uint c = 0; c < aiAnimation->mNumChannels; c++ ){
+			aiNodeAnim* aichannel = aiAnimation->mChannels[c];
+			SkeletonJoint* joint = frame->_skeleton->getJointByName( String( aichannel->mNodeName.C_Str() ) );
+			glm::quat rotation = aiAnimGetRotationAt( aichannel, ticktime );
+			Vec3 translation = aiAnimGetPositionAt( aichannel, ticktime );
+			joint->setRelativeMatrix( Mat4::Translation( translation ) * Mat4::Rotation( rotation ) );
+		}
+		frame->_skeleton->transform( _transform );
+	}
+	return animation;
+}
+glm::quat AssImp::aiAnimGetRotationAt( aiNodeAnim* aichannel, double time ){
+	ASSERT( aichannel );
+	ASSERT( 0 < aichannel->mNumRotationKeys );
+	if( time < aichannel->mRotationKeys[0].mTime ){
+		return glm::quat();
+	}
+	for( unsigned int r = 1; r < aichannel->mNumRotationKeys; r++ ){
+		aiQuatKey& rotkey0 = aichannel->mRotationKeys[r-1];
+		aiQuatKey& rotkey1 = aichannel->mRotationKeys[r];
+		if( rotkey0.mTime <= time && time <= rotkey1.mTime ){
+			double duration = rotkey1.mTime - rotkey0.mTime;
+			ASSERT( 0 < duration );
+			double localtime = time - rotkey0.mTime;
+			ASSERT( 0 <= localtime && localtime <= duration );
+			double f1 = localtime / duration;
+			aiQuaternion v;
+			aiQuaternion::Interpolate( v, rotkey0.mValue, rotkey1.mValue, f1 );
+			return glm::quat( v.w, v.x, v.y, v.z );
+		}
+	}
+	aiQuatKey& rotkeylast = aichannel->mRotationKeys[ aichannel->mNumRotationKeys -1 ];
+	ASSERT( rotkeylast.mTime <= time );
+	return glm::quat( rotkeylast.mValue.w, rotkeylast.mValue.x, rotkeylast.mValue.y, rotkeylast.mValue.z );
+}
+Vec3 AssImp::aiAnimGetPositionAt( aiNodeAnim* aichannel, double time ){
+	ASSERT( aichannel );
+	ASSERT( 0 < aichannel->mNumPositionKeys );
+	for( unsigned int p = 1; p < aichannel->mNumPositionKeys; p++ ){
+		aiVectorKey& poskey0 = aichannel->mPositionKeys[p-1];
+		aiVectorKey& poskey1 = aichannel->mPositionKeys[p];
+		if( poskey0.mTime <= time && time <= poskey1.mTime ){
+			double duration = poskey1.mTime - poskey0.mTime;
+			ASSERT( 0 < duration );
+			double localtime = time - poskey0.mTime;
+			ASSERT( 0 <= localtime && localtime <= duration );
+			double f1 = localtime / duration;
+			double f0 = 1.0 - f1;
+			aiVector3D v0 = poskey0.mValue;
+			v0 *= f0;
+			aiVector3D v1 = poskey1.mValue;
+			v1 *= f1;
+			aiVector3D v;
+			v += v0;
+			v += v1;
+			return Vec3( v.x, v.y, v.z );
+		}
+	}
+	aiVectorKey& poskeylast = aichannel->mPositionKeys[ aichannel->mNumPositionKeys -1 ];
+	ASSERT( poskeylast.mTime <= time );
+	return Vec3( poskeylast.mValue.x, poskeylast.mValue.y, poskeylast.mValue.z );
+}
 /*
 
 void AssImp::loadNodes( std::function<void ( uint meshIndex, const glm::mat4& localMatrix, const glm::mat4& globalMatrix )> loader ){

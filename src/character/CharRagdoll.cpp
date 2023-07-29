@@ -4,6 +4,7 @@
 #include "CharResource.h"
 #include "CharPose.h"
 #include "skin/SkinMesh.h"
+#include "scene/Scene.h"
 
 CharRagdollType::CharRagdollType(const String &id)
 	:Resource( id )
@@ -241,11 +242,12 @@ void CharRagdoll::savePose( CharPose& pose ) const {
 //}
 
 
-//CharRagdollRenderer::CharRagdollRenderer( CharRagdoll* ragdoll, Material* material, Object* object )
-//	:ObjectProperty( object )
-//	,_ragdoll( asserted( ragdoll ) )
-//	,_material( asserted( material ) )
-//{
+CharRagdollRenderer::CharRagdollRenderer( CharRagdoll* ragdoll, Material* material, SceneObject* object )
+	:SceneProperty( object )
+	,_object( asserted( object ) )
+	,_ragdoll( asserted( ragdoll ) )
+	,_material( asserted( material ) )
+{
 //	for( CharJoint* joint : _ragdoll->joints() ){
 //		if( !joint->type()->hasMesh() ){
 //			logDebug( "CharRagdoll joint no mesh", joint->type()->name() );
@@ -256,20 +258,24 @@ void CharRagdoll::savePose( CharPose& pose ) const {
 //		renderer->_renderer = new ObjectRenderableProperty( joint->type()->mesh(), material, object );
 //		_renderers.add( renderer );
 //	}
-//}
-//CharRagdollRenderer::~CharRagdollRenderer(){
-//	_renderers.deleteAll();
-//}
+}
+CharRagdollRenderer::~CharRagdollRenderer(){
+	//	_renderers.deleteAll();
+}
+void CharRagdollRenderer::onAddedToScene( Scene* scene ){
+	assert( _skeletonMesh == null );
+	//_skeletonMesh = scene->renderer().createDynamicMeshPNT( "crr" );
+	//_ragdoll->
 
-//void CharRagdollRenderer::setPosOri(const PosOri&posori)
-//{
-//_posori = posori;
-//}
-//void CharRagdollRenderer::animate( float dt ){
+}
+void CharRagdollRenderer::onRemovedFromScene( Scene* scene ){
+
+}
+void CharRagdollRenderer::animate( float dt ){
 //	for( Renderer* renderer : _renderers ){
 //		renderer->_renderer->setPosOri( PosOri( _posori.matrix() * renderer->_joint->posori().matrix() ) );
 //	}
-//}
+}
 
 //CharRagdollSkinRenderer::CharRagdollSkinRenderer( CharRagdoll* ragdoll, Material* material, Object* object )
 //	:ObjectProperty( object )

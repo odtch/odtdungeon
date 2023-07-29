@@ -51,39 +51,39 @@ void CharSkinType::save( BinaryFileWriter& writer ) const {
 	writer.write_uint32( 's' );
 }
 
-CharSkinPart::CharSkinPart( CharSkinPartType* type, Material* material, CharJoint* joint, Object* object )
-	:/*ObjectRenderableProperty( asserted( type )->mesh(), asserted( material ), object )
-//	,*/_joint( asserted( joint ) )
-{
-}
-CharSkinPart::~CharSkinPart(){
-}
-void CharSkinPart::animate( float dt ){
-	assert( false ); //setPosOri( _joint->posori() );
-	ObjectRenderableProperty::animate( dt );
-}
+//CharSkinPart::CharSkinPart( CharSkinPartType* type, Material* material, CharJoint* joint, Object* object )
+//	:/*ObjectRenderableProperty( asserted( type )->mesh(), asserted( material ), object )
+////	,*/_joint( asserted( joint ) )
+//{
+//}
+//CharSkinPart::~CharSkinPart(){
+//}
+//void CharSkinPart::animate( float dt ){
+//	assert( false ); //setPosOri( _joint->posori() );
+//	ObjectRenderableProperty::animate( dt );
+//}
 
 
 
-CharSkin::CharSkin( CharSkinType* type, Material* material, CharRagdoll* skeleton, Object* object )
-	:/*ObjectProperty( object )
-	,*/_type( asserted( type ) )
-	,_material( asserted( material ) )
-	,_skeleton( asserted( skeleton ) )
-{
-	for( CharSkinPartType* parttype : _type->parts() ){
-		CharJoint* joint = skeleton->joints().get( parttype->jointindex() );
-#ifdef ODTDEBUG
-		if( joint->type()->name() != parttype->jointname() ){
-			logError( "CharSkin Skeleton not map: ", parttype->jointindex(), parttype->jointname(), joint->type()->index(), joint->type()->name() );
-			ASSERT( false );
-		}
-#endif
-		CharSkinPart* part = new CharSkinPart( parttype, _material, joint, object );
-		_parts.add( part );
-	}
-}
-CharSkin::~CharSkin(){
-	_type = null;
-	_parts.removeAll();
-}
+//CharSkin::CharSkin( CharSkinType* type, Material* material, CharRagdoll* skeleton, Object* object )
+//	:/*ObjectProperty( object )
+//	,*/_type( asserted( type ) )
+//	,_material( asserted( material ) )
+//	,_skeleton( asserted( skeleton ) )
+//{
+//	for( CharSkinPartType* parttype : _type->parts() ){
+//		CharJoint* joint = skeleton->joints().get( parttype->jointindex() );
+//#ifdef ODTDEBUG
+//		if( joint->type()->name() != parttype->jointname() ){
+//			logError( "CharSkin Skeleton not map: ", parttype->jointindex(), parttype->jointname(), joint->type()->index(), joint->type()->name() );
+//			ASSERT( false );
+//		}
+//#endif
+//		CharSkinPart* part = new CharSkinPart( parttype, _material, joint, object );
+//		_parts.add( part );
+//	}
+//}
+//CharSkin::~CharSkin(){
+//	_type = null;
+//	_parts.removeAll();
+//}

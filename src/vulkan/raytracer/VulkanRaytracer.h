@@ -40,6 +40,7 @@ private:
 	List<VulkanMesh*> _vulkanmeshes;
 	VulkanMeshPool _meshPool;
 	VulkanTLASList _tlases;
+	List<VulkanRaytracerSkinInstance*> _skininstances;
 	VulkanRenderableArray _instances;
 	VulkanTextureArray _textures;
 	VulkanMaterialArray _materials;
@@ -103,6 +104,8 @@ public:
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) override;
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) override;
+	virtual RenderSkinInstance* createSkinInstance( RenderLayer* layer, const PosOri& posori, Skin* skin ) override;
+public:
 	virtual void addLight( RenderLayer* layer, RenderLight* light ) override;
 protected:
 	virtual void getRequirements( VulkanRequirements& requirements ) override;

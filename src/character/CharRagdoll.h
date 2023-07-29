@@ -70,27 +70,32 @@ public:
 //	void load( const CharRagdoll& ragdoll );
 };
 
-class CharRagdollRenderer : public ObjectProperty
+class CharRagdollRenderer : public SceneProperty
 {
 private:
+	SceneObject* _object;
 	CharRagdoll* _ragdoll;
 	Material* _material;
 	PosOri _posori;
 private:
-	struct Renderer {
-		CharJoint* _joint = null;
-		ObjectRenderableProperty* _renderer = null;
-	};
-	List<Renderer*> _renderers;
+	MeshPNT* _skeletonMesh = null;
+//	struct Renderer {
+//		CharJoint* _joint = null;
+//		ObjectRenderableProperty* _renderer = null;
+//	};
+//	List<Renderer*> _renderers;
 public:
-	explicit CharRagdollRenderer( CharRagdoll* ragdoll, Material* material, Object* object );
+	explicit CharRagdollRenderer( CharRagdoll* ragdoll, Material* material, SceneObject* object );
 	virtual ~CharRagdollRenderer() override;
-public:
-	void setPosOri( const PosOri& posori );
-public:
+//public:
+//	void setPosOri( const PosOri& posori );
+protected:
+	virtual void onAddedToScene( Scene* scene ) override;
+	virtual void onRemovedFromScene( Scene* scene ) override;
+protected:
 	virtual void animate( float dt ) override;
-private:
-	void rebuild();
+//private:
+//	void rebuild();
 };
 /*
 class CharRagdollSkinRenderer : public ObjectProperty

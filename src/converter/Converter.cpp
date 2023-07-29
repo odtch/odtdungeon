@@ -45,6 +45,7 @@ void Converter::run(){
 	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
 	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx", AssImp::YUp_to_ZUp_Synty1() );
 	convertMesh( "banner02", "/home/rt/media/Polygon_Dungeon/FBX/SM_Wep_Banner_02.fbx", AssImp::YUp_to_ZUp_Synty1() );
+	///home/rt/media/Polygon_Dungeon/Characters/SK_Character_Rock_Golem.fbx
 	convertImage( "dt01", "/home/rt/media/Polygon_Dungeon/Textures/Dungeons_Texture_01.png" );
 
 	convertImage( "mcg_diff", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );

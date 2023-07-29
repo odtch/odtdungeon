@@ -40,35 +40,35 @@ public:
 	friend class CharImporter;
 };
 
-class CharSkinPart : public ObjectRenderableProperty {
-private:
-	CharSkinPartType* _type = null;
-private:
-	CharJoint* _joint = null;
-private:
-	explicit CharSkinPart( CharSkinPartType* type, Material* material, CharJoint* joint, Object* object );
-	~CharSkinPart();
-public:
-	const CharSkinPartType* type() const{ return _type; }
-public:
-	virtual void animate( float dt ) override;
-public:
-	friend class CharSkin;
-	friend class CharImporter;
-};
+//class CharSkinPart : public ObjectRenderableProperty {
+//private:
+//	CharSkinPartType* _type = null;
+//private:
+//	CharJoint* _joint = null;
+//private:
+//	explicit CharSkinPart( CharSkinPartType* type, Material* material, CharJoint* joint, Object* object );
+//	~CharSkinPart();
+//public:
+//	const CharSkinPartType* type() const{ return _type; }
+//public:
+//	virtual void animate( float dt ) override;
+//public:
+//	friend class CharSkin;
+//	friend class CharImporter;
+//};
 
-class CharSkin : public ObjectProperty
-{
-	DEBUGCOUNTER(CharSkin)
-private:
-	CharSkinType* _type;
-	Material* _material;
-	CharRagdoll* _skeleton;
-private:
-	List<CharSkinPart*> _parts;
-public:
-	explicit CharSkin( CharSkinType* type, Material* material, CharRagdoll* skeleton, Object* object );
-	virtual ~CharSkin();
-public:
-};
+//class CharSkin : public ObjectProperty
+//{
+//	DEBUGCOUNTER(CharSkin)
+//private:
+//	CharSkinType* _type;
+//	Material* _material;
+//	CharRagdoll* _skeleton;
+//private:
+//	List<CharSkinPart*> _parts;
+//public:
+//	explicit CharSkin( CharSkinType* type, Material* material, CharRagdoll* skeleton, Object* object );
+//	virtual ~CharSkin();
+//public:
+//};
 

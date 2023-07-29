@@ -18,6 +18,7 @@ enum MessageType {
 	VulkanLayerCreated,
 	VulkanMeshPNTCreated,
 	VulkanRenderInstancePNTCreated,
+	VulkanRaytracerSkinInstanceCreated,
 	VulkanLightAdded,
 };
 

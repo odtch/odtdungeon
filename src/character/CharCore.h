@@ -7,11 +7,11 @@
 //#include "resource/OdtResource.h"
 //#include "scene/OdtScene.h"
 //#include "object/OdtObject.h"
-class Object { public: explicit Object(){} virtual ~Object(){} };
-class ObjectProperty { public: explicit ObjectProperty(){} virtual ~ObjectProperty(){}
-								 virtual void animate( float dt ) {} };
-class ObjectRenderableProperty { public: explicit ObjectRenderableProperty(){} virtual ~ObjectRenderableProperty(){}
-								 virtual void animate( float dt ) {} };
+//class Object { public: explicit Object(){} virtual ~Object(){} };
+//class ObjectProperty { public: explicit ObjectProperty(){} virtual ~ObjectProperty(){}
+//								 virtual void animate( float dt ) {} };
+//class ObjectRenderableProperty { public: explicit ObjectRenderableProperty(){} virtual ~ObjectRenderableProperty(){}
+//								 virtual void animate( float dt ) {} };
 //#include "renderer/OdtRender.h"
 //#include "physics/OdtPhysics.h"
 #include "skin/SkinCore.h"

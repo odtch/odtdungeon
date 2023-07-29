@@ -7,9 +7,11 @@
 #include "resource/Mesh.h"
 
 class Camera;
+class Skin;
 
 class Renderer;
 class RenderLayer;
 class RenderInstance;
 class RenderInstancePNT;
+class RenderSkinInstance;
 class RenderLight;

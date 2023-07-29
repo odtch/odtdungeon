@@ -42,3 +42,14 @@ public:
 	Mesh<VertexPNT>* mesh() const{ return _mesh; }
 	Material* material() const{ return _material; }
 };
+
+class RenderSkinInstance : public RenderInstance
+{
+private:
+	Skin* _skin;
+protected:
+	explicit RenderSkinInstance( const PosOri& posori, Skin* skin );
+	virtual ~RenderSkinInstance() override;
+public:
+	Skin* skin() const{ return _skin; }
+};

@@ -21,14 +21,6 @@ public:
 
 #define SkinMesh Mesh<SkinVertex>
 
-//class SkinMesh : public Mesh<SkinVertex>
-//{
-////public:
-////	static Mesh<VertexPNT>* Convert( const Mesh<SkinVertex>& source );
-////	static void Update( const Mesh<SkinVertex>& source, Mat4* matrices, Mesh<VertexPNT>& target );
-//};
-
-
 struct SkinBoneType {
 public:
 	int index = -1;

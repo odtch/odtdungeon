@@ -4,8 +4,6 @@
 #include "vulkan/VulkanCore.h"
 #include "math/Camera.h"
 
-class xDummyRenderInstancePNT;
-
 class VulkanRaytracerRenderLayer : public RenderLayer
 {
 private:
@@ -17,7 +15,7 @@ private:
 //private:
 //	List<Renderable*> _renderables;
 private:
-	List<xDummyRenderInstancePNT*> _instances;
+	List<VulkanRaytracerInstancePNT*> _instances;
 	List<RenderLight*> _lights;
 //private:
 //	List<Decal*> _decals;

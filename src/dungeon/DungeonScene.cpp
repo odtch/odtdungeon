@@ -14,9 +14,18 @@
 #include "physics/PhysicsDynamicBody.h"
 
 #include "converter/AssImp.h"
+#include "converter/AssImpAnimation.h"
 #include "resource/Skeleton.h"
 #include "skin/SkinImporter.h"
 #include "skin/Skin.h"
+
+#include "character/CharImporter.h"
+#include "character/CharRagdoll.h"
+
+
+Skin* _skin = null;
+AssImpAnimation* anim3  = null;
+MeshPNT* skeleton_mesh = null;
 
 DungeonScene::DungeonScene( Renderer* renderer )
     :Scene( renderer )
@@ -36,6 +45,20 @@ void DungeonScene::animate( float dt ){
 	_camera->rotate( control.cameraRotateY * 100 * dt, _camera->direction() );
 	_camera->rotate( control.cameraRotateZ * 100 * dt, _camera->up() );
 	_uilayer->setNextFixedCamera( *_camera );
+	if( anim3 ){
+		static float at = 0;
+		at += dt;
+		AssImpAnimationFrame* f = anim3->findFrameAt( at );
+		if( f == null ){
+			at = 0;
+		} else {
+			_skin->loadBones( *f->skeleton() );
+			if( skeleton_mesh ){
+				skeleton_mesh->clear();
+				f->skeleton()->createMesh( *skeleton_mesh );
+			}
+		}
+	}
 	Scene::animate( dt );
 }
 void DungeonScene::run(){
@@ -81,14 +104,6 @@ void DungeonScene::run(){
 				new PhysicsBody( bs, PhysicsMotionType_Dynamic, bo1 );
 				_area1->addChild( bo1 );
 			}
-
-
-
-
-
-			//mesh = renderer().createDynamicMeshPNT( "dungeonboxmesh3" );
-			//MeshBuilder::CreateSphere( *mesh, Vec3::Null, 1.4f, 3, VertexPNT() );
-			//renderer().createInstance( layer, PosOri().translated( Vec3( -3, 0, 0 ) ), mesh, material );
 		}
 		{
 //			MeshPNT* mesh = renderer().loadMeshPNT( "platform5" );
@@ -107,27 +122,59 @@ void DungeonScene::run(){
 			material->setTexture( renderer().loadTexture( "mcg_diff" ) );
 			AssImp assimp;
 			assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
-
-			//assimp.trace();
 			Skeleton* skeleton = assimp.loadSkeleton();
 			SkinType* skintype = SkinImporter::Import( assimp, 0 );
-
+			AssImp a2;
+			a2.open( "/home/rt/media/mocap/FBX_Ninja_v27_Pro/Animation/Root_Motion/NJA_Rlx_Walk_Forward_Loop.fbx", AssImp::YUp_to_ZUp_Synty2() );
+			assert( 1 == a2.animationCount() );
+			anim3 = a2.loadAnimation();
 	//		charimporter.setupRagdollFromSkeleton( *skeleton );
 	//		charimporter.loadSkin( *skeleton, assimp, 0 );
-			//skeleton->trace();
 			SceneObject* so1 = new SceneObject();
 			so1->setPosOri( PosOri().translated( Vec3( 3, 0, 0 ) ) );
-			new Skin( skintype, material, so1 );
+			_skin = new Skin( skintype, material, so1 );
 			_area1->addChild( so1 );
+			/*
+			{
+				skeleton_mesh = renderer().createDynamicMeshPNT( "sm" );
+				skeleton->createMesh( *skeleton_mesh );
+				odelete( skeleton );
+				SceneObject* so = new SceneObject();
+				so->setPosOri( PosOri().translated( Vec3( 0, 0, 0 ) ) );
+				//new SceneRenderInstancePNTProperty( skeleton_mesh, material, so );
+				_area1->addChild( so );
+			}
 
-			MeshPNT* sm = renderer().createDynamicMeshPNT( "sm" );
-			skeleton->createMesh( *sm );
-			odelete( skeleton );
-			SceneObject* so = new SceneObject();
-			so->setPosOri( PosOri().translated( Vec3( 0, 0, 0 ) ) );
-			new SceneRenderInstancePNTProperty( sm, material, so );
-			_area1->addChild( so );
-
+//			float x = 4;
+//			for( AssImpAnimationFrame* f : anim3->frames() ){
+//				MeshPNT* sm = renderer().createDynamicMeshPNT( "sm" );
+//				f->skeleton()->createMesh( *sm );
+//				odelete( skeleton );
+//				SceneObject* so = new SceneObject();
+//				so->setPosOri( PosOri().translated( Vec3( x, 0, 0 ) ) );
+//				new SceneRenderInstancePNTProperty( sm, material, so );
+//				_area1->addChild( so );
+//				x += 1;
+//			}
+//			{
+//				CharImporter charimporter( CharImporter::MocapFormat );
+//				charimporter.createRagdoll();
+//				{
+//					AssImp assimp;
+//					assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
+//					Skeleton* skeleton = assimp.loadSkeleton();
+//					charimporter.setupRagdollFromSkeleton( *skeleton );
+//					charimporter.loadSkin( *skeleton, assimp, 0 );
+//					odelete( skeleton );
+//					CharRagdollType* motusman_type = charimporter.ragdolltype();
+//					CharRagdoll* motusman_ragdoll = new CharRagdoll( motusman_type );
+//					SceneObject* r = new SceneObject();
+//					r->setPosOri( PosOri().translated( Vec3( 4, 2, 0 ) ) );
+//					new CharRagdollRenderer( motusman_ragdoll, material, r );
+//					_area1->addChild( r );
+//				}
+//			}
+		*/
 		}
     }
     Scene::run();
