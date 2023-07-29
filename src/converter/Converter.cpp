@@ -44,6 +44,8 @@ void Converter::run(){
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rmiss.glsl" );
 	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
 	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx", AssImp::YUp_to_ZUp_Synty1() );
+	convertMesh( "banner02", "/home/rt/media/Polygon_Dungeon/FBX/SM_Wep_Banner_02.fbx", AssImp::YUp_to_ZUp_Synty1() );
+	convertImage( "dt01", "/home/rt/media/Polygon_Dungeon/Textures/Dungeons_Texture_01.png" );
 
 	convertImage( "mcg_diff", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
 	//material->setFlag( MaterialFlag_CalcNormalFromTriangle );
@@ -297,8 +299,8 @@ void Converter::convertImage( const String& trgname, const String& srcpath ){
 	}
 	Image image( trgname );
 	image.create( texWidth, texHeight );
-	for( uint x = 0; x < texWidth; x++ ){
-		for( uint y = 0; y < texHeight; y++ ){
+	for( uint y = 0; y < texHeight; y++ ){
+		for( uint x = 0; x < texWidth; x++ ){
 			float r = i16toc( *rgba ); rgba++;
 			float g = i16toc( *rgba ); rgba++;
 			float b = i16toc( *rgba ); rgba++;

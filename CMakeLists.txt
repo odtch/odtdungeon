@@ -22,11 +22,15 @@ file(GLOB source_files CONFIGURE_DEPENDS
 )
 
 include_directories(
+	external/JoltPhysics
 )
 add_executable(odtdungeon ${source_files})
 
 target_compile_definitions(odtdungeon PUBLIC "$<$<CONFIG:DEBUG>:ODTDEBUG>"
 	_DEBUG
+	ODTJOLT
+	JPH_PROFILE_ENABLED # auch im release
+	JPH_DEBUG_RENDERER
 )
 
 target_link_libraries(odtdungeon
@@ -34,5 +38,6 @@ target_link_libraries(odtdungeon
     #pthread
     vulkan
 	assimp
+	${CMAKE_CURRENT_SOURCE_DIR}/external/JoltPhysics/Build/Linux_Debug/libJolt.a
 )
 

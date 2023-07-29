@@ -131,7 +131,7 @@ vec4 OHitCalcColor( in OHit hit ){
 
 
 	if( 0 <= texture_index ){
-		debugPrintfEXT( "t %d %d\n", hit.material_index, texture_index );
+		//debugPrintfEXT( "t %d %d\n", hit.material_index, texture_index );
 		color *= OTextureGetFromMaterial(
 					hit.material_index,
 					hit.texture_coord,

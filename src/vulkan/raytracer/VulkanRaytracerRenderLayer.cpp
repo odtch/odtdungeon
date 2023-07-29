@@ -2,11 +2,8 @@
 
 #include "VulkanRaytracerRenderLayer.h"
 #include "VulkanRaytracerData.h"
-//#include "Renderable.h"
-//#include "RenderLight.h"
-//#include "Renderer.h"
-//#include "scene/SceneArea.h"
-//#include "scene/SceneCameraNode.h"
+#include "renderer/RenderInstance.h"
+#include "renderer/RenderLight.h"
 
 VulkanRaytracerRenderLayer::VulkanRaytracerRenderLayer(){
 }

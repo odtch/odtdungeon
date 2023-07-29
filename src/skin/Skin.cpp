@@ -407,19 +407,12 @@
 //	_skeleton->transform( transform );
 //}
 
-Skin::Skin( SkinType* type, Material* material ) // , Object* object
-	:/*ObjectProperty( object )
-	,*/_type( asserted( type ) )
+Skin::Skin( SkinType* type, Material* material, SceneObject* object )
+	:SceneRenderInstanceProperty( object )
+	,_type( asserted( type ) )
 	,_material( asserted( material ) )
-	,_mesh( "Skin", type->mesh().vertexCount(), type->mesh().indexCount() )
+	//,_mesh( "Skin", type->mesh().vertexCount(), type->mesh().indexCount() )
 {
-	for( uint v = 0; v < type->mesh().vertexCount(); v++ ){
-		const SkinVertex& src = type->mesh().vertex( v );
-		_mesh.addVertex( VertexPNT( src.position, src.normal, src.texcoord ) );
-	}
-	for( uint i = 0; i < type->mesh().indexCount(); i++ ){
-		_mesh.addIndex( type->mesh().index( i ) );
-	}
 }
 Skin::~Skin(){
 }
@@ -433,4 +426,18 @@ void Skin::loadBones( const Skeleton& skeleton ){
 }
 void Skin::setBonesModified(){
 	_bones_modified = true;
+}
+
+RenderInstance* Skin::createInstance(Renderer& renderer, RenderLayer* layer)
+{
+	assert( _mesh == null );
+	_mesh = renderer.createDynamicMeshPNT( "Skin" );
+	for( uint v = 0; v < _type->mesh().vertexCount(); v++ ){
+		const SkinVertex& src = _type->mesh().vertex( v );
+		_mesh->addVertex( VertexPNT( src.position, src.normal, src.texcoord ) );
+	}
+	for( uint i = 0; i < _type->mesh().indexCount(); i++ ){
+		_mesh->addIndex( _type->mesh().index( i ) );
+	}
+	return renderer.createInstance( layer, posori(), _mesh, _material );
 }

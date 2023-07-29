@@ -1,6 +1,7 @@
 #include "stdodt.h"
 #include "Skeleton.h"
 #include "utils/Logger.h"
+#include "MeshBuilder.h"
 
 SkeletonJoint::SkeletonJoint(){
 }
@@ -143,6 +144,21 @@ void Skeleton::transform( const Mat4& transform ){
 void Skeleton::trace() const{
 	logDebug( "AssImpSkeleton" );
 	_root->trace( 0 );
+}
+void Skeleton::createMesh( Mesh<VertexPNT>& mesh ) const {
+	for( SkeletonJoint* joint : joints() ){
+		PosOri posori( joint->absolutematrix() );
+		//posori.setPosition( posori.position() );
+		MeshBuilder::CreatePosOri( mesh, posori, 0.02f, 0.0015f, 6, true, VertexPNT() );
+		if( joint->hasParent() ){
+			SkeletonJoint* parent = joint->parent();
+			PosOri parentposori( parent->absolutematrix() );
+			//parentposori.setPosition( parentposori.position() );
+			if( 0.0001f < ( parentposori.position() - posori.position() ).length2() ){
+				MeshBuilder::CreateLine( mesh, parentposori.position(), posori.position(), 0.01f, 6, true, VertexPNT() );
+			}
+		}
+	}
 }
 SkeletonJoint* Skeleton::findJointByName( const String& name ) const {
 	for( SkeletonJoint* joint : _joints ){

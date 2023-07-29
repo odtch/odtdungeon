@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ResourceCore.h"
+#include "Mesh.h"
 
 class SkeletonJoint {
 	DEBUGCOUNTER(SkeletonJoint)
@@ -65,5 +66,6 @@ public:
 public:
 	void trace() const;
 public:
+	void createMesh( MeshPNT& mesh ) const;
 };
 

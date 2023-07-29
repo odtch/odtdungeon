@@ -21,7 +21,6 @@
 
 Material::Material( const String& name )
     :Resource( name )
-//	:_texture( null )
 ////	,_texture_has_transparency( false )
 ////	,_emissiveTexture( null )
     ,_color( 1, 1, 1, 1 )
@@ -72,11 +71,11 @@ Material::~Material(){
 ////void Material::setLightAffected(bool f){
 ////	setFlag( Material_LightAffected, f );
 ////}
-//void Material::setTexture( Texture* texture ){
-//	assert( texture );
-//	_texture = texture;
-//	_modified = true;
-//}
+void Material::setTexture( Texture* texture ){
+	assert( texture );
+	_texture = texture;
+	setModified();
+}
 ////void Material::setTextureHasTransparency( bool f ){
 ////	setFlag( Material_TextureHasTransparency, f );
 ////}

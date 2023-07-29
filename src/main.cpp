@@ -8,6 +8,8 @@
 #include "dungeon/DungeonScene.h"
 #include "dungeon/DungeonWindow.h"
 #include "converter/Converter.h"
+#include "physics/Physics.h"
+#include "physics/PhysicsWorld.h"
 
 int main( int argc, char** argv ) {
     logInfo( "odtdungeon" );
@@ -23,6 +25,7 @@ int main( int argc, char** argv ) {
 		#endif
         {
             Modules modules;
+			Physics physics;
             modules.start();
 			DungeonWindow window;
 			window.create( 1600, 1200, String( "ODT-Dungeon" ));
@@ -30,6 +33,7 @@ int main( int argc, char** argv ) {
             renderer.start();
             DungeonScene scene( &renderer );
 			window.setScene( &scene );
+			new PhysicsWorld( &physics, &scene );
             scene.start();
             window.main();
             renderer.requestStop();

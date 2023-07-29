@@ -17,12 +17,8 @@ public:
 private:
 	RenderLayer* _uilayer = null;
 	Camera* _camera = null;
-	RenderInstancePNT* _box1 = null;
 private:
 	SceneArea* _area1 = null;
-	SceneObject* _sphere1 = null;
-	Vec3 _sphere1vel;
-	SceneObject* _sphere2 = null;
 public:
     explicit DungeonScene( Renderer* renderer );
     virtual ~DungeonScene() override;

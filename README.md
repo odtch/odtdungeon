@@ -38,3 +38,4 @@ Goals:
 - VulkanMesh extends Mesh
 - render-lights reorg
 - scenenode.childs as array 
+- rm Physics::Global, PhysicsWorld as Property of Scene, as a own Thread

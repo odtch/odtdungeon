@@ -76,7 +76,7 @@ public:
 public:
 	bool hasTexture() const{ return _texture != null; }
 	Texture* texture() const{ assert( hasTexture() ); return _texture; }
-//	void setTexture( Texture* texture );
+	void setTexture( Texture* texture );
 ////	void setTextureHasTransparency( bool f );
 ////public:
 ////	bool hasEmissiveTexture() const{ return _emissiveTexture != null; }
