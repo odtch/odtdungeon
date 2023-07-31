@@ -1,9 +1,11 @@
 #include "stdodt.h"
 #include "Mesh.h"
+#include "ResourceType.h"
+//#include "ResourceStorage.h"
 
 AbstractMesh::AbstractMesh(){
-//	static int nr = 0;
-//	setId( String( "mesh " ) + String::FromInt( ++nr ) );
+	static std::atomic<uint32_t> next_meshindex( 0 );
+	_meshindex = next_meshindex.fetch_add( 1, std::memory_order_relaxed );
 }
 AbstractMesh::~AbstractMesh(){
 //	ASSERT( _vulkanmesh == null );
@@ -36,22 +38,12 @@ void AbstractMesh::setVulkanMesh( VulkanMesh* vulkanmesh ){
 //void AbstractMesh::collectPreLoad( List<AbstractMesh*>& meshes ){
 //	meshes.add( this );
 //}
-//void AbstractMesh::load( BinaryFileReader& reader ){
-//	Resource::load( reader );
-//	_geometryFlags = reader.read_uint32();
-//}
-//void AbstractMesh::save( BinaryFileWriter& writer ) const {
+void AbstractMesh::load( BinaryFileReader& reader ){
+	//Resource::load( reader );
+	_geometryFlags = reader.read_uint32();
+}
+void AbstractMesh::save( BinaryFileWriter& writer ) const {
 //	Resource::save( writer );
-//	writer.write_uint32( _geometryFlags );
-//}
+	writer.write_uint32( _geometryFlags );
+}
 
-//const char* MeshPNTType::Id = "MeshPNTType";
-//MeshPNTType::MeshPNTType()
-//	:ResourceType( 5, Id )
-//{
-//}
-//MeshPNTType::~MeshPNTType(){
-//}
-//Resource* MeshPNTType::newInstance(){
-//	return new MeshPNT();
-//}

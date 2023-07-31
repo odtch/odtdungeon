@@ -2,16 +2,15 @@
 
 #include "ResourceCore.h"
 #include "Resource.h"
-//#include "ResourceType.h"
-//#include "ResourceStorage.h"
 #include "Vertex.h"
-//#include "space/vulkan/resource/VulkanMeshBuffer.h"
 
 class VulkanMesh; // todo: rm
 
 class AbstractMesh : public Resource
 {
 	DEBUGCOUNTER(AbstractMesh)
+private:
+	uint32_t _meshindex = UINT32_MAX;
 public:
 	enum ModificationState {
 		NotModified,
@@ -35,6 +34,10 @@ private:
 public:
 	explicit AbstractMesh();
 	virtual ~AbstractMesh() override;
+public:
+	uint32_t meshindex() const{ return _meshindex; }
+public:
+
 //public:
 //	UpdateType updateType() const{ return _updateType; }
 //	void setUpdateBackground();
@@ -60,9 +63,9 @@ public:
 	void setVulkanMesh( VulkanMesh* vulkanmesh );
 //public:
 //	virtual void collectPreLoad( List<AbstractMesh*>& meshes ) override;
-//public:
-//	virtual void load( BinaryFileReader& reader ) override;
-//	virtual void save( BinaryFileWriter& writer ) const override;
+public:
+	virtual void load( BinaryFileReader& reader ) override;
+	virtual void save( BinaryFileWriter& writer ) const override;
 };
 
 template < typename V >
@@ -196,11 +199,11 @@ public:
 	virtual const void* abstractVertexData() const override { return verticesData(); }
 	virtual uint32_t abstractIndexCount() const override { return _indices.size(); }
 	virtual const void* abstractIndexData() const override { return indicesData(); }
-//public:
-//	virtual ResourceType* type() const{ return asserted( V::GetResourceType() ); }
+public:
+	virtual ResourceType* type() const{ return asserted( V::GetResourceType() ); }
 public:
 	virtual void load( BinaryFileReader& reader ) override {
-		//AbstractMesh::load( reader );
+		AbstractMesh::load( reader );
 		reader.read_magicnumber( 19176 );
 		assert( _vertices.size() == 0 );
 		uint vertex_count = reader.read_uint32();
@@ -212,7 +215,7 @@ public:
 		reader.read_magicnumber( 19177 );
 	}
 	virtual void save( BinaryFileWriter& writer ) const override {
-		//AbstractMesh::save( writer );
+		AbstractMesh::save( writer );
 		writer.write_uint32( 19176 );
 		assert( 0 < vertexCount() ); assert( 0 < indexCount() );
 		writer.write_uint32( vertexCount() );
@@ -228,17 +231,8 @@ public:
 
 //typedef Mesh<VertexPNT> MeshPNT;
 #define MeshPNT Mesh<VertexPNT>
+#define SkinMesh Mesh<SkinVertex>
 
 //MeshPNT* loadMeshPNT( BinaryFileReader& reader );
 //void saveMeshPNT( BinaryFileWriter& writer, const MeshPNT& mesh );
 
-//class MeshPNTType : public ResourceType
-//{
-//public:
-//	static const char* Id;
-//public:
-//	explicit MeshPNTType();
-//	virtual ~MeshPNTType() override;
-//public:
-//	virtual Resource* newInstance() override;
-//};

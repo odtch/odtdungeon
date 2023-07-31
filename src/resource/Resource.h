@@ -15,7 +15,7 @@ public:
 public:
 	const String& id() const{ return _id; }
 public:
-	virtual ResourceType* type() const{ assert( false ); }
+	virtual ResourceType* type() const{ logError( "Resource::type not overriden" ); assert( false ); }
 public:
 	virtual void load( BinaryFileReader& reader );
 	virtual void save( BinaryFileWriter& writer ) const;

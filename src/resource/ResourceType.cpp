@@ -31,7 +31,7 @@ void ResourceTypes::registerDefaultTypes(){
 	new ImageType();
 	new TextureType();
 	new MaterialType();
-//	new MeshPNTType();
+	new MeshPNTType();
 //	new MeshModelType();
 }
 
@@ -71,3 +71,14 @@ Resource* MaterialType::newInstance(){
 	return new Material();
 }
 
+#include "Mesh.h"
+const char* MeshPNTType::Id = "MeshPNTType";
+MeshPNTType::MeshPNTType()
+	:ResourceType( 5, Id )
+{
+}
+MeshPNTType::~MeshPNTType(){
+}
+Resource* MeshPNTType::newInstance(){
+	return new MeshPNT();
+}

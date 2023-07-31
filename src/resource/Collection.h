@@ -48,8 +48,8 @@ public:
 public:
 //	const List<Material*>& materials() const{ return _materials; }
 	Material* getMaterial( const String& id ) const;
-//public:
-//	MeshPNT* getMeshPNT( const String& id ) const;
+public:
+	MeshPNT* getMeshPNT( const String& id ) const;
 //public:
 //	const List<MeshModel*>& meshmodels() const{ return _meshmodels; }
 //	MeshModel* getMeshModel( const String& id ) const;

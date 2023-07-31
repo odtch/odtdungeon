@@ -13,11 +13,6 @@ public:
 	explicit Renderer();
 	virtual ~Renderer();
 public:
-	virtual Texture* loadTexture( const String& name ) = 0;
-public:
-	virtual MeshPNT* createDynamicMeshPNT( const String& name ) = 0;
-	virtual MeshPNT* loadMeshPNT( const String& name ) = 0;
-public:
 	virtual RenderLayer* createRootLayer() = 0;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) = 0;
 public:

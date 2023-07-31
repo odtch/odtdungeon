@@ -27,8 +27,8 @@ private:
 	bool shouldConvert( const String& srcpath, const String& trgpath );
 	void compileShader( const String& vulkanLevel, const String& fn );
 	void convertImage( const String& trgpath, const String& srcpath );
-	void convertMesh( const String& name, const String& srcpath, const Mat4& transform );
 	/*
+	void convertMesh( const String& name, const String& srcpath, const Mat4& transform );
 	void copy( const String& srcpath, const String& trgpath );
 	void convertCollection( const String& id, const String& srcpath );
 	void buildCollectionTemplate( const String& trgpath, const String& id, const String& srcpath, const String& bincollpath );

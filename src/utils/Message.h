@@ -14,9 +14,9 @@ enum MessageType {
 	WindowDestroyed,
 	// Vulkan
 	//VulkanMaterialCreated,
-	VulkanTextureCreated,
+	//VulkanTextureCreated,
 	VulkanLayerCreated,
-	VulkanMeshPNTCreated,
+	//VulkanMeshPNTCreated,
 	VulkanRenderInstancePNTCreated,
 	VulkanRaytracerSkinInstanceCreated,
 	VulkanLightAdded,

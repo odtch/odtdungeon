@@ -4,7 +4,7 @@
 
 class AssImp
 {
-public:
+public: // copy in CollectionImporter.h
 	static Mat4 YUp_to_ZUp_Synty1(){ return Mat4::Scale( 1.0f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
 	static Mat4 YUp_to_ZUp_Synty2(){ return Mat4::Scale( 0.01f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
 private:

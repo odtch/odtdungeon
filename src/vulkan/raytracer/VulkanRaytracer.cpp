@@ -13,6 +13,7 @@
 #include "vulkan/command/VulkanQueue.h"
 #include "vulkan/command/VulkanCommandBuffer.h"
 #include "vulkan/resource/VulkanMesh.h"
+#include "vulkan/resource/VulkanMeshes.h"
 #include "vulkan/as/VulkanAccelerationStructureExtension.h"
 #include "utils/File.h"
 #include "renderer/RenderLayer.h"
@@ -37,33 +38,35 @@ VulkanRaytracer::~VulkanRaytracer(){
 	_skininstances.removeAll();
 	_layers.deleteAll();
 	odelete( _globals );
+	ASSERT( _meshpool == null );
+	ASSERT( _meshes == null );
 }
-Texture* VulkanRaytracer::loadTexture( const String& name ){
-	String filename = String( "media/" ) + name;
-	BinaryFileReader reader( filename );
-	Image* image = new Image();
-	image->load( reader );
-	Texture* texture = new Texture();
-	//texture->load( reader );
-	texture->setImage( image );
-	_queue.post( VulkanTextureCreated, texture, null, this );
-	return texture;
-}
-Mesh<VertexPNT>* VulkanRaytracer::createDynamicMeshPNT( const String& name ){
-	MeshPNT* mesh = new MeshPNT();
-	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
-	return mesh;
-}
-Mesh<VertexPNT>* VulkanRaytracer::loadMeshPNT( const String& name ){
-	MeshPNT* mesh = new MeshPNT();
-	{
-		String filename = String( "media/" ) + name;
-		BinaryFileReader reader( filename );
-		mesh->load( reader );
-	}
-	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
-	return mesh;
-}
+//Texture* VulkanRaytracer::loadTexture( const String& name ){
+//	String filename = String( "media/" ) + name;
+//	BinaryFileReader reader( filename );
+//	Image* image = new Image();
+//	image->load( reader );
+//	Texture* texture = new Texture();
+//	//texture->load( reader );
+//	texture->setImage( image );
+//	_queue.post( VulkanTextureCreated, texture, null, this );
+//	return texture;
+//}
+//Mesh<VertexPNT>* VulkanRaytracer::createDynamicMeshPNT( const String& name ){
+//	MeshPNT* mesh = new MeshPNT();
+//	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
+//	return mesh;
+//}
+//Mesh<VertexPNT>* VulkanRaytracer::loadMeshPNT( const String& name ){
+//	MeshPNT* mesh = new MeshPNT();
+//	{
+//		String filename = String( "media/" ) + name;
+//		BinaryFileReader reader( filename );
+//		mesh->load( reader );
+//	}
+//	_queue.post( VulkanMeshPNTCreated, mesh, null, this );
+//	return mesh;
+//}
 RenderLayer* VulkanRaytracer::createRootLayer(){
 	return createNextLayer( null );
 }
@@ -100,7 +103,11 @@ void VulkanRaytracer::getRequirements( VulkanRequirements& requirements ){
 }
 void VulkanRaytracer::createDevice(){
 	VulkanPresenter::createDevice();
-	_meshPool.create( device() );
+	assert( _meshpool == null );
+	_meshpool = new VulkanMeshPool();
+	_meshpool->create( device() );
+	assert( _meshes == null );
+	_meshes = new VulkanMeshes( _meshpool );
 	assert( _properties == null );
 	_properties = new VulkanRaytracingPipelineProperties();
 	_properties->get( device()->physicalDevice() );
@@ -141,14 +148,13 @@ void VulkanRaytracer::createDevice(){
 	//	if( _extension )_extension->create( device );
 }
 void VulkanRaytracer::destroyDevice(){
-	while( !_vulkanmeshes.isEmpty() ){
-		VulkanMesh* vm = _vulkanmeshes.takeFirst();
-		vm->_mesh->setVulkanMesh( null );
-		delete vm;
-	}
+	odelete( _meshes );
 	_globals->destroy();
 	odelete( _properties );
-	_meshPool.destroy();
+	if( _meshpool ){
+		_meshpool->destroy();
+		odelete( _meshpool );
+	}
 	//	while( !_preloadedMeshes.isEmpty() ){
 	//		AbstractMesh* mesh = _preloadedMeshes.takeLast();
 	//		ASSERT( mesh->vulkanMesh()->instanceCount() == 1 );
@@ -187,7 +193,6 @@ void VulkanRaytracer::destroyDevice(){
 	_lights.destroy();
 	//	//_blases.destroy();
 	_textures.destroy();
-	_meshPool.destroy();
 	_target.destroy();
 	VulkanPresenter::destroyDevice();
 }
@@ -215,9 +220,6 @@ void VulkanRaytracer::render( VkImage targetimage ){
 
 bool VulkanRaytracer::handle( const Message& message ){
 	switch( message.type ){
-	case VulkanTextureCreated:
-		_textures.getTextureIndex( (Texture*) message.p1 );
-		return true;
 	case VulkanLayerCreated:
 		{
 			VulkanRaytracerRenderLayer* layer = asserted( (VulkanRaytracerRenderLayer*) message.p1 );
@@ -231,18 +233,13 @@ bool VulkanRaytracer::handle( const Message& message ){
 			_layers.add( layer );
 		}
 		return true;
-	case VulkanMeshPNTCreated:
-		{
-			MeshPNT* mesh = (MeshPNT*) message.p1;
-			auto vm = new VulkanMesh( mesh, &this->_meshPool );
-			_vulkanmeshes.add( vm );
-			mesh->setVulkanMesh( vm );
-		}
-		return true;
 	case VulkanRenderInstancePNTCreated:
 		{
 			VulkanRaytracerInstancePNT* instance = (VulkanRaytracerInstancePNT*)message.p1;
+			_meshes->registerPNT( instance->mesh() );
 			_globals->registerMaterial( instance->material() );
+			if( instance->material()->hasTexture() )
+				_textures.getTextureIndex( instance->material()->texture() );
 			instance->_layer->_instances.add( instance );
 		}
 		return true;
@@ -252,9 +249,7 @@ bool VulkanRaytracer::handle( const Message& message ){
 			_globals->registerMaterial( skininstance->skin()->material() );
 			MeshPNT* mesh = new MeshPNT();
 			skininstance->createMesh( mesh );
-			auto vm = new VulkanMesh( mesh, &this->_meshPool );
-			mesh->setVulkanMesh( vm );
-			_vulkanmeshes.add( vm );
+			_meshes->registerPNT( mesh );
 			VulkanRaytracerInstancePNT* pntinstance = new VulkanRaytracerInstancePNT( skininstance->_layer, skininstance->posori(), mesh, skininstance->skin()->material() );
 			skininstance->_layer->_instances.add( pntinstance );
 			_skininstances.add( skininstance );
@@ -338,7 +333,7 @@ void VulkanRaytracer::startLoadData(){
 	}
 	{
 		_globals->_data.instance_count = _instances.count();
-		_globals->_data.mesh_count = _meshPool.size(); // _blases.size();
+		_globals->_data.mesh_count = _meshpool->size(); // _blases.size();
 //		_globals->_data.view_mode = 0;
 //		if( _globals->_data.antialisingCount != AntiAliasingCount ){
 //			//std::cout << "VulkanRaytracer switch AntialisingCount from " << _globals->_data.antialisingCount << " to " << AntiAliasingCount << "\n";
@@ -373,7 +368,7 @@ void VulkanRaytracer::startRender(){
 	////	_tasks.render.commandBuffer().addWait( &_tasks.loadData.completedSemaphore() );
 	_tasks.render.addWaitFor( _tasks.loadData );
 	_tasks.render.addWaitFor( _tasks.buildTLAS );
-	const uint32_t MAX_MESH_COUNT = _meshPool.size();
+	const uint32_t MAX_MESH_COUNT = _meshpool->size();
 	if( descriptorSetLayout.isCreated() ){
 		if( descriptorSetLayout.descriptorSize( 1 ) != MAX_MESH_COUNT ||
 			descriptorSetLayout.descriptorSize( 3 ) != _tlases.count() ||
@@ -408,8 +403,8 @@ void VulkanRaytracer::startRender(){
 	descriptorSet.reset();
 	descriptorSet.bindStorageImage( 0, &_target.imageView );
 	//descriptorSet.bindStorageImage( 0, targetImageView );
-	descriptorSet.bindBufferArray( 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &_meshPool.vertexBufferArray() );
-	descriptorSet.bindBufferArray( 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &_meshPool.indexBufferArray() );
+	descriptorSet.bindBufferArray( 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &_meshpool->vertexBufferArray() );
+	descriptorSet.bindBufferArray( 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &_meshpool->indexBufferArray() );
 	descriptorSet.bindAccelerations( 3, _tlases.count(), _tlases.descriptor_info() );
 	descriptorSet.bindBuffer( 4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, _instances.buffer() );
 	descriptorSet.bindBuffer( 5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, _lights._buffer );

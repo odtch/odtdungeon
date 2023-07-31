@@ -31,9 +31,6 @@ Material::~Material(){
 //	Resources::Get()->unregisterMaterial( this );
 	////	logDebug( "~Material", this );
 }
-ResourceType* Material::type() const {
-	return Singleton::Get<MaterialType>();
-}
 //bool Material::hasFlag( uint flag ) const{
 //	return _flags & flag;
 //}
@@ -101,6 +98,9 @@ void Material::setModified( bool modified ){
 //	_tileCount.y = y;
 //	_modified = true;
 //}
+ResourceType* Material::type() const {
+	return Singleton::Get<MaterialType>();
+}
 void Material::load( BinaryFileReader& reader ){
 //	Resource::load( reader );
 	_flags = reader.read_uint32();

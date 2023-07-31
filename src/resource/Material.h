@@ -9,7 +9,7 @@ class Material : public Resource
 {
 	DEBUGCOUNTER( Material )
 private:
-	uint32_t _materialindex = 0;
+	uint32_t _materialindex = UINT32_MAX;
 private:
 	uint32_t _flags = 0;
 //private:
@@ -36,8 +36,6 @@ public:
 public:
 	explicit Material();
 	virtual ~Material() override;
-public:
-	virtual ResourceType* type() const override;
 public:
 	uint32_t materialindex() const{ return _materialindex; }
 public:
@@ -94,6 +92,8 @@ public:
 ////public:
 ////	bool hasAlternatives() const{ return _alternatives != null; }
 ////	const List<Material*>& alternatives() const;
+public:
+	virtual ResourceType* type() const override;
 public:
 	virtual void load( BinaryFileReader& reader ) override;
 	virtual void save( BinaryFileWriter& writer ) const override;

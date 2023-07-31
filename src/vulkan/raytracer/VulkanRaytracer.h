@@ -37,8 +37,8 @@ private:
 	VulkanRaytracerGlobals* _globals = null;
 private:
 	//VulkanBLASList _blases;
-	List<VulkanMesh*> _vulkanmeshes;
-	VulkanMeshPool _meshPool;
+	VulkanMeshPool* _meshpool = null;
+	VulkanMeshes* _meshes = null;
 	VulkanTLASList _tlases;
 	List<VulkanRaytracerSkinInstance*> _skininstances;
 	VulkanRenderableArray _instances;
@@ -93,11 +93,6 @@ private:
 public:
     explicit VulkanRaytracer( Window* window );
     virtual ~VulkanRaytracer() override;
-public:
-	virtual Texture* loadTexture( const String& name ) override;
-public:
-	virtual MeshPNT* createDynamicMeshPNT( const String& name ) override;
-	virtual MeshPNT* loadMeshPNT( const String& name ) override;
 public:
 	virtual RenderLayer* createRootLayer() override;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) override;

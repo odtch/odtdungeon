@@ -2,25 +2,6 @@
 
 #include "SkinCore.h"
 
-struct SkinVertex {
-public:
-	vec3 position; float filler00;
-	vec3 normal; float filler10;
-	vec2 texcoord; float filler20; float filler30;
-	float bone_weights[3]; float filler40;
-	int bone_indexes[3]; int filler50;
-public:
-	SkinVertex();
-public:
-	void addBoneWeight( int boneindex, float weight );
-	float totalBoneWeight() const;
-	void adjustBoneWeightsTo1();
-public:
-//	static ResourceType* GetResourceType();
-};
-
-#define SkinMesh Mesh<SkinVertex>
-
 struct SkinBoneType {
 public:
 	int index = -1;

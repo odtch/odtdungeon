@@ -121,18 +121,18 @@ Material* CollectionImporter::materialWithTexture( const String& id, const Strin
 //	_collection->addResource( model );
 //	return model;
 //}
-//Mesh<VertexPNT>* CollectionImporter::importMesh( const String& id, const String& filename, uint meshindex ){
-//	AssImp assimp;
-//	Mat4 transform = Mat4::Scale( 0.01f ) * Mat4::RotationAtAxis( -90, Vec3::Right );// * Mat4::RotationAtAxis( -90, Vec3::Up ) * Mat4::RotationAtAxis( -90, Vec3::Right );
-////	assimp._mesh_transform = Mat4::Scale( 0.01f ) * Mat4::RotationAtAxis( -90, Vec3::Right );// * Mat4::RotationAtAxis( -90, Vec3::Up ) * Mat4::RotationAtAxis( -90, Vec3::Right );
-////	assimp._node_pretransform = assimp._mesh_transform * Mat4::RotationAtAxis( -90, Vec3::Right );
-////	assimp._node_posttransform = Mat4::RotationAtAxis( 90, Vec3::Up );
-//	assimp.open( getSourceFilename( filename ).asStd(), transform );
-//	MeshPNT* mesh = assimp.loadMeshPNT( meshindex );
-//	mesh->setId( id );
-//	_collection->addResource( mesh );
-//	return mesh;
-//}
+Mesh<VertexPNT>* CollectionImporter::mesh( const String& id, const String& filename, const Mat4& transform, uint meshindex ){
+	AssImp assimp;
+	assimp.open( filename, transform );
+	assimp.trace();
+	if( meshindex == UINT32_MAX ){
+		assert( assimp.meshCount() == 1 );
+		meshindex = 0;
+	}
+	MeshPNT* mesh = assimp.loadMeshPNT( meshindex );
+	_collection->addResource( id, mesh );
+	return mesh;
+}
 //void CollectionImporter::importMesh( const String& id, Mesh<VertexPNT>* mesh ){
 //	assert( mesh );
 //	mesh->setId( id );

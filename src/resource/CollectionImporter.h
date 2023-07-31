@@ -25,6 +25,9 @@
 class CollectionImporter
 {
 	DEBUGCOUNTER( CollectionImporter )
+public: // copy in AssImp.h
+	static Mat4 YUp_to_ZUp_Synty1(){ return Mat4::Scale( 1.0f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
+	static Mat4 YUp_to_ZUp_Synty2(){ return Mat4::Scale( 0.01f ) * Mat4::RotationAtAxis( -90, Vec3::Right ) * Mat4::RotationAtAxis( 180, Vec3::Forward ); }
 private:
 	Collection* _collection;
 //private:
@@ -44,7 +47,7 @@ public:
 	Material* materialWithTexture( const String& id, const String& filename );
 //	Material* importParticleMaterial( const String& id, const String& filename );
 //	MeshModel* importModel( const String& filename );
-//	MeshPNT* importMesh( const String& id, const String& filename, uint meshindex );
+	MeshPNT* mesh( const String& id, const String& filename, const Mat4& transform, uint meshindex = UINT32_MAX );
 //	void importMesh( const String& id, MeshPNT* mesh );
 //	void importMeshAndConvexHull( const String& id, MeshPNT* mesh );
 //	void importSyntyVegetation2022Mesh( const String& id, const String& filename, uint meshindex );

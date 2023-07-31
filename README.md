@@ -8,6 +8,9 @@ ODT-Dungeon is the Summer Week 2023 practice project aimed at extending the real
 - cleanup the raytracer 
 - splitt the single thread to each one for Main, Scene and Render 
 
+## Erkenntnisse
+Die Verschiebung der Erstellung von Resourcen (Material, Texture, Mesh) in das Renderer-Interface hat nicht die erhoffte Vereinfachung gebracht. Da die Resourcen eigentlich ein Teil der Collection sind, muss der Renderer resp Raytracer weiterhin dynamisch mit neuen Resourcen zurecht kommen. Ungelöst ist daher immer noch das Resourcen-Freigeben bei einem Level-Wechsel. 
+
 ## Steps
 - [x] github
 - [x] main
@@ -21,8 +24,10 @@ ODT-Dungeon is the Summer Week 2023 practice project aimed at extending the real
 - [x] input
 - [x] rock
 - [x] collection
+- [x] char
 - [ ] mesh in collection
-- [ ] char
+- [ ] mocapcollection
+- [ ] char in dungeon
 - [ ] animation
 - [ ] bones
 
@@ -33,7 +38,8 @@ ODT-Dungeon is the Summer Week 2023 practice project aimed at extending the real
 - [ ] rm VulkanMaterialArray
 - [ ] globals.data mv private
 - [ ] rm dependencies of mesh to vulkan
-- [ ] VulkanMesh extends Mesh
+- [ ] VulkanMesh extends Mesh or
+- [ ] rm Mesh.vulkanMesh
 - [ ] render-lights reorg
 - [ ] scenenode.childs as array 
 - [ ] rm Physics::Global, PhysicsWorld as Property of Scene, as a own Thread

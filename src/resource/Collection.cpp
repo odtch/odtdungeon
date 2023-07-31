@@ -124,12 +124,9 @@ Material* Collection::getMaterial( const String& id ) const{
 //	assert( material );
 //	return material;
 //}
-//Mesh<VertexPNT>* Collection::getMeshPNT( const String& id ) const {
-//	Resource* resource = getResource( id );
-//	MeshPNT* mesh = dynamic_cast<MeshPNT*>( resource );
-//	assert( mesh );
-//	return mesh;
-//}
+Mesh<VertexPNT>* Collection::getMeshPNT( const String& id ) const {
+	return asserted( dynamic_cast<MeshPNT*>( getResource( id ) ) );
+}
 //MeshModel* Collection::getMeshModel( const String& id ) const {
 //	Resource* resource = getResource( id );
 //	MeshModel* meshmodel = dynamic_cast<MeshModel*>( resource );

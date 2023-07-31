@@ -46,10 +46,7 @@ void Converter::run(){
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rchit.glsl" );
 	compileShader( "1.2", "src/vulkan/raytracer.glsl/vrt.transl.rmiss.glsl" );
 	convertImage( "test_red", "/home/rt/media/test/TestRed.png" );
-	convertMesh( "platform5", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Rock_Flat_Platform_05.fbx", AssImp::YUp_to_ZUp_Synty1() );
-	convertMesh( "banner02", "/home/rt/media/Polygon_Dungeon/FBX/SM_Wep_Banner_02.fbx", AssImp::YUp_to_ZUp_Synty1() );
 	convertImage( "mcg_diff", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
-
 	if( shouldConvert( String( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx" ), _targetpath + "/motusman_ragdoll" ) == true ){
 		CharImporter charimporter( CharImporter::MocapFormat );
 		charimporter.createRagdoll();
@@ -65,8 +62,6 @@ void Converter::run(){
 		writer.close();
 		odelete( ragdolltype );
 	}
-
-
 	//material->setFlag( MaterialFlag_CalcNormalFromTriangle );
 //	{
 //		AssImp assimp;
@@ -355,6 +350,9 @@ void Converter::convertImage( const String& trgname, const String& srcpath ){
 	writer.close();
 	stbi_image_free( pixels );
 }
+
+
+#ifdef old
 void Converter::convertMesh( const String& name, const String& srcpath, const Mat4& transform ){
 	String trgpath = _targetpath + "/" + name;
 #ifndef REBUILD_ALL
@@ -372,9 +370,6 @@ void Converter::convertMesh( const String& name, const String& srcpath, const Ma
 	odelete( mesh );
 #endif
 }
-
-
-#ifdef old
 void Converter::copy( const String& trgpath, const String& srcpath ){
 	if( File::Exists( trgpath ) )
 		return;

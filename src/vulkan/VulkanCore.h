@@ -65,6 +65,7 @@ class VulkanMesh;
 class VulkanMeshData;
 class VulkanMeshDataPointer;
 class VulkanMeshPool;
+class VulkanMeshes;
 
 class VulkanSurface;
 

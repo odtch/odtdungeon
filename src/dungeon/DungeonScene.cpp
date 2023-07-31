@@ -83,7 +83,7 @@ void DungeonScene::run(){
     {
 		Material* material = new Material();
 		material->setColor( Vec4( 0.8f, 0.8f, 0.8f, 1.0f ) );
-		Texture* texture_red = renderer().loadTexture( "test_red" );
+		//Texture* texture_red = renderer().loadTexture( "test_red" );
 		_camera->setPosOri( PosOri().translated( Vec3( 0, 10, 2 ) ).rotated( 180, Vec3::Up ) );
 		_uilayer = renderer().createRootLayer();
 		_uilayer->setNextFixedCamera( *_camera );
@@ -93,7 +93,7 @@ void DungeonScene::run(){
 		{
 			renderer().addLight( _uilayer, RenderLight::CreateAmbient( vec4( 0.8f, 0.5f, 0.5f, 1.0f ) ) );
 			//renderer().addLight( uilayer, RenderLight::CreateDirectional( Vec3( 0.1f, 0.1f, -1.0f ).normalized(), vec4( 0.5f, 0.8f, 0.5f, 1.0f ) ) );
-			MeshPNT* mesh = renderer().createDynamicMeshPNT( "dungeonboxmesh" );
+			MeshPNT* mesh = new MeshPNT();
 			MeshBuilder::CreateBox( *mesh, PosOri(), Vec3( 56, 59, 1 ), VertexPNT() );
 			renderer().createInstance( _uilayer, PosOri().translated( Vec3( 800, 6, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ), mesh, material );
 		}
@@ -103,7 +103,7 @@ void DungeonScene::run(){
 
 			Vec3 gr( 50, 5, 0.5f );
 			PhysicsShape* gs = PhysicsShape::CreateBox( gr );
-			MeshPNT* gm = renderer().createDynamicMeshPNT( "dungeonboxmesh2" );
+			MeshPNT* gm = new MeshPNT();
 			MeshBuilder::CreateBox( *gm, PosOri(), gr, VertexPNT() );
 			SceneObject* go = new SceneObject();
 			go->setPosOri( PosOri().translated( Vec3::Down * gr.z() ));
@@ -113,7 +113,7 @@ void DungeonScene::run(){
 
 			float br = 1.5f;
 			PhysicsShape* bs = PhysicsShape::CreateSphere( br );
-			MeshPNT* bm = renderer().createDynamicMeshPNT( "bm" );
+			MeshPNT* bm = new MeshPNT();
 			MeshBuilder::CreateSphere( *bm, Vec3::Null, br, 3, VertexPNT() );
 			for( int b = 0; b < 50; b++ ){
 				SceneObject* bo1 = new SceneObject();
@@ -130,8 +130,7 @@ void DungeonScene::run(){
 //			renderer().createInstance( layer, PosOri().translated( Vec3( -11.8, 0, -0.0f ) ), mesh, material );
 		}
 		{
-			MeshPNT* mesh = renderer().loadMeshPNT( "banner02" );
-			renderer().createInstance( layer, PosOri().translated( Vec3( -8, -5, 0 ) ), mesh, DungeonCollection::Get()->getMaterial( "dt01" ));
+			renderer().createInstance( layer, PosOri().translated( Vec3( -8, -5, 0 ) ), DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ));
 		}
 		{
 //			Material* material = renderer().createMaterial( "m" );
@@ -154,7 +153,7 @@ void DungeonScene::run(){
 		{
 			{
 				Material* material = new Material();
-				material->setTexture( renderer().loadTexture( "mcg_diff" ) );
+				//material->setTexture( renderer().loadTexture( "mcg_diff" ) );
 				CharImporter charimporter( CharImporter::MocapFormat );
 				charimporter.createRagdoll();
 				{

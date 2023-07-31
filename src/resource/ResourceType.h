@@ -68,3 +68,14 @@ public:
 public:
 	virtual Resource* newInstance() override;
 };
+
+class MeshPNTType : public ResourceType
+{
+public:
+	static const char* Id;
+public:
+	explicit MeshPNTType();
+	virtual ~MeshPNTType() override;
+public:
+	virtual Resource* newInstance() override;
+};
