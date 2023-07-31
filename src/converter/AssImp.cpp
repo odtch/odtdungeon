@@ -89,7 +89,7 @@ void AssImp::open( const String& filename, const Mat4& transform ){
 }
 void AssImp::close(){
 	if( _aiImporter ){
-		logDebug( "AssImp.close", _filename );
+		//logDebug( "AssImp.close", _filename );
 		if( String( _filename ).contains( String( "Polygon_SciFi_Worlds" ) )
 				&& String( _filename ).contains( String( "Characters" ) ) ){
 			logDebug( "Assimp::close skipping delete aiImporter because Synty SciFiWorld characters crashes" );

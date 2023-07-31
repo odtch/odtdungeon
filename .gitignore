@@ -1,3 +1,4 @@
+external/
 build/
 media/
 CMakeLists.txt.user
