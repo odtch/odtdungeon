@@ -1,29 +1,26 @@
 #include "stdodt.h"
-//#include "CharMocapCollection.h"
+#include "CharMocapCollection.h"
+#include "resource/CollectionImporter.h"
 //#include "CharRagdoll.h"
 //#include "CharAnimation.h"
 //#include "CharSkin.h"
 //#include "CharImporter.h"
-//#include "resource/CollectionImporter.h"
 //#include "converter/AssImp.h"
 
-//const char* CharMocapCollection::Id = "CharMocapCollection";
-//CharMocapCollection* CharMocapCollection::Get(){
-//	return Singleton::Get<CharMocapCollection>();
-//}
-//CharMocapCollection::CharMocapCollection()
-//	:Collection( Id )
-//{
-////	File::DeleteFileIfExists( "/home/rt/build-odtspace-Desktop-Debug/media/CharMocapCollection.obc" );
-//}
-//CharMocapCollection::~CharMocapCollection(){
-//}
-//void CharMocapCollection::load( const String& mediapath ){
-//	Collection::load( mediapath );
-//}
-//void CharMocapCollection::import( CollectionImporter& importer ){
-//	Material* material = importer.importMaterial( "Material", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
-//	material->setFlag( MaterialFlag_CalcNormalFromTriangle );
+const char* CharMocapCollection::Id = "Mocap";
+CharMocapCollection* CharMocapCollection::Get(){
+	return Singleton::Get<CharMocapCollection>();
+}
+CharMocapCollection::CharMocapCollection()
+	:Collection( Id )
+{
+//	File::DeleteFileIfExists( "/home/rt/build-odtspace-Desktop-Debug/media/CharMocapCollection.obc" );
+}
+CharMocapCollection::~CharMocapCollection(){
+}
+void CharMocapCollection::import( CollectionImporter& importer ){
+	Material* material = importer.materialWithTexture( "mcg", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/MotusMan_v55/MotusMan_v55.fbm/MCG_diff.jpg" );
+	material->setFlag( MaterialFlag_CalcNormalFromTriangle );
 //	CharImporter charimporter( CharImporter::MocapFormat );
 //	charimporter.createRagdoll();
 //	{
@@ -53,10 +50,4 @@
 //		CharAnimation* animation = charimporter.loadAnimation( *assimp_animation );
 //		addResource( "NJA_Rlx_Stand_Idle", animation );
 //	}
-
-
-//	Collection::import( importer );
-//}
-//void CharMocapCollection::build(){
-//	Collection::build();
-//}
+}

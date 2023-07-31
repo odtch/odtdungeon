@@ -9,42 +9,31 @@
 
 Material::Material()
 	:
-////	,_texture_has_transparency( false )
-////	,_emissiveTexture( null )
+//	,_texture_has_transparency( false )
+//	,_emissiveTexture( null )
 	_color( 1, 1, 1, 1 )
-////	,_transparency( 0, 0, 0, 0 )
+//	,_transparency( 0, 0, 0, 0 )
 //	,_reflection( 0, 0, 0, 0 )
 {
 	static std::atomic<uint32_t> next_materialindex( 0 );
 	_materialindex = next_materialindex.fetch_add( 1, std::memory_order_relaxed );
-//	_index = Resources::Get()->registerMaterial( this );
-////	if( _index == 57 ){
-////		logDebug( "material 57" );
-////	}
-////	setRenderable( true );
-////	setCreatesShadow( true );
-////	setLightAffected( true );
-////	logDebug( "Material", this );
 }
 Material::~Material(){
-//	//_alternatives = null;
-//	Resources::Get()->unregisterMaterial( this );
-	////	logDebug( "~Material", this );
 }
-//bool Material::hasFlag( uint flag ) const{
-//	return _flags & flag;
-//}
-//void Material::setFlag( uint flag, bool enabled ){
-//	if( enabled ){
-//		_flags |= flag;
-//	} else {
-//		_flags &= (~flag);
-//	}
-//	_modified = true;
-//}
+bool Material::hasFlag( uint flag ) const{
+	return _flags & flag;
+}
+void Material::setFlag( uint flag, bool enabled ){
+	if( enabled ){
+		_flags |= flag;
+	} else {
+		_flags &= (~flag);
+	}
+	setModified();
+}
 //void Material::setTranslucent( bool translucent ){
 //	_translucent = translucent;
-//	_modified = true;
+//	setModified();
 //}
 ////void Material::setTranslucent(){
 ////	_type = MaterialType_Translucent;
@@ -76,9 +65,7 @@ void Material::setTexture( Texture* texture ){
 void Material::setColor( const Vec4& color ){
     _color = color;
 	setModified();
-	//	_modified = true;
 }
-
 void Material::setModified( bool modified ){
 	_modified = modified;
 }
@@ -87,16 +74,16 @@ void Material::setModified( bool modified ){
 ////}
 //void Material::setReflection(const glm::vec4 &reflection){
 //	_reflection = reflection;
-//	_modified = true;
+//	setModified();
 //}
 //void Material::setTileCount( const TileCount& tileCount ){
 //	_tileCount = tileCount;
-//	_modified = true;
+//	setModified();
 //}
 //void Material::setTileCount( uint x, uint y ){
 //	_tileCount.x = x;
 //	_tileCount.y = y;
-//	_modified = true;
+//	setModified();
 //}
 ResourceType* Material::type() const {
 	return Singleton::Get<MaterialType>();
@@ -117,7 +104,7 @@ void Material::load( BinaryFileReader& reader ){
 //	_reflection = reader.read_vec4();
 	_tileCount.x = reader.read_uint32();
 	_tileCount.y = reader.read_uint32();
-	_modified = true;
+	setModified();
 }
 void Material::save( BinaryFileWriter& writer ) const {
 //	Resource::save( writer );

@@ -23,6 +23,7 @@
 #include "character/CharImporter.h"
 #include "character/CharRagdoll.h"
 #include "character/CharAnimation.h"
+#include "character/CharMocapCollection.h"
 
 
 Skin* _skin = null;
@@ -152,7 +153,7 @@ void DungeonScene::run(){
 		}
 		{
 			{
-				Material* material = new Material();
+				Material* material = CharMocapCollection::Get()->getMaterial( "mcg" );
 				//material->setTexture( renderer().loadTexture( "mcg_diff" ) );
 				CharImporter charimporter( CharImporter::MocapFormat );
 				charimporter.createRagdoll();

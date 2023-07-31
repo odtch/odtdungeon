@@ -6,12 +6,13 @@
 #include "resource/ResourceType.h"
 #include "window/Window.h"
 #include "vulkan/raytracer/VulkanRaytracer.h"
-#include "dungeon/DungeonCollection.h"
-#include "dungeon/DungeonScene.h"
-#include "dungeon/DungeonWindow.h"
 #include "converter/Converter.h"
 #include "physics/Physics.h"
 #include "physics/PhysicsWorld.h"
+#include "dungeon/DungeonCollection.h"
+#include "dungeon/DungeonScene.h"
+#include "dungeon/DungeonWindow.h"
+#include "character/CharMocapCollection.h"
 
 int main( int argc, char** argv ) {
     logInfo( "odtdungeon" );
@@ -31,6 +32,7 @@ int main( int argc, char** argv ) {
 			Physics physics;
             modules.start();
 			new Collections();
+			new CharMocapCollection();
 			new DungeonCollection();
 			Collections::Get()->load( String( "media" ) );
 			DungeonWindow window;

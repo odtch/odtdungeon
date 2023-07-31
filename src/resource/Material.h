@@ -40,24 +40,8 @@ public:
 	uint32_t materialindex() const{ return _materialindex; }
 public:
 	uint32_t flags() const{ return _flags; }
-//	bool hasFlag( uint flag ) const;
-//	void setFlag( const uint flag, bool enabled = true );
-////	MaterialType type() const{ return _type; }
-////	bool isSolid() const{ return _type == MaterialType_Solid; }
-////	bool isTranslucent() const{ return _type == MaterialType_Translucent; }
-////	void setTranslucent();
-////	bool isRenderable() const { return hasFlag( Material_Renderable ); }
-////	void setRenderable( bool renderable );
-////	bool createsShadow() const{ return hasFlag( Material_CreatesShadow ); }
-////	void setCreatesShadow( bool creates_shadow );
-////	bool createsLight() const{ return hasFlag( Material_CreatesLight ); }
-////	void setCreatesLight( bool creates_light );
-////	void setLightAffected( bool f );
-////public:
-////	uint32_t flags() const{ return _raytracing_flags; }
-////	void setFlag( uint flag, bool enabled = true );
-////public:
-////	uint32_t raytracingFlags() const{ return _raytracing_flags; }
+	bool hasFlag( uint flag ) const;
+	void setFlag( const uint flag, bool enabled = true );
 //public:
 //	bool isTranslucent() const{ return _translucent; }
 //	void setTranslucent( bool translucent = true );
