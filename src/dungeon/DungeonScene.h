@@ -26,4 +26,6 @@ public:
 	virtual void animate( float dt ) override;
 protected:
     virtual void run() override;
+private:
+	void createStaticBox( const Vec3& c, const Vec3& r, Material* material );
 };
