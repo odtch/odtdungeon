@@ -969,7 +969,7 @@ void CharImporter::loadSkin( const Skeleton& skeleton, AssImp& assimp, uint mesh
 	const Vec3 co = Vec3::Up * 0.1f;
 	for( Bone* bone : _bones ){
 		PosOri po( bone->absoluteTposori.translated( co ) );
-		logDebug( "uuuuuuuuu", po.up() );
+		//logDebug( "uuuuuuuuu", po.up() );
 		MeshBuilder::CreatePosOri( *_testmesh, bone->absoluteTposori.translated( co ), 0.02f, 0.002f, 6, true, VertexPNT() );
 		if( bone->parent_bone ){
 			MeshBuilder::CreateLine( *_testmesh, bone->absoluteTposori.translated( co ).position(),
@@ -991,10 +991,10 @@ void CharImporter::loadSkin( const Skeleton& skeleton, AssImp& assimp, uint mesh
 //		Bone* bone = skeletonjoint_to_bone[ skeletonjoint->index() ];
 		Bone* bone = findBoneForSkeletonJoint( skeletonjoint );
 		if( bone == null ){
-			logDebug( "sk ", skeletonjoint->name(), "NULL" );
+			//logDebug( "sk ", skeletonjoint->name(), "NULL" );
 //			MeshBuilder::CreateLine( *_testmesh, PosOri( skeletonjoint->absolutematrix() ).position(), Vec3::Null, 0.002f, 6, true, VertexPNT() ) ;
 		} else {
-			logDebug( "sk ", skeletonjoint->name(), bone->name );
+			//logDebug( "sk ", skeletonjoint->name(), bone->name );
 			MeshBuilder::CreateLine( *_testmesh, PosOri( skeletonjoint->absolutematrix() ).position(),
 									 bone->absoluteTposori.position() + co, 0.002f, 6, true, VertexPNT() ) ;
 		}
@@ -1039,11 +1039,11 @@ void CharImporter::loadSkin( const Skeleton& skeleton, AssImp& assimp, uint mesh
 	odelete( fullmesh );
 }
 void CharImporter::mapSkeletonToRagdoll( const Skeleton& skeleton, CharRagdoll& ragdoll ){
-	skeleton.trace();
+	//skeleton.trace();
 	for( Bone* bone : _bones ){
 		CharJoint* joint = ragdoll.getJointByName( bone->name );
 		SkeletonJoint* skeletonjoint = skeleton.getJointByName( bone->skin_root_joint_name );
-		logDebug( "  ", skeletonjoint->name(), PosOri( skeletonjoint->absolutematrix() ).position() );
+		//logDebug( "  ", skeletonjoint->name(), PosOri( skeletonjoint->absolutematrix() ).position() );
 		Mat4 skeletonrelative = skeleton.calcRelativeMatrix( bone->skin_root_joint_name, ( bone->parent_bone ? bone->parent_bone->skin_root_joint_name : String() ) );
 //		logDebug( "     x ", skeletonrelative.map( Vec3::Null ) );
 ////		if( bone->parent_bone == null ){
@@ -1107,13 +1107,13 @@ CharImporter::Bone* CharImporter::getBoneForSkeletonJoint( SkeletonJoint* aijoin
 CharAnimation* CharImporter::loadAnimation( const AssImpAnimation& skinanimation ){
 	CharAnimation* charanimation = new CharAnimation();
 	SceneObject character;
-	CharRagdoll ragdoll( ragdolltype(), &character );
+	CharRagdoll* ragdoll = new CharRagdoll( ragdolltype(), &character );
 	for( AssImpAnimationFrame* skinanimframe : skinanimation.frames() ){
 		Skeleton* skinskeleton = skinanimframe->skeleton();
-		mapSkeletonToRagdoll( *skinskeleton, ragdoll );
+		mapSkeletonToRagdoll( *skinskeleton, *ragdoll );
 		CharAnimationFrame* charframe = new CharAnimationFrame();
 		charframe->_duration = skinanimframe->duration();
-		ragdoll.savePose( charframe->_pose );
+		ragdoll->savePose( charframe->_pose );
 		charframe->_pose._translation =
 				skinskeleton->getJointByName( this->_root_bone->skin_root_joint_name )->absolutematrix().map( Vec3::Null )
 				- _root_bone->joint->relativeTposori().position();
@@ -1124,5 +1124,4 @@ CharAnimation* CharImporter::loadAnimation( const AssImpAnimation& skinanimation
 	}
 	charanimation->recalc();
 	return charanimation;
-
 }

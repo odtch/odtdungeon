@@ -85,7 +85,9 @@ void FileFind( const String& directory, const String& nameprefix, const File::Fi
 			handler( entry );
 		}
 		if( fsentry.is_directory() ){
-			FileFind( fsentry.path().u8string(), entry.name, options, handler );
+			if( options.recursive ){
+				FileFind( fsentry.path().u8string(), entry.name, options, handler );
+			}
 		}
 	}
 }

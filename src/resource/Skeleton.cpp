@@ -203,11 +203,10 @@ Mat4 Skeleton::calcRelativeMatrix( const String& childname, const String& parent
 		assert( child->isChildOfRecursive( parent ) );
 		PosOri c( child->absolutematrix() );
 		PosOri p( parent->absolutematrix() );
-		logDebug( "        calcRelativeMatrix ", childname, child->absolutematrix().map( Vec3::Null ), "to", parentname, parent->absolutematrix().map( Vec3::Null ),
-			( parent->absolutematrix().inverted() * child->absolutematrix() ).map( Vec3::Null ),
-				  ( p.matrix().inverted() * c.matrix().inverted() ).map( Vec3::Null )
-
-				  );
+//		logDebug( "        calcRelativeMatrix ", childname, child->absolutematrix().map( Vec3::Null ), "to", parentname, parent->absolutematrix().map( Vec3::Null ),
+//			( parent->absolutematrix().inverted() * child->absolutematrix() ).map( Vec3::Null ),
+//				  ( p.matrix().inverted() * c.matrix().inverted() ).map( Vec3::Null )
+//				  );
 		return parent->absolutematrix().inverted() * child->absolutematrix();
 	}
 }

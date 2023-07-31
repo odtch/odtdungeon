@@ -96,19 +96,19 @@ void DungeonScene::run(){
 		createStaticBox( Vec3( gr.x(), 0, 0 ), Vec3( 0.2f, gr.y(), 1.4f ), material );
 		createStaticBox( Vec3(-gr.x(), 0, 0 ), Vec3( 0.2f, gr.y(), 1.4f ), material );
 		createStaticBox( Vec3( 0, 0, -1.0f ), Vec3( gr.x(), gr.y(), 1.0f ), material );
-		float br = 0.2f;
-		PhysicsShape* bs = PhysicsShape::CreateSphere( br );
-		_resources2delete.add( bs );
-		MeshPNT* bm = new MeshPNT();
-		_resources2delete.add( bm );
-		MeshBuilder::CreateSphere( *bm, Vec3::Null, br, 3, VertexPNT() );
-		for( int b = 0; b < 50; b++ ){
-			SceneObject* bo1 = new SceneObject();
-			bo1->setPosOri( PosOri().translated( Vec3( -3.65f, 0, 5 + b * br * 1.01f  ) ) );
-			new SceneRenderInstancePNTProperty( bm, material, bo1 );
-			new PhysicsBody( bs, PhysicsMotionType_Dynamic, bo1 );
-			_area1->addChild( bo1 );
-		}
+//		float br = 0.2f;
+//		PhysicsShape* bs = PhysicsShape::CreateSphere( br );
+//		_resources2delete.add( bs );
+//		MeshPNT* bm = new MeshPNT();
+//		_resources2delete.add( bm );
+//		MeshBuilder::CreateSphere( *bm, Vec3::Null, br, 3, VertexPNT() );
+//		for( int b = 0; b < 50; b++ ){
+//			SceneObject* bo1 = new SceneObject();
+//			bo1->setPosOri( PosOri().translated( Vec3( -3.65f, 0, 5 + b * br * 1.01f  ) ) );
+//			new SceneRenderInstancePNTProperty( bm, material, bo1 );
+//			new PhysicsBody( bs, PhysicsMotionType_Dynamic, bo1 );
+//			_area1->addChild( bo1 );
+//		}
 	}
 	{
 		PhysicsShape* platform05shape = PhysicsShape::CreateMesh( *DungeonCollection::Get()->getMeshPNT( "platform05" ) );
@@ -124,15 +124,15 @@ void DungeonScene::run(){
 		new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), banner );
 		_area1->addChild( banner );
 	}{
-		Material* material = CharMocapCollection::Get()->getMaterial( "mcg" );
-		CharRagdollType* motusman_type = CharMocapCollection::Get()->get<CharRagdollType>( "mm" );
-		SceneObject* r = new SceneObject();
-		CharRagdoll* motusman_ragdoll = new CharRagdoll( motusman_type, r );
-		r->setPosOri( PosOri().translated( Vec3( 4, 2, 0 ) ) );
-		new CharRagdollSkin( motusman_ragdoll, material, r );
-		_area1->addChild( r );
-		charanim1 = CharMocapCollection::Get()->get<CharAnimation>( "NJA_Rlx_Walk_Forward_Loop" );
-		charragdoll1 = motusman_ragdoll;
+//		Material* material = CharMocapCollection::Get()->getMaterial( "mcg" );
+//		CharRagdollType* motusman_type = CharMocapCollection::Get()->get<CharRagdollType>( "mm" );
+//		SceneObject* r = new SceneObject();
+//		CharRagdoll* motusman_ragdoll = new CharRagdoll( motusman_type, r );
+//		r->setPosOri( PosOri().translated( Vec3( 4, 2, 0 ) ) );
+//		new CharRagdollSkin( motusman_ragdoll, material, r );
+//		_area1->addChild( r );
+//
+//		charragdoll1 = motusman_ragdoll;
 	}{
 		Material* material = DungeonCollection::Get()->getMaterial( "fk01" );
 		CharRagdollType* ragdolltype = DungeonCollection::Get()->get<CharRagdollType>( "rt" );
@@ -143,6 +143,7 @@ void DungeonScene::run(){
 		_area1->addChild( r );
 		charragdoll2 = ragdoll;
 	}
+	charanim1 = CharMocapCollection::Get()->get<CharAnimation>( "MOB1_Stand_Relaxed_To_Walk_F" );
 	Scene::run();
 }
 void DungeonScene::createStaticBox( const Vec3& c, const Vec3& r, Material* material ){

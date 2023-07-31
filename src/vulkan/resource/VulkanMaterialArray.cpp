@@ -40,7 +40,7 @@ void VulkanMaterialArray::update( VulkanRaytracerGlobals& globals, VulkanTask& t
 		//Material* material = resources->materials()[ index ];
 		Material* material = globals.materials().get( index ); //resources->materials()[ index ];
 		if( material == null ){
-			logError( "VulkanMaterialArray null material", index );
+			//logError( "VulkanMaterialArray null material", index );
 		} else if( !material->_modified ){
 		} else {
 			VulkanMaterialData& data = _materials[ index ];
