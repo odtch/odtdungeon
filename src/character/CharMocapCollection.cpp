@@ -46,6 +46,9 @@ void CharMocapCollection::import( CollectionImporter& importer ){
 		File::Find( "/home/rt/media/mocap/FBX_Mobility_27B_Pro/Animation/Root_Motion", File::FindOptions( ".fbx", false ), [&]( const File::Entry& entry ){
 			impanim( importer, charimporter, entry.name, entry.path );
 		} );
+		File::Find( "/home/rt/media/mocap/FBX_Mobility_27B_Pro/Animation/IPC", File::FindOptions( ".fbx", false ), [&]( const File::Entry& entry ){
+			impanim( importer, charimporter, entry.name, entry.path );
+		} );
 		//assert( false );
 		//impanim( importer, charimporter, "wf", "/home/rt/media/mocap/FBX_Ninja_v27_Pro/Animation/Root_Motion/NJA_Rlx_Walk_Forward_Loop.fbx" );
 	}

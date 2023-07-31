@@ -2,6 +2,7 @@
 #include "VulkanRaytracerSkinInstance.h"
 #include "skin/Skin.h"
 #include "skin/SkinMesh.h"
+#include "VulkanRaytracerInstance.h"
 
 VulkanRaytracerSkinInstance::VulkanRaytracerSkinInstance( VulkanRaytracerRenderLayer* layer, const PosOri& posori, Skin* skin )
 	:RenderSkinInstance( posori, skin )
@@ -46,4 +47,6 @@ void VulkanRaytracerSkinInstance::updateMeshInCPU(){
 		//target_vertex.normal = glm::normalize( target_vertex.normal );
 	}
 	_mesh->setModified();
+	if( _pntinstance )
+		_pntinstance->setPosOri( posori() );
 }

@@ -55,8 +55,21 @@
 ////};
 
 
-//class CharCharacter : public Object
-//{
+class CharCharacter : public SceneObject
+{
+public:
+	struct Control {
+		float move_y = 0;
+	} control;
+private: public:
+	CharRagdoll* _ragdoll;
+private:
+	Vec2 _velocity;
+public:
+	explicit CharCharacter( CharRagdollType* ragdolltype, Material* material );// CharCharacterType* type );
+	virtual ~CharCharacter() override;
+public:
+	virtual void animate( float dt ) override;
 ////public:
 ////	static const int ClassId;
 ////public:
@@ -183,9 +196,6 @@
 ////////		PhSweep* full;
 //////	} _sweeps;
 ////	PhSweep* _sweep;
-//public:
-//	explicit CharCharacter( CharCharacterType* type );
-//	virtual ~CharCharacter() override;
 ////private:
 ////	PhSweep* createSweep( PhSweepType* type );
 //////private:
@@ -267,4 +277,4 @@
 //	virtual bool isCharacter() const override { return true; }
 //	virtual CharCharacter* asCharacter() override { return this; }
 //	*/
-//};
+};

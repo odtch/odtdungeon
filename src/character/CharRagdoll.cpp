@@ -261,6 +261,7 @@ CharRagdollSkin::~CharRagdollSkin(){
 	//	_renderers.deleteAll();
 }
 void CharRagdollSkin::animate( float dt ){
+
 	Mat4* bonematrix = & this->bone_matrix( 0 );
 	int boneindex = 0;
 	for( CharRagdollType::JointToSkin* joint2skin : _ragdoll->type()->joint2skins() ){

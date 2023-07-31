@@ -16,6 +16,9 @@ public:
 	explicit BrainState( const FloatBuffer& input, const FloatBuffer& output );
 	~BrainState();
 public:
+	FloatBuffer& input(){ return _input; }
+	FloatBuffer& output(){ return _output; }
+public:
 	friend class Brain;
 };
 
@@ -59,6 +62,8 @@ public:
 	FloatBuffer& output(){ return *_output; }
 public:
 	void setScore( float score );
+public:
+	void learn( const List<BrainState*>& states, int count, float learningrate );
 //protected:
 //	virtual void onAddedToScene( Scene* scene ) override;
 //public:

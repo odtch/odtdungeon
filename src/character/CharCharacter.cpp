@@ -3,10 +3,42 @@
 #include "CharCharacterType.h"
 #include "CharPose.h"
 #include "CharAnimation.h"
+#include "CharRagdoll.h"
 //#include "CharSegment.h"
 //#include "CharFootStepCalcer.h"
 //#include "CharBehavior.h"
 //#include "brain/CharBrainControl.h"
+
+CharCharacter::CharCharacter( CharRagdollType* ragdolltype, Material* material ){
+	_ragdoll = new CharRagdoll( ragdolltype, this );
+	new CharRagdollSkin( _ragdoll, material, this );
+}
+CharCharacter::~CharCharacter(){
+}
+
+void CharCharacter::animate( float dt ){
+//	Vec2 accel( 0, 0 );
+//	if( 0 < control.move_y ){
+//		accel += Vec2( 0, 1.19f );
+//	} else if( _velocity.y() > 0 ){
+//		accel += Vec2( 0, -_velocity.y() );
+//	}
+////	float maxaccell = 1.9635f;
+////	if( accel.length() > maxaccell )accel = accel.normalized() * maxaccell;
+//	_velocity += accel * dt ;//* 0.5f;
+//	float max_vel = 1.28195f;
+//	if( _velocity.length() > max_vel )_velocity = _velocity.normalized() * max_vel;
+//	Vec2 t = _velocity * dt;
+//	PosOri posori = this->posori();
+//	posori.translate( posori.direction() * t.y() );
+//	//posori.translate( posori.direction() * control.move_y * dt * 10  );
+
+//	setPosOri( posori );
+	SceneObject::animate( dt );
+}
+
+
+
 
 //const int CharCharacter::ClassId = CharCharacter::CreateClassId();
 
@@ -1037,3 +1069,4 @@
 //	,time_in_air( 0 )
 //{
 //}
+

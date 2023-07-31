@@ -12,6 +12,8 @@ private:
 private:
 	MeshPNT* _mesh = null;
 public:
+	VulkanRaytracerInstancePNT* _pntinstance = null;
+public:
 	explicit VulkanRaytracerSkinInstance( VulkanRaytracerRenderLayer* layer, const PosOri& posori, Skin* skin );
 	virtual ~VulkanRaytracerSkinInstance() override;
 public:
