@@ -250,6 +250,9 @@ bool VulkanRaytracer::handle( const Message& message ){
 			MeshPNT* mesh = new MeshPNT();
 			skininstance->createMesh( mesh );
 			_meshes->registerPNT( mesh );
+			_globals->registerMaterial( skininstance->skin()->material() );
+			if( skininstance->skin()->material()->hasTexture() )
+				_textures.getTextureIndex( skininstance->skin()->material()->texture() );
 			VulkanRaytracerInstancePNT* pntinstance = new VulkanRaytracerInstancePNT( skininstance->_layer, skininstance->posori(), mesh, skininstance->skin()->material() );
 			skininstance->_layer->_instances.add( pntinstance );
 			_skininstances.add( skininstance );

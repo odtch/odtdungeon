@@ -28,8 +28,6 @@ public:
 	explicit CharAnimation();
 	virtual ~CharAnimation() override;
 public:
-//	virtual ResourceType* type() const override;
-public:
 	float duration() const{ return _duration; }
 public:
 	const List<CharAnimationFrame*>& frames() const{ return _frames; }
@@ -37,6 +35,8 @@ public:
 	CharAnimationFrame* findFrameAt( float time ) const;
 public:
 	void getPose( float time, CharPose& pose ) const;
+public:
+	virtual ResourceType* type() const override;
 public:
 	virtual void load( BinaryFileReader& reader ) override;
 	virtual void save( BinaryFileWriter& writer ) const override;

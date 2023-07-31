@@ -21,8 +21,6 @@ public:
 	explicit CharRagdollType();
 	virtual ~CharRagdollType() override;
 public:
-//	virtual ResourceType* type() const override;
-public:
 	CharJointType* root() const{ return _root; }
 	const List<CharJointType*>& joints() const{ return _joints; }
 	CharJointType* findJointByName( const String& name ) const;
@@ -35,6 +33,8 @@ public:
 	const List<JointToSkin*>& joint2skins() const{ return _joint2skins; }
 public:
 	virtual void collectPreLoad( List<AbstractMesh*>& meshes );
+public:
+	virtual ResourceType* type() const override;
 public:
 	virtual void load( BinaryFileReader& reader ) override;
 	virtual void save( BinaryFileWriter& writer ) const override;

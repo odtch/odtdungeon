@@ -54,6 +54,9 @@ CollectionImporter::CollectionImporter( Collection* collection )
 CollectionImporter::~CollectionImporter(){
 	_collection = null;
 }
+void CollectionImporter::resource( const String& id, Resource* resource ){
+	_collection->addResource( id, resource );
+}
 //void CollectionImporter::setSourcePath(const String& sourcepath){
 //	_source_path = sourcepath;
 //}

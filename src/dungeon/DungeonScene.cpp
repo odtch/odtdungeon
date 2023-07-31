@@ -20,10 +20,10 @@
 #include "skin/SkinImporter.h"
 #include "skin/Skin.h"
 
-#include "character/CharImporter.h"
 #include "character/CharRagdoll.h"
 #include "character/CharAnimation.h"
 #include "character/CharMocapCollection.h"
+#include "character/CharImporter.h"
 
 
 Skin* _skin = null;
@@ -154,56 +154,22 @@ void DungeonScene::run(){
 		{
 			{
 				Material* material = CharMocapCollection::Get()->getMaterial( "mcg" );
-				//material->setTexture( renderer().loadTexture( "mcg_diff" ) );
-				CharImporter charimporter( CharImporter::MocapFormat );
-				charimporter.createRagdoll();
-				{
-					AssImp assimp;
-					assimp.open( "/home/rt/media/mocap/MotusMan_v55/MotusMan_v55.fbx", AssImp::YUp_to_ZUp_Synty2() );
-					Skeleton* skeleton = assimp.loadSkeleton();
-					charimporter.setupRagdollFromSkeleton( *skeleton );
-					charimporter.loadSkin( *skeleton, assimp, 0 );
-					odelete( skeleton );
-					CharRagdollType* motusman_type = charimporter.ragdolltype();
-					SceneObject* r = new SceneObject();
-					CharRagdoll* motusman_ragdoll = new CharRagdoll( motusman_type, r );
-					r->setPosOri( PosOri().translated( Vec3( 4, 2, 0 ) ) );
-					new CharRagdollSkin( motusman_ragdoll, material, r );
-					_area1->addChild( r );
-					{
-						AssImp a2;
-						a2.open( "/home/rt/media/mocap/FBX_Ninja_v27_Pro/Animation/Root_Motion/NJA_Rlx_Walk_Forward_Loop.fbx", AssImp::YUp_to_ZUp_Synty2() );
-						assert( 1 == a2.animationCount() );
-						AssImpAnimation* a2anim = a2.loadAnimation();
-						charanim1 = charimporter.loadAnimation( *a2anim );
-						odelete( a2anim );
-					}
-
-					charragdoll1 = motusman_ragdoll;
-				}
+				CharRagdollType* motusman_type = CharMocapCollection::Get()->get<CharRagdollType>( "mm" );
+				SceneObject* r = new SceneObject();
+				CharRagdoll* motusman_ragdoll = new CharRagdoll( motusman_type, r );
+				r->setPosOri( PosOri().translated( Vec3( 4, 2, 0 ) ) );
+				new CharRagdollSkin( motusman_ragdoll, material, r );
+				_area1->addChild( r );
+				charanim1 = CharMocapCollection::Get()->get<CharAnimation>( "NJA_Rlx_Walk_Forward_Loop" );
+				charragdoll1 = motusman_ragdoll;
 			}
 		}
 		{
 			Material* material = DungeonCollection::Get()->getMaterial( "fk01" );
-			CharImporter charimporter( CharImporter::MecanimFormat );
-			charimporter.createRagdoll();
 			{
-				AssImp assimp;
-				assimp.open(
-							//"/home/rt/media/Polygon_SciFi_Space/Characters/SK_Chr_Crew_Female_01.fbx"
-							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Jester_01.fbx"
-							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Prince_01.fbx"
-							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Rider_01.fbx"
-							//"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Male_01.fbx"
-							"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Female_01.fbx"
-							, AssImp::YUp_to_ZUp_Synty2() );
-				Skeleton* skeleton = assimp.loadSkeleton();
-				charimporter.setupRagdollFromSkeleton( *skeleton );
-				charimporter.loadSkin( *skeleton, assimp, 0 );
-				odelete( skeleton );
-				CharRagdollType* motusman_type = charimporter.ragdolltype();
+				CharRagdollType* ragdolltype = DungeonCollection::Get()->get<CharRagdollType>( "rt" );
 				SceneObject* r = new SceneObject();
-				CharRagdoll* ragdoll = new CharRagdoll( motusman_type, r );
+				CharRagdoll* ragdoll = new CharRagdoll( ragdolltype, r );
 				r->setPosOri( PosOri().translated( Vec3( 0, 2, 0 ) ) );
 				new CharRagdollSkin( ragdoll, material, r );
 				_area1->addChild( r );

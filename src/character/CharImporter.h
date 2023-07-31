@@ -8,6 +8,8 @@ class CharImporter
 public:
 	enum Format { MocapFormat, MecanimFormat };
 public:
+	static CharRagdollType* ImportRagdollType( const String& filename, Format format );
+public:
 	struct Bone {
 		String name;
 //		vec4 color;

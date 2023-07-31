@@ -780,6 +780,18 @@ float RnPosOriDiff( const RnPosOri& f, const RnPosOri& t ){
 //	return importer._ragdolltype;
 //}
 
+CharRagdollType* CharImporter::ImportRagdollType( const String& filename, Format format ){
+	CharImporter charimporter( format );
+	charimporter.createRagdoll();
+	AssImp assimp;
+	assimp.open( filename, AssImp::YUp_to_ZUp_Synty2() );
+	Skeleton* skeleton = assimp.loadSkeleton();
+	charimporter.setupRagdollFromSkeleton( *skeleton );
+	charimporter.loadSkin( *skeleton, assimp, 0 );
+	odelete( skeleton );
+	return charimporter.ragdolltype();
+}
+
 CharImporter::CharImporter( Format format ){
 	setupBones();
 	if( format == MocapFormat ){

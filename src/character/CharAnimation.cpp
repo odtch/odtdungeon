@@ -80,9 +80,6 @@ CharAnimation::CharAnimation(){
 CharAnimation::~CharAnimation(){
 	_frames.deleteAll();
 }
-//ResourceType* CharAnimation::type() const {
-//	return Singleton::Get<CharAnimationResourceType>();
-//}
 CharAnimationFrame* CharAnimation::findFrameStartingAt( float starttime ) const {
 	float starttimemin = starttime - 0.0001f;
 	float starttimemax = starttime + 0.0001f;
@@ -116,8 +113,10 @@ void CharAnimation::getPose( float time, CharPose& pose ) const {
 	}
 	assert( false );
 }
+ResourceType* CharAnimation::type() const {
+	return Singleton::Get<CharAnimationResourceType>();
+}
 void CharAnimation::load( BinaryFileReader& reader ){
-	Resource::load( reader );
 	int ac = reader.read_uint32();
 	while( _frames.size() < ac ){
 		CharAnimationFrame* frame = new CharAnimationFrame();
@@ -130,7 +129,6 @@ void CharAnimation::load( BinaryFileReader& reader ){
 	assert( exp_duration == _duration );
 }
 void CharAnimation::save( BinaryFileWriter& writer ) const {
-	Resource::save( writer );
 	writer.write_uint32( _frames.size() );
 	for( CharAnimationFrame* frame : _frames ){
 		writer.write_float( frame->_duration );

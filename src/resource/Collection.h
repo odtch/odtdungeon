@@ -50,6 +50,8 @@ public:
 	Material* getMaterial( const String& id ) const;
 public:
 	MeshPNT* getMeshPNT( const String& id ) const;
+public:
+	template <typename T> T* get( const String& id ){ return asserted( dynamic_cast< T* >( getResource( id ) ) ); }
 //public:
 //	const List<MeshModel*>& meshmodels() const{ return _meshmodels; }
 //	MeshModel* getMeshModel( const String& id ) const;

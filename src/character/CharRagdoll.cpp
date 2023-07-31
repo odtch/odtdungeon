@@ -16,9 +16,6 @@ CharRagdollType::~CharRagdollType(){
 	_joint2skins.deleteAll();
 	odelete( _skin );
 }
-//ResourceType*CharRagdollType::type() const {
-//	return Singleton::Get<CharRagdollResourceType>();
-//}
 CharJointType* CharRagdollType::findJointByName( const String& name ) const {
 	for( CharJointType* joint : _joints ){
 		if( joint->name() == name )
@@ -64,6 +61,9 @@ void CharRagdollType::collectPreLoad( List<AbstractMesh*>& meshes ){
 //	}
 //	return joint;
 //}
+ResourceType*CharRagdollType::type() const {
+	return Singleton::Get<CharRagdollResourceType>();
+}
 void CharRagdollType::load( BinaryFileReader& reader ){
 	//Resource::load( reader );
 	uint jointcount = reader.read_uint32();

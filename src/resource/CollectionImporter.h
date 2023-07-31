@@ -41,6 +41,7 @@ public:
 //	void setSourcePath( const String& sourcepath );
 //	String getSourceFilename( const String& filename );
 public:
+	void resource( const String& id, Resource* resource );
 	Image* image( const String& id, const String& filename );
 	Texture* texture( const String& id, const String& filename );
 	Material* material( const String& id );

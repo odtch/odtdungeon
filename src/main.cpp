@@ -12,6 +12,7 @@
 #include "dungeon/DungeonCollection.h"
 #include "dungeon/DungeonScene.h"
 #include "dungeon/DungeonWindow.h"
+#include "character/CharResource.h"
 #include "character/CharMocapCollection.h"
 
 int main( int argc, char** argv ) {
@@ -29,6 +30,7 @@ int main( int argc, char** argv ) {
         {
             Modules modules;
 			new ResourceTypes();
+			new CharModule();
 			Physics physics;
             modules.start();
 			new Collections();
