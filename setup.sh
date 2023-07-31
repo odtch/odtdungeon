@@ -14,5 +14,9 @@ if [ ! -d "JoltPhysics" ]; then
   cd ..
   cd ..
 fi
+if [ ! -d "genann" ]; then
+  git clone https://github.com/odtch/genann.git
+fi
 cd ..
+
 
