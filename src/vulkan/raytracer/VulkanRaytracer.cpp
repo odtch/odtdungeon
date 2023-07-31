@@ -148,6 +148,9 @@ void VulkanRaytracer::createDevice(){
 	//	if( _extension )_extension->create( device );
 }
 void VulkanRaytracer::destroyDevice(){
+	while( !_skininstances.isEmpty() ){
+		delete _skininstances.takeLast();
+	}
 	odelete( _meshes );
 	_globals->destroy();
 	odelete( _properties );

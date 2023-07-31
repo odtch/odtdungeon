@@ -12,6 +12,12 @@ SceneNode::SceneNode(){
 SceneNode::~SceneNode(){
 	ASSERT( _parent == null );
 	ASSERT( _childs.isEmpty() );
+	SceneProperty* property = _firstProperty;
+	while( property ){
+		SceneProperty* p = property;
+		property = property->_next;
+		delete p;
+	}
 }
 Scene* SceneNode::scene(){
 	Scene* scene = findScene();

@@ -9,6 +9,7 @@ VulkanRaytracerSkinInstance::VulkanRaytracerSkinInstance( VulkanRaytracerRenderL
 {
 }
 VulkanRaytracerSkinInstance::~VulkanRaytracerSkinInstance(){
+	odelete( _mesh );
 }
 void VulkanRaytracerSkinInstance::createMesh( Mesh<VertexPNT>* mesh ){
 	assert( mesh );

@@ -19,6 +19,8 @@ private:
 	Camera* _camera = null;
 private:
 	SceneArea* _area1 = null;
+private:
+	List<Resource*> _resources2delete;
 public:
     explicit DungeonScene( Renderer* renderer );
     virtual ~DungeonScene() override;

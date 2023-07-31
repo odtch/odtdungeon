@@ -20,6 +20,7 @@ void SceneRenderInstanceProperty::onAddedToScene( Scene* scene ){
 void SceneRenderInstanceProperty::onRemovedFromScene( Scene* scene ){
 	if( _instance ){
 		int todo;
+		//odelete( _instance );
 		_instance = null;
 	}
 }
