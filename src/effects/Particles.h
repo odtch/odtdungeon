@@ -10,6 +10,7 @@ public:
 	MeshPNT* mesh = null;
 	Material* material = null;
 public:
+	float f01 = 0; // 0 to 1
 	float time = 0; // 0 to duration
 	float duration = 0; // <=0 endless,
 public:
@@ -73,8 +74,9 @@ private:
 private:
 	List<Particle*> _particles;
 	std::queue<Particle*> _unused_particles;
+	Vec3 _unusedposition;
 public:	
-	explicit ParticleSystem( uint particleCount ); // , SceneArea* area );
+	explicit ParticleSystem( uint particleCount, RenderLayer* layer );
 	virtual ~ParticleSystem() override;
 public:
 //	uint freeParticleCount() const{ return _unused_renderables.size(); }

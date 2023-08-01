@@ -23,7 +23,7 @@ layout(location = 0) rayPayloadEXT ORayPayload pld;
 vec4 calcPixelColor( float pixelx, float pixely ){
 	/*
 	color-table
-	*/
+	* /
 	if( pixelx < 256 + 40 && pixely < 100 ){
 		float px = pixelx;
 		px -= 20;

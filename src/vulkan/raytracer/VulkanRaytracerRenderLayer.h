@@ -21,8 +21,8 @@ private:
 //	List<Decal*> _decals;
 //private:
 //	List<RenderLight*> _lights;
-//private:
-//	RenderLayer* _translucent_layer = null;
+private:
+	VulkanRaytracerRenderLayer* _translucent_layer = null;
 private:
 	VulkanRaytracerRenderLayer* _nextLayer = null;
 	uint _nextCameraAction = 0;
@@ -33,6 +33,8 @@ private:
 public:
 	explicit VulkanRaytracerRenderLayer();
 	virtual ~VulkanRaytracerRenderLayer() override;
+public:
+	int index() const{ ASSERT( 0 <= _index ); return _index; }
 public:
 	virtual void setNextFixedCamera( const Camera& nextCamera ) override;
 	//public:
@@ -61,10 +63,10 @@ public:
 	//	RenderLight* createSpotLight( const Vec3& position, const Vec3& direction, float angle, float range, const vec4& color );
 	//	void addLight( RenderLight* light );
 	//	void removeLight( RenderLight* light );
-	//public:
-	//	bool hasTranslucentLayer() const{ return _translucent_layer != null; }
-	//	RenderLayer* translucentLayer() const{ ASSERT( _translucent_layer ); return _translucent_layer; }
-	//	RenderLayer* createTranslucentLayer();
+	public:
+		bool hasTranslucentLayer() const{ return _translucent_layer != null; }
+		VulkanRaytracerRenderLayer* translucentLayer() const{ ASSERT( _translucent_layer ); return _translucent_layer; }
+		VulkanRaytracerRenderLayer* createTranslucentLayer();
 	public:
 //		bool hasNextLayer() const{ return _nextLayer != null; }
 	//	RenderLayer* nextLayer() const{ assert( _nextLayer ); return _nextLayer; }

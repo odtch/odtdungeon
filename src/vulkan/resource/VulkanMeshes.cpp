@@ -5,7 +5,7 @@
 
 VulkanMeshes::VulkanMeshes( VulkanMeshPool* meshpool )
 	:_meshpool( asserted( meshpool ) )
-	,_index2vulkan( 100 )
+	,_index2vulkan( 300 )
 {
 	_index2vulkan.fill( null );
 }

@@ -74,7 +74,12 @@ RenderLayer* VulkanRaytracer::createNextLayer( RenderLayer* prev ){
 	RenderLayer* layer = new VulkanRaytracerRenderLayer();
 	_queue.post( VulkanLayerCreated, layer, prev, this );
 	return layer;
-
+}
+RenderLayer* VulkanRaytracer::createTranslucentLayer( RenderLayer* prev ){
+	VulkanRaytracerRenderLayer* vulkanprev = asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( prev ) );
+	VulkanRaytracerRenderLayer* transl = vulkanprev->createTranslucentLayer();
+	_queue.post( VulkanTranslucentLayerCreated, transl, prev, this );
+	return transl;
 }
 RenderInstancePNT* VulkanRaytracer::createInstance( RenderLayer* layer, const Mat4& posori, Mesh<VertexPNT>* mesh, Material* material ){
 	RenderInstancePNT* instance = new VulkanRaytracerInstancePNT( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, mesh, material );
@@ -236,6 +241,13 @@ bool VulkanRaytracer::handle( const Message& message ){
 			_layers.add( layer );
 		}
 		return true;
+	case VulkanTranslucentLayerCreated:
+		{
+			VulkanRaytracerRenderLayer* layer = asserted( (VulkanRaytracerRenderLayer*) message.p1 );
+			layer->_index = _layers.size();
+			_layers.add( layer );
+		}
+		return true;
 	case VulkanRenderInstancePNTCreated:
 		{
 			VulkanRaytracerInstancePNT* instance = (VulkanRaytracerInstancePNT*)message.p1;
@@ -323,11 +335,11 @@ void VulkanRaytracer::startLoadData(){
 		loadLayer( layer, layerdata, _current_solid_tlas );
 //		layerdata.tlas_index = -1;
 		layerdata.tlas_index = _current_solid_tlas->index();
-//		if( layer->hasTranslucentLayer() ){
-//			layerdata.translucent_layer_index = layer->translucentLayer()->index();
-//		} else {
+		if( layer->hasTranslucentLayer() ){
+			layerdata.translucent_layer_index = layer->translucentLayer()->index();
+		} else {
 			layerdata.translucent_layer_index = -1;
-//		}
+		}
 		if( layer->_nextLayer == null ){
 			layerdata.next_layer_index = -1;
 			layerdata.next_camera_action = 0;

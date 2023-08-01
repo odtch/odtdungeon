@@ -87,7 +87,8 @@ bool ORayNextLayer( vec2 pixel, uint layer_index, out ORay ray ){
 		return false;
 	} else if( globals.layers[ layer_index ].next_camera_action == VulkanLayer_NextCameraAction_2D_to_3D ){
 		ray.direction = vec3( -( globals.target_half_width - pixel.x ),
-							  1000, //globals.layers[ layer_index ].next_camera_2d_fov_size,
+							  //1000, //
+							  globals.layers[ layer_index ].next_camera_2d_fov_size,
 							  ( globals.target_half_height - pixel.y ) );
 		ray.direction = normalize( ray.direction );
 		//ray.origin = vec3( ray.origin.x, 0, ray.origin.z );

@@ -69,7 +69,7 @@ public:
 	uint tileCountX() const{ return _tileCount.x; }
 	uint tileCountY() const{ return _tileCount.y; }
 //	void setTileCount( const TileCount& tileCount );
-//	void setTileCount( uint x, uint y );
+	void setTileCount( uint x, uint y );
 ////public:
 ////	int viewportIndex() const{ return _viewport_index; }
 ////	void setViewportIndex( int viewport_index );

@@ -80,11 +80,11 @@ void Material::setModified( bool modified ){
 //	_tileCount = tileCount;
 //	setModified();
 //}
-//void Material::setTileCount( uint x, uint y ){
-//	_tileCount.x = x;
-//	_tileCount.y = y;
-//	setModified();
-//}
+void Material::setTileCount( uint x, uint y ){
+	_tileCount.x = x;
+	_tileCount.y = y;
+	setModified();
+}
 ResourceType* Material::type() const {
 	return Singleton::Get<MaterialType>();
 }

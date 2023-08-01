@@ -32,11 +32,27 @@ void DungeonCollection::import( CollectionImporter& importer ){
 	importer.mesh( "tile01", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Tiles_01.fbx", CollectionImporter::YUp_to_ZUp_Synty1() );
 	importer.mesh( "tile02", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Tiles_02.fbx", CollectionImporter::YUp_to_ZUp_Synty1() );
 	importer.mesh( "tile03", "/home/rt/media/Polygon_Dungeon/FBX/SM_Env_Tiles_03.fbx", CollectionImporter::YUp_to_ZUp_Synty1() );
-	importer.materialWithTexture( "fk01", "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Textures/PolygonFantasyKingdom_Texture_01_A.png" );
-	importer.resource( "rt", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Female_01.fbx", CharImporter::MecanimFormat ) );
-					   //"/home/rt/media/Polygon_SciFi_Space/Characters/SK_Chr_Crew_Female_01.fbx"
-					   //"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Jester_01.fbx"
-					   //"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Prince_01.fbx"
-					   //"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Rider_01.fbx"
-					   //"/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Male_01.fbx"
+	Material* material;
+	material = importer.materialWithTexture( "fk01", "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Textures/PolygonFantasyKingdom_Texture_01_A.png" );
+	material->setFlag( MaterialFlag_CalcNormalFromTriangle );
+	importer.resource( "rt1", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Female_01.fbx", CharImporter::MecanimFormat ) );
+	importer.resource( "rt2", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Jester_01.fbx", CharImporter::MecanimFormat ) );
+	importer.resource( "rt4", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Prince_01.fbx", CharImporter::MecanimFormat ) );
+	importer.resource( "rt5", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Rider_01.fbx", CharImporter::MecanimFormat ) );
+	importer.resource( "rt6", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Male_01.fbx", CharImporter::MecanimFormat ) );
+
+	material = importer.materialWithTexture( "spell01a",
+											 //"/home/rt/media/KriptoFX/Explosions/Textures/Trails/Trail1.png" );
+											 //"/home/rt/media/KriptoFX/Explosions/Textures/Explosions/Explosion18.png" );
+											 "/home/rt/media/KriptoFX/Explosions/Textures/Shared/Particles/Glow.png" );
+
+	//material->setTileCount( 5, 17 );
+	//material->setTileCount( 12, 7 );
+	material->setColor( Vec4( 0.1f, 0.1f, 1.3f, 1 ) );
+//	material->setFlag( MaterialFlag_NoShadowEmit );
+//	material->setFlag( MaterialFlag_NoLightAffected );
+	//material->setFlag( MaterialFlag_Volumetric );
+	material->setFlag( MaterialFlag_ViewOrentationToAlpha );
+	//material->setTranslucent( true );
+	material->texture()->image()->convertGrayToAlpha();
 }

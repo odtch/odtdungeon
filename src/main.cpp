@@ -38,7 +38,11 @@ int main( int argc, char** argv ) {
 			new DungeonCollection();
 			Collections::Get()->load( String( "media" ) );
 			DungeonWindow window;
-			window.create( 1600, 1200, String( "ODT-Dungeon" ));
+			window.create(
+						//1600, 1200,
+						3840,2000,
+
+						String( "ODT-Dungeon" ));
             VulkanRaytracer renderer( &window );
             renderer.start();
             DungeonScene scene( &renderer );

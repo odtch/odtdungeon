@@ -15,6 +15,7 @@ public:
 public:
 	virtual RenderLayer* createRootLayer() = 0;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) = 0;
+	virtual RenderLayer* createTranslucentLayer( RenderLayer* prev ) = 0;
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const Mat4& posori, MeshPNT* mesh, Material* material ) = 0;
 	virtual RenderSkinInstance* createSkinInstance( RenderLayer* layer, const Mat4& posori, Skin* skin ) = 0;

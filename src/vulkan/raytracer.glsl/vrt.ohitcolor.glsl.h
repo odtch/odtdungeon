@@ -37,7 +37,7 @@ vec4 OTextureGetFromMaterial( uint material_index, vec2 texture_coord, float tex
 		float tile1f = tileF - tile0i;
 		float tile0f = 1.0 - tile1f;
 		vec4 color0 = getTileTexture( tile0i, texture_coord, tileCountX, tileCountY, texture_index );
-		if( tile0i < tileCount ){
+		if( tile0i +1 < tileCount ){
 			vec4 color1 = getTileTexture( tile0i + 1, texture_coord, tileCountX, tileCountY, texture_index );
 	//				if( tile1f > 0.5 ){
 			color0 = color0 * tile0f + color1 * tile1f;

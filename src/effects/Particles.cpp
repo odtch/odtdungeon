@@ -13,6 +13,7 @@ Particle::Particle()
 void Particle::set( const Particle& src ){
 	mesh = src.mesh;
 	material = src.material;
+	f01 = src.f01;
 	time = src.time;
 	duration = src.duration;
 	posori = src.posori;
@@ -29,6 +30,7 @@ void Particle::set( const Particle& src ){
 
 void Particle::animate( float f01, float dt ){
 	ASSERT( 0 <= f01 && f01 <= 1 );
+	//this->f01 = f01;
 	velocity += acceleration * dt;
 	if( !positionOverLifetime.isEmpty() ){
 		posori.setPosition( Vec3( positionOverLifetime.getByFactor( f01 ) ) );
@@ -41,7 +43,6 @@ void Particle::animate( float f01, float dt ){
 	if( directed_xrot != 0 ){
 		posori.rotate( directed_xrot * dt, posori.right() );
 	}
-
 	if( colorOverLifetime ){
 		color = colorOverLifetime->getByFactor( f01 );
 	}
@@ -75,10 +76,12 @@ ParticleSystem* ParticleSystem::Get( SceneArea* area ){
 	}
 	assert( false );
 }
-ParticleSystem::ParticleSystem( uint particleCount ) // , SceneArea* area
+ParticleSystem::ParticleSystem( uint particleCount, RenderLayer* layer  ) // , SceneArea* area
 //	:_area( asserted( area ) )
+	:_layer( asserted( layer ) )
 {
 //	_layer = asserted( _area->layer() );
+	_unusedposition = Vec3::Down * 5;
 	MeshBuilder::CreateParticleCross( _defaultmesh, Vec3::Null, 1.0f );
 	//_defaultmesh.setGeometryFlags( 0 );
 	_defaultmaterial.setColor( Vec4( 1, 0, 0, 1 ) );
@@ -133,6 +136,7 @@ void ParticleSystem::emitParticle( const Particle& aparticle ){
 	ASSERT( particle->_instance );
 	particle->_instance->resetMeshMaterial( particle->mesh, particle->material );
 	//particle->_instance = _renderer->createInstance( _layer, particle->posori, particle->mesh, particle->material );
+	particle->f01 = 0;
 	updateParticle( *particle );
 }
 //ParticleRenderable* ParticleSystem::tryCreateRenderable(){
@@ -166,8 +170,9 @@ void ParticleSystem::onAddedToScene( Scene* scene ){
 ////	_layer->renderer()->loadMeshToGPU( &_crossmesh );
 ////	_layer->renderer()->loadMeshToGPU( &_directedmesh );
 	SceneNode::onAddedToScene( scene );
-	ASSERT( _layer == null );
-	_layer = area()->layer();
+	ASSERT( _layer );
+	//ASSERT( _layer == null );
+	//_layer = area()->layer();
 	_renderer = &scene->renderer();
 	PosOri posori;
 	for( Particle* particle : _particles ){
@@ -194,7 +199,7 @@ void ParticleSystem::onRemovedFromScene(Scene* scene ){
 	SceneNode::onRemovedFromScene( scene );
 }
 void ParticleSystem::animate( float dt ){
-	Vec3 unusedposition = Vec3::Left * 15 + Vec3::Down * 5;
+	_unusedposition = Vec3::Down * 5;
 	for( Particle* particle : _particles ){
 		if( particle->_living ){
 			ASSERT( particle->_instance );
@@ -203,20 +208,14 @@ void ParticleSystem::animate( float dt ){
 				particle->animate( 0, dt );
 			} else if( particle->time <= particle->duration ){
 				float f01 = particle->time / particle->duration;
+				particle->f01 = f01;
 				particle->animate( f01, dt );
-				//particle->setTextureTile( f01 );
 			} else {
 				particle->_living = false;
 				_unused_particles.push( particle );
 			}
 		}
-		if( particle->_living ){
-			particle->_instance->setPosOri( particle->posori.matrix() * Mat4::Scale( particle->scale ) );
-			particle->_instance->setColor( particle->color );
-		} else {
-			particle->_instance->setPosOri( Mat4::Translation( unusedposition ) );
-			unusedposition += Vec3::Down;
-		}
+		updateParticle( *particle );
 	}
 	SceneNode::animate( dt );
 ////#ifdef ODTDEBUG
@@ -228,4 +227,14 @@ void ParticleSystem::animate( float dt ){
 //	}
 ////#endif
 }
-void ParticleSystem::updateParticle( const Particle& particle ){}
+void ParticleSystem::updateParticle( const Particle& particle ){
+	if( particle._living ){
+		particle._instance->setPosOri( particle.posori.matrix() * Mat4::Scale( particle.scale ) );
+		particle._instance->setColor( particle.color );
+		assert( 0 <= particle.f01 && particle.f01 <= 1 );
+		particle._instance->setTextureTile( particle.f01 );
+	} else {
+		particle._instance->setPosOri( Mat4::Translation( _unusedposition ) );
+		_unusedposition += Vec3::Down;
+	}
+}

@@ -158,13 +158,13 @@ void Image::import( const String& filename ){
 //		}
 //	}
 //}
-//void Image::convertGrayToAlpha(){
-//	for( uint x = 0; x < width(); x++ ){
-//		for( uint y = 0; y < height(); y++ ){
-//			vec4 c = pixel( x, y );
-//			float g = ( c.x + c.y + c.z ) / 3;
-//			set( x, y, vec4( 1, 1, 1, g ) );
-//		}
-//	}
-//}
+void Image::convertGrayToAlpha(){
+	for( uint x = 0; x < width(); x++ ){
+		for( uint y = 0; y < height(); y++ ){
+			vec4 c = pixel( x, y );
+			float g = ( c.x + c.y + c.z ) / 3;
+			set( x, y, vec4( 1, 1, 1, g ) );
+		}
+	}
+}
 

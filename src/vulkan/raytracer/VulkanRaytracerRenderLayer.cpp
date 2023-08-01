@@ -14,10 +14,10 @@ VulkanRaytracerRenderLayer::~VulkanRaytracerRenderLayer(){
 	//	ASSERT( _renderer == null );
 	//	ASSERT( _renderables.isEmpty() );
 	//	_lights.deleteAll();
-	//	if( _translucent_layer ){
-	//		//odelete( _translucent_layer );
-	//		_translucent_layer = null;
-	//	}
+	if( _translucent_layer ){
+//		odelete( _translucent_layer );
+		_translucent_layer = null;
+	}
 }
 void VulkanRaytracerRenderLayer::setNextFixedCamera( const Camera& nextCamera ){
 	_nextCamera = nextCamera;
@@ -101,13 +101,13 @@ void VulkanRaytracerRenderLayer::setNextFixedCamera( const Camera& nextCamera ){
 //void RenderLayer::removeLight( RenderLight* light ){
 //	_lights.remove( light );
 //}
-//RenderLayer* RenderLayer::createTranslucentLayer(){
-//	ASSERT( _translucent_layer == null );
-//	assert( _renderer );
-//	_translucent_layer = new RenderLayer();
-//	_renderer->addLayer( _translucent_layer );
-//	return _translucent_layer;
-//}
+VulkanRaytracerRenderLayer* VulkanRaytracerRenderLayer::createTranslucentLayer(){
+	ASSERT( _translucent_layer == null );
+	//assert( _renderer );
+	_translucent_layer = new VulkanRaytracerRenderLayer();
+	//_renderer->addLayer( _translucent_layer );
+	return _translucent_layer;
+}
 //void RenderLayer::setNextLayer( RenderLayer* nextlayer ){
 //	if( _nextLayer == null ){
 //		assert( nextlayer );

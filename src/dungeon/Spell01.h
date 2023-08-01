@@ -1,7 +1,6 @@
 #pragma once
 
-#include "EffectsCore.h"
-#include "Particles.h"
+#include "effects/Particles.h"
 
 class Spell01 : public SceneNode
 {
@@ -9,7 +8,7 @@ private:
 	ParticleSystem* _system = null;
 	Random _rnd;
 private:
-	Material _material;
+	//Material _material;
 	MeshPNT _mesh;
 	Particle _particletype;
 	FloatGradientTable _scaleOverLifetime;

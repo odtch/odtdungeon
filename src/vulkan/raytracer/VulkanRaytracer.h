@@ -96,6 +96,7 @@ public:
 public:
 	virtual RenderLayer* createRootLayer() override;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) override;
+	virtual RenderLayer* createTranslucentLayer( RenderLayer* prev ) override;
 public:
 	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const Mat4& posori, MeshPNT* mesh, Material* material ) override;
 	virtual RenderSkinInstance* createSkinInstance( RenderLayer* layer, const Mat4& posori, Skin* skin ) override;

@@ -15,6 +15,9 @@ void RenderInstance::setPosOri( const Mat4& posori ){
 void RenderInstance::setColor( const vec4& color ){
 	_color = color;
 }
+void RenderInstance::setTextureTile( float textureTile ){
+	_textureTile = textureTile;
+}
 
 RenderInstancePNT::RenderInstancePNT( const Mat4& posori, Mesh<VertexPNT>* mesh, Material* material )
     :RenderInstance( posori )

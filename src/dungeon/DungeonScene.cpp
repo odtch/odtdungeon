@@ -30,7 +30,7 @@
 #include "brain/Brain.h"
 
 #include "effects/Particles.h"
-#include "effects/Spell01.h"
+#include "dungeon/Spell01.h"
 
 List<CharAnimation*> animations;
 
@@ -84,11 +84,14 @@ void DungeonScene::animate( float dt ){
 	Scene::animate( dt );
 }
 void DungeonScene::run(){
+	RenderLayer* translucent_layer = null;
 	{
 		_camera->setPosOri( PosOri().translated( Vec3( 14, 4, 2 ) ).rotated( -90, Vec3::Up ) );
+		_camera->setPosOri( PosOri().translated( Vec3( 14, 15, 2 ) ).rotated( -120, Vec3::Up ) );
 		_uilayer = renderer().createRootLayer();
 		_uilayer->setNextFixedCamera( *_camera );
 		RenderLayer* layer = renderer().createNextLayer( _uilayer );
+		translucent_layer = renderer().createTranslucentLayer( layer );
 		_area1 = new SceneArea( "area1", layer );
 		addChild( _area1 );
 		{
@@ -99,10 +102,10 @@ void DungeonScene::run(){
 			MeshPNT* mesh = new MeshPNT();
 			_resources2delete.add( mesh );
 			MeshBuilder::CreateBox( *mesh, PosOri(), Vec3( 56, 59, 1 ), VertexPNT() );
-			renderer().createInstance( _uilayer, PosOri().translated( Vec3( 800, 6, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ).matrix(), mesh, material );
+			renderer().createInstance( _uilayer, PosOri().translated( Vec3( 800, -406, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ).matrix(), mesh, material );
 		}{
 			renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.1f, 0.1f, 0.1f, 1.0f ) ) );
-			renderer().addLight( layer, RenderLight::CreateDirectional( Vec3( -0.41f, 0.1f, -2.0f ).normalized(), vec4( 0.4f, 0.4f, 0.4f, 1.0f ) ) );
+			renderer().addLight( layer, RenderLight::CreateDirectional( Vec3( -0.41f, 0.1f, -2.0f ).normalized(), vec4( 0.1f, 0.1f, 0.1f, 1.0f ) ) );
 		}
 	}
 	{
@@ -114,7 +117,7 @@ void DungeonScene::run(){
 //		//createStaticBox( Vec3( 0,-gr.y(), 0 ), Vec3( gr.x(), 0.2f, 0.2f ), material );
 //		createStaticBox( Vec3( gr.x(), 0, 0 ), Vec3( 0.2f, gr.y(), 1.4f ), material );
 //		createStaticBox( Vec3(-gr.x(), 0, 0 ), Vec3( 0.2f, gr.y(), 1.4f ), material );
-		createStaticBox( Vec3( 0, 0, -1.0f ), Vec3( gr.x(), gr.y(), 1.0f ), material );
+//		createStaticBox( Vec3( 0, 0, -1.0f ), Vec3( gr.x(), gr.y(), 1.0f ), material );
 //		float br = 0.2f;
 //		PhysicsShape* bs = PhysicsShape::CreateSphere( br );
 //		_resources2delete.add( bs );
@@ -157,22 +160,22 @@ void DungeonScene::run(){
 			new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( String( "banner0" ) + String::FromInt( 1 + ( 100 + y ) % 3 ) ), DungeonCollection::Get()->getMaterial( "dt01" ), object );
 			_area1->addChild( object );
 		}
-
 	}
+//	{
+//		PhysicsShape* platform05shape = PhysicsShape::CreateMesh( *DungeonCollection::Get()->getMeshPNT( "platform05" ) );
+//		_resources2delete.add( platform05shape );
+//		SceneObject* platform = new SceneObject();
+//		platform->setPosOri( PosOri().translated( Vec3( -4, 14, 5.7f ) ));
+//		new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "platform05" ), DungeonCollection::Get()->getMaterial( "dt01" ), platform );
+//		new PhysicsBody( platform05shape, PhysicsMotionType_Static, platform );
+//		_area1->addChild( platform );
+//	}{
+//		SceneObject* banner = new SceneObject();
+//		banner->setPosOri( PosOri().translated( Vec3( -4, 14, 5.7f + 0.3315f ) ));
+//		new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), banner );
+//		_area1->addChild( banner );
+//	}
 	{
-		PhysicsShape* platform05shape = PhysicsShape::CreateMesh( *DungeonCollection::Get()->getMeshPNT( "platform05" ) );
-		_resources2delete.add( platform05shape );
-		SceneObject* platform = new SceneObject();
-		platform->setPosOri( PosOri().translated( Vec3( -4, 14, 5.7f ) ));
-		new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "platform05" ), DungeonCollection::Get()->getMaterial( "dt01" ), platform );
-		new PhysicsBody( platform05shape, PhysicsMotionType_Static, platform );
-		_area1->addChild( platform );
-	}{
-		SceneObject* banner = new SceneObject();
-		banner->setPosOri( PosOri().translated( Vec3( -4, 14, 5.7f + 0.3315f ) ));
-		new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), banner );
-		_area1->addChild( banner );
-	}{
 //		Material* material = CharMocapCollection::Get()->getMaterial( "mcg" );
 //		CharRagdollType* motusman_type = CharMocapCollection::Get()->get<CharRagdollType>( "mm" );
 //		SceneObject* r = new SceneObject();
@@ -193,12 +196,12 @@ void DungeonScene::run(){
 //		_area1->addChild( char2 );
 //		charragdoll2 = ragdoll;
 	}
-	character = new CharCharacter( DungeonCollection::Get()->get<CharRagdollType>( "rt" ), DungeonCollection::Get()->getMaterial( "fk01" ) );
+	character = new CharCharacter( DungeonCollection::Get()->get<CharRagdollType>( "rt6" ), DungeonCollection::Get()->getMaterial( "fk01" ) );
 	character->setPosOri( PosOri( Vec3( -9, -4, 0 ), Vec3::Right, Vec3::Up ) );
 	character->setPosOri( PosOri().translated( Vec3( 2, 0, 0.15f ) ) );
 //	new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), character );
 	_area1->addChild( character );
-	_area1->addChild( new ParticleSystem( 1000 ) );
+	_area1->addChild( new ParticleSystem( 1000, translucent_layer ) );
 	spell01 = new Spell01();
 //	new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), spell01 );
 	_area1->addChild( spell01 );
