@@ -16,7 +16,7 @@ void main(){
 	uint material_index = instances[ instance_index ].materialIndex;
 	if( 0 != ( materials[ material_index ].flags & MaterialFlag_NoShadowEmit ) ){
 		ignoreIntersectionEXT;
-		//debugPrintfEXT( "uuuu\n" );
+		debugPrintfEXT( "uuuu\n" );
 	} else {
 	}
 	//pld.has_hit = true;

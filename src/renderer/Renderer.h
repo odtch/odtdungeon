@@ -16,8 +16,8 @@ public:
 	virtual RenderLayer* createRootLayer() = 0;
 	virtual RenderLayer* createNextLayer( RenderLayer* prev ) = 0;
 public:
-	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const PosOri& posori, MeshPNT* mesh, Material* material ) = 0;
-	virtual RenderSkinInstance* createSkinInstance( RenderLayer* layer, const PosOri& posori, Skin* skin ) = 0;
+	virtual RenderInstancePNT* createInstance( RenderLayer* layer, const Mat4& posori, MeshPNT* mesh, Material* material ) = 0;
+	virtual RenderSkinInstance* createSkinInstance( RenderLayer* layer, const Mat4& posori, Skin* skin ) = 0;
 public:
 	virtual void addLight( RenderLayer* layer, RenderLight* light ) = 0;
 public:

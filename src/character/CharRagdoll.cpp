@@ -167,10 +167,13 @@ CharJoint*CharRagdoll::findJointByName( const String& name ) const {
 	}
 	return null;
 }
-CharJoint*CharRagdoll::getJointByName( const String& name ) const {
+CharJoint* CharRagdoll::getJointByName( const String& name ) const {
 	CharJoint* joint = findJointByName( name );
 	if( joint )
 		return joint;
+	for( CharJoint* joint : _joints ){
+		logDebug( "CharJoint", joint->name() );
+	}
 	logError( "CharRagdoll", _type, "getJointByName", name, "not found" );
 	assert( false );
 }

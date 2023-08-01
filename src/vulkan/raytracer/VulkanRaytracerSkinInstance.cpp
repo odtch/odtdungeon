@@ -4,7 +4,7 @@
 #include "skin/SkinMesh.h"
 #include "VulkanRaytracerInstance.h"
 
-VulkanRaytracerSkinInstance::VulkanRaytracerSkinInstance( VulkanRaytracerRenderLayer* layer, const PosOri& posori, Skin* skin )
+VulkanRaytracerSkinInstance::VulkanRaytracerSkinInstance( VulkanRaytracerRenderLayer* layer, const Mat4& posori, Skin* skin )
 	:RenderSkinInstance( posori, skin )
 	,_layer( asserted( layer ) )
 {

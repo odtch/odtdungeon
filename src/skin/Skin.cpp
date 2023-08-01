@@ -428,5 +428,5 @@ void Skin::setBonesModified(){
 	_bones_modified = true;
 }
 RenderInstance* Skin::createInstance( Renderer& renderer, RenderLayer* layer ){
-	return renderer.createSkinInstance( layer, posori(), this );
+	return renderer.createSkinInstance( layer, posori().matrix(), this );
 }

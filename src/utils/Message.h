@@ -65,7 +65,7 @@ class MessageQueue : public MessageListener {
 private:
 	std::mutex _mutex;
 private:
-	enum { MaxMessages = 1000 };
+	enum { MaxMessages = 5000 };
 	Message _messages[ MaxMessages ];
 	uint _next_read = 0;
 	uint _next_write = 0;

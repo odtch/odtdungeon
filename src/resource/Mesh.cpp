@@ -22,10 +22,10 @@ void AbstractMesh::setModified( ModificationState modificationState ){
 //	}
 	_modificationState = modificationState;
 }
-//void AbstractMesh::setGeometryFlags( VkGeometryFlagsKHR geometryFlags ){
-//	assert( _vulkanmesh == null );
-//	_geometryFlags = geometryFlags;
-//}
+void AbstractMesh::setGeometryFlags( VkGeometryFlagsKHR geometryFlags ){
+	assert( _vulkanmesh == null );
+	_geometryFlags = geometryFlags;
+}
 void AbstractMesh::setVulkanMesh( VulkanMesh* vulkanmesh ){
 	if( vulkanmesh ){
 		assert( _vulkanmesh == null );

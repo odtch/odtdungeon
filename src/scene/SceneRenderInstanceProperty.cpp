@@ -32,7 +32,7 @@ void SceneRenderInstanceProperty::animate( float dt ){
 	if( _instance == null ){
 		logWarning( "SceneRenderInstanceProperty::animate no instance" );
 	} else {
-		_instance->setPosOri( _posori );
+		_instance->setPosOri( _posori.matrix() );
 	}
 }
 
@@ -45,5 +45,5 @@ SceneRenderInstancePNTProperty::SceneRenderInstancePNTProperty( Mesh<VertexPNT>*
 SceneRenderInstancePNTProperty::~SceneRenderInstancePNTProperty(){
 }
 RenderInstance* SceneRenderInstancePNTProperty::createInstance( Renderer& renderer, RenderLayer* layer ){
-	return renderer.createInstance( layer, posori(), _mesh, _material );
+	return renderer.createInstance( layer, posori().matrix(), _mesh, _material );
 }

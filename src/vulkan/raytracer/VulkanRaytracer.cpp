@@ -76,12 +76,12 @@ RenderLayer* VulkanRaytracer::createNextLayer( RenderLayer* prev ){
 	return layer;
 
 }
-RenderInstancePNT* VulkanRaytracer::createInstance( RenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material ){
+RenderInstancePNT* VulkanRaytracer::createInstance( RenderLayer* layer, const Mat4& posori, Mesh<VertexPNT>* mesh, Material* material ){
 	RenderInstancePNT* instance = new VulkanRaytracerInstancePNT( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, mesh, material );
 	_queue.post( VulkanRenderInstancePNTCreated, instance, null, this );
 	return instance;
 }
-RenderSkinInstance* VulkanRaytracer::createSkinInstance( RenderLayer* layer, const PosOri& posori, Skin* skin ){
+RenderSkinInstance* VulkanRaytracer::createSkinInstance( RenderLayer* layer, const Mat4& posori, Skin* skin ){
 	VulkanRaytracerSkinInstance* instance = new VulkanRaytracerSkinInstance( asserted( dynamic_cast<VulkanRaytracerRenderLayer*>( layer) ), posori, skin );
 	_queue.post( VulkanRaytracerSkinInstanceCreated, instance, null, this );
 	return instance;
@@ -205,7 +205,7 @@ void VulkanRaytracer::run(){
 }
 void VulkanRaytracer::render( VkImage targetimage ){
 	//logDebug( "VulkanRaytracer::render" );
-	_queue.handle( this );
+	_queue.handle( this, 2000 );
 	{
 		MutexLocker locker;
 		locker.lock( writeMutex() );
@@ -274,9 +274,23 @@ bool VulkanRaytracer::handle( const Message& message ){
 void VulkanRaytracer::startLoadData(){
 	_pcs.load->start();
 	_tasks.loadData.clear();
-//	for( RenderLayer* layer : _layers ){
+	for( VulkanRaytracerRenderLayer* layer : _layers ){
 //		layer->prerender();
-//	}
+		for( VulkanRaytracerInstancePNT* instance : layer->_instances ){
+			if( instance->_prevMaterial != instance->material() ){
+				instance->_prevMaterial = instance->material();
+				_globals->registerMaterial( instance->material() );
+				if( instance->material()->hasTexture() )
+					_textures.getTextureIndex( instance->material()->texture() );
+			}
+			if( instance->_prevMesh != instance->mesh() ){
+				instance->_prevMesh = instance->mesh();
+				_meshes->registerPNT( instance->mesh() );
+			}
+		}
+	}
+
+
 	_globals->begin();
 	_tasks.buildTLAS.clear();
 	_meshLoaderImmediate.reinit();
@@ -618,7 +632,7 @@ void VulkanRaytracer::loadLayer( RenderLayer* alayer, VulkanLayerData& layerdata
 //				}
 //			}
 //#endif
-			const Mat4& transform = renderable->posori().matrix();
+			const Mat4& transform = renderable->posori();
 			uint32_t instanceIndex = _instances.add( transform, meshIndex, materialIndex, renderable->color(), renderable->textureOffsetY(), renderable->textureTile() );
 			VulkanBLAS* blas = data->vulkanBLAS();
 			ASSERT( blas );

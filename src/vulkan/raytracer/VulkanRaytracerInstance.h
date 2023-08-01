@@ -8,6 +8,9 @@ class VulkanRaytracerInstancePNT : public RenderInstancePNT
 public:
 	VulkanRaytracerRenderLayer* _layer;
 public:
-	explicit VulkanRaytracerInstancePNT( VulkanRaytracerRenderLayer* layer, const PosOri& posori, Mesh<VertexPNT>* mesh, Material* material );
+	Mesh<VertexPNT>* _prevMesh = null;
+	Material* _prevMaterial = null;
+public:
+	explicit VulkanRaytracerInstancePNT( VulkanRaytracerRenderLayer* layer, const Mat4& posori, Mesh<VertexPNT>* mesh, Material* material );
 	virtual ~VulkanRaytracerInstancePNT() override;
 };

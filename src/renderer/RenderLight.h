@@ -17,7 +17,7 @@ public:
 	};
 private:
 	Type _type;
-private:
+private: public:
 	Vec3 _position;
 	Vec3 _direction;
 	float _range = 0;
