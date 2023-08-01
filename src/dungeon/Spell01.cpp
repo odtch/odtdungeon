@@ -6,6 +6,11 @@
 #include "renderer/RenderLight.h"
 #include "DungeonCollection.h"
 
+//glm::vec4 spell01color( 0.2f, 1.1f, 0.2f, 1.0f );
+//glm::vec4 spell01color( 1.2f, 0.2f, 0.2f, 1.0f );
+//glm::vec4 spell01color( 0.2f, 0.2f, 1.2f, 1.0f );
+glm::vec4 spell01color( 1.2f, 1.2f, 1.2f, 1.0f );
+
 Spell01::Spell01(){
 //	_material.setColor( Vec4( 0, 0, 1, 1 ) );
 //	_material.setFlag( MaterialFlag_NoShadowEmit );
@@ -16,6 +21,7 @@ Spell01::Spell01(){
 	_mesh.setGeometryFlags( 0 );
 	//_mesh.transform( Mat4::RotationAtAxis( 90, Vec3::Backward ) );
 	_particletype.material = DungeonCollection::Get()->getMaterial( "spell01a" );
+	_particletype.material->setColor( Vec4( spell01color ) );
 	_particletype.mesh = &_mesh;
 	_particletype.duration = 2;	
 	_particletype.scaleOverLifetime = &_scaleOverLifetime;
@@ -32,7 +38,7 @@ void Spell01::fire(){
 		_firetime = 1;
 		_fireposori = _attachementPosOri;
 		_light2->_range = 441;
-		_light2->_color = vec4( 0.1f, 0.1f, 0.8f, 1.0f ) * 0.1f;
+		_light2->_color = spell01color * 0.1f;
 	}
 }
 void Spell01::setAttachementPosOri( const PosOri& attachementPosOri ){
@@ -41,9 +47,9 @@ void Spell01::setAttachementPosOri( const PosOri& attachementPosOri ){
 	//_attachementPosOri = PosOri( Vec3( 2, 2, 1 ), Vec3::Forward, Vec3::Up );
 }
 void Spell01::onAddedToScene( Scene* scene ){
-	_light1 = RenderLight::CreatePoint( Vec3( 0, 0, -5 ), 0.71f, vec4( 0.1f, 0.1f, 0.8f, 1.0f ) *3 );
+	_light1 = RenderLight::CreatePoint( Vec3( 0, 0, -5 ), 0.71f, spell01color *3 );
 	scene->renderer().addLight( area()->layer(), _light1 );
-	_light2 = RenderLight::CreatePoint( Vec3( 0, 0, -5 ), 400, vec4( 0.1f, 0.1f, 0.8f, 1.0f ) );
+	_light2 = RenderLight::CreatePoint( Vec3( 0, 0, -5 ), 400, spell01color );
 	scene->renderer().addLight( area()->layer(), _light2 );
 	ASSERT( _system == null );
 	_system = ParticleSystem::Get( area() );

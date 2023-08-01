@@ -29,6 +29,7 @@
 
 #include "brain/Brain.h"
 
+#include "audio/OdtAudio.h"
 #include "effects/Particles.h"
 #include "dungeon/Spell01.h"
 
@@ -36,7 +37,8 @@ List<CharAnimation*> animations;
 
 CharCharacter* character = null;
 Spell01* spell01 = null;
-
+AudioSystem* audioSystem = null;
+AudioClip* audioSpell = null;
 DungeonScene::DungeonScene( Renderer* renderer )
     :Scene( renderer )
 {
@@ -72,8 +74,12 @@ void DungeonScene::animate( float dt ){
 			at = 0;
 			ai = ( ai + 1 ) % animations.size();
 		}
-		if( ai == 1 && at > animations.get( ai )->duration() * 0.175f ){
+		static float fi = 0;
+		fi -= dt;
+		if( ai == 1 && at > animations.get( ai )->duration() * 0.175f && fi < 0 ){
 			spell01->fire();
+			audioSystem->start( audioSpell, 0.5f );
+			fi = 2.5f;
 		}
 	}
 	if( spell01 ){
@@ -84,6 +90,20 @@ void DungeonScene::animate( float dt ){
 	Scene::animate( dt );
 }
 void DungeonScene::run(){
+	audioSystem = AudioSystem::Get();
+	audioSystem->bindCamera( _camera );
+	AudioClip* audioAmbient = audioSystem->loadWAV(
+								  "/home/rt/media/UltimateGameMusicCollection/Dungeons/Ambient Dungeon.wav"
+								  //"/home/rt/media/UltimateGameMusicCollection/Dungeons/Dark Dungeon AMBIENT LOOP.wav"
+	);
+	AudioPlayer* audioAmbientPlayer = audioSystem->createPlayer();
+	audioAmbientPlayer->setLooping();
+	audioAmbientPlayer->start( audioAmbient );
+	audioAmbientPlayer->setVolume( 0.13f );
+	audioSpell = audioSystem->loadWAV(
+								  "/home/rt/media/KriptoFX/RealisticEffectsV4/Effects/Audio/FireIn.wav"
+					 //"/home/rt/media/KriptoFX/RealisticEffectsV4/Effects/Audio/Fly.wav"
+								  );
 	RenderLayer* translucent_layer = null;
 	{
 		_camera->setPosOri( PosOri().translated( Vec3( 14, 4, 2 ) ).rotated( -90, Vec3::Up ) );

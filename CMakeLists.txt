@@ -39,5 +39,6 @@ target_link_libraries(odtdungeon
     vulkan
 	assimp
 	${CMAKE_CURRENT_SOURCE_DIR}/external/JoltPhysics/Build/Linux_Debug/libJolt.a
+	SDL2
 )
 

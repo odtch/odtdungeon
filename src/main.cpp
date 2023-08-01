@@ -9,6 +9,7 @@
 #include "converter/Converter.h"
 #include "physics/Physics.h"
 #include "physics/PhysicsWorld.h"
+#include "audio/OdtAudio.h"
 #include "dungeon/DungeonCollection.h"
 #include "dungeon/DungeonScene.h"
 #include "dungeon/DungeonWindow.h"
@@ -30,6 +31,7 @@ int main( int argc, char** argv ) {
         {
             Modules modules;
 			new ResourceTypes();
+			new AudioSystem();
 			new CharModule();
 			Physics physics;
             modules.start();
