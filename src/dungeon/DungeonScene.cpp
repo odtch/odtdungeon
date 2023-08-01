@@ -216,7 +216,7 @@ void DungeonScene::run(){
 //		_area1->addChild( char2 );
 //		charragdoll2 = ragdoll;
 	}
-	character = new CharCharacter( DungeonCollection::Get()->get<CharRagdollType>( "rt6" ), DungeonCollection::Get()->getMaterial( "fk01" ) );
+	character = new CharCharacter( DungeonCollection::Get()->get<CharRagdollType>( "rt2" ), DungeonCollection::Get()->getMaterial( "fk01" ) );
 	character->setPosOri( PosOri( Vec3( -9, -4, 0 ), Vec3::Right, Vec3::Up ) );
 	character->setPosOri( PosOri().translated( Vec3( 2, 0, 0.15f ) ) );
 //	new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), character );

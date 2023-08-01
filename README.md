@@ -1,5 +1,6 @@
 # ODT - Dungeon
 ODT-Dungeon is the Summer Week 2023 practice project aimed at extending the real-time raytracer from the previous exercise. The goals include separating the renderer and raytracer, optimizing and cleaning up the raytracer, and splitting the single thread into Main, Scene, and Render threads. Above all, the main focus is to have fun and enjoy the project.
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/PeV8zA87vY4/0.jpg)](https://www.youtube.com/watch?v=PeV8zA87vY4)
 
 ## Goals
 - have fun and enjoy. 
@@ -25,11 +26,12 @@ Die Verschiebung der Erstellung von Resourcen (Material, Texture, Mesh) in das R
 - [x] rock
 - [x] collection
 - [x] char
-- [ ] mesh in collection
-- [ ] mocapcollection
-- [ ] char in dungeon
-- [ ] animation
-- [ ] bones
+- [x] mesh in collection
+- [x] mocapcollection
+- [x] char in dungeon
+- [x] animation
+- [x] bones
+- [x] vfx spell
 
 ## Todoes
 - [ ] rm VulkanMeshPool

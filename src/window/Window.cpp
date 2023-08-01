@@ -346,13 +346,13 @@ void Window::onIdle(){
 }
 void Window::onActivated(){
 	//logDebug( "Window::onActivated" );
-	ASSERT( _active == false );
-	_active = true;
+//	ASSERT( _active == false );
+//	_active = true;
 }
 void Window::onDeactivated(){
 	//logDebug( "Window::onDeactivated" );
-	ASSERT( _active == true );
-	_active = false;
+//	ASSERT( _active == true );
+//	_active = false;
 }
 void Window::onKey( int key, int scancode, int action, int mods ){
 	_keyboard.onKey( key, scancode, action, mods );
