@@ -6,9 +6,14 @@
 class CharImporter
 {
 public:
-	enum Format { MocapFormat, MecanimFormat };
+	enum Format {
+		MocapFormat,
+		Mecanim1Format,
+		Mecanim2Format, // Fantasy-Kingdon, SciFi-Space
+		SyntyV3Format // SciFi-World
+	};
 public:
-	static CharRagdollType* ImportRagdollType( const String& filename, Format format );
+	static CharRagdollType* ImportRagdollType( const String& filename, Format format, uint meshindex = 0 );
 public:
 	struct Bone {
 		String name;
@@ -56,6 +61,7 @@ private:
 	void setupJointNamesMocap();
 	void setupJointNamesMecanim1();
 	void setupJointNamesMecanim2();
+	void setupJointNamesSyntyV3();
 public:
 	void createRagdoll();
 	void setupRagdollFromSkeleton( const Skeleton& skeleton );

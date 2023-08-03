@@ -50,7 +50,14 @@ float SkinVertex::totalBoneWeight() const {
 }
 void SkinVertex::adjustBoneWeightsTo1(){
 	float sum = totalBoneWeight();
-	assert( 0.001f < sum && sum < 1.1f );
+	if( 0.001f < sum && sum < 1.1f ){
+	} else {
+		logError( "SkinVertex::adjustBoneWeightsTo1 unexpected sum", sum );
+		if( sum < 0.001f ){
+			sum = 1.0f;
+			bone_weights[ 0 ] = 1;
+		}
+	}
 	float f = 1.0f / sum;
 	for( int i = 0; i < 3; i++ ){
 		if( 0 <= bone_indexes[ i ]  ){

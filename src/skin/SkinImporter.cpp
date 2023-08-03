@@ -75,8 +75,15 @@ SkinType* SkinImporter::Import( AssImp& assimp, uint meshindex ){
 	odelete( skeleton );
 	for( int v = 0; v < mesh->vertexCount(); v++ ){
 		SkinVertex* vertex = &mesh->vertex( v );
-		assert( 0 <= vertex->bone_indexes[ 0 ] );
-		assert( 0 < vertex->bone_weights[ 0 ] );
+		if( 0 <= vertex->bone_indexes[ 0 ] ){
+		} else {
+			logError( "SkinImporter no vertex.bone_indexes" );
+			vertex->bone_indexes[ 0 ] = 2;
+		}
+		if( vertex->bone_weights[ 0 ] <= 0 ){
+			logError( "SkinImporter no vertex.bone_weights 0 <= 0" );
+			vertex->bone_weights[ 0 ] = 0.1f;
+		}
 		vertex->adjustBoneWeightsTo1();
 	}
 	return skin;

@@ -6,10 +6,10 @@
 #include "renderer/RenderLight.h"
 #include "DungeonCollection.h"
 
-//glm::vec4 spell01color( 0.2f, 1.1f, 0.2f, 1.0f );
+glm::vec4 spell01color( 0.2f, 1.1f, 0.2f, 1.0f );
 //glm::vec4 spell01color( 1.2f, 0.2f, 0.2f, 1.0f );
 //glm::vec4 spell01color( 0.2f, 0.2f, 1.2f, 1.0f );
-glm::vec4 spell01color( 1.2f, 1.2f, 1.2f, 1.0f );
+//glm::vec4 spell01color( 1.2f, 1.2f, 1.2f, 1.0f );
 
 Spell01::Spell01(){
 //	_material.setColor( Vec4( 0, 0, 1, 1 ) );

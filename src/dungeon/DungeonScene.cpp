@@ -124,7 +124,8 @@ void DungeonScene::run(){
 			MeshBuilder::CreateBox( *mesh, PosOri(), Vec3( 56, 59, 1 ), VertexPNT() );
 			renderer().createInstance( _uilayer, PosOri().translated( Vec3( 800, -406, 0 ) ).rotated( 30, Vec3::Right ).rotated( 15, Vec3::Up ).rotated( 15, Vec3::Forward ).matrix(), mesh, material );
 		}{
-			renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.1f, 0.1f, 0.1f, 1.0f ) ) );
+			//renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.1f, 0.1f, 0.1f, 1.0f ) ) );
+			renderer().addLight( layer, RenderLight::CreateAmbient( vec4( 0.1f, 0.1f, 0.1f, 1.0f ) *8) );
 			renderer().addLight( layer, RenderLight::CreateDirectional( Vec3( -0.41f, 0.1f, -2.0f ).normalized(), vec4( 0.1f, 0.1f, 0.1f, 1.0f ) ) );
 		}
 	}
@@ -206,17 +207,8 @@ void DungeonScene::run(){
 //
 //		charragdoll1 = motusman_ragdoll;
 	}{
-//		Material* material = DungeonCollection::Get()->getMaterial( "fk01" );
-//		CharRagdollType* ragdolltype = DungeonCollection::Get()->get<CharRagdollType>( "rt" );
-//		char2 = new SceneObject();
-//		CharRagdoll* ragdoll = new CharRagdoll( ragdolltype, char2 );
-//		char2->setPosOri( PosOri().translated( Vec3( 0, 2, 0 ) ) );
-//		new CharRagdollSkin( ragdoll, material, char2 );
-//		//new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), char2 );
-//		_area1->addChild( char2 );
-//		charragdoll2 = ragdoll;
 	}
-	character = new CharCharacter( DungeonCollection::Get()->get<CharRagdollType>( "rt2" ), DungeonCollection::Get()->getMaterial( "fk01" ) );
+	character = new CharCharacter( DungeonCollection::Get()->get<CharRagdollType>( "rt6" ), DungeonCollection::Get()->getMaterial( "fk01" ) );
 	character->setPosOri( PosOri( Vec3( -9, -4, 0 ), Vec3::Right, Vec3::Up ) );
 	character->setPosOri( PosOri().translated( Vec3( 2, 0, 0.15f ) ) );
 //	new SceneRenderInstancePNTProperty( DungeonCollection::Get()->getMeshPNT( "banner02" ), DungeonCollection::Get()->getMaterial( "dt01" ), character );

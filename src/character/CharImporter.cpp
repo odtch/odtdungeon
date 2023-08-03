@@ -780,14 +780,14 @@ float RnPosOriDiff( const RnPosOri& f, const RnPosOri& t ){
 //	return importer._ragdolltype;
 //}
 
-CharRagdollType* CharImporter::ImportRagdollType( const String& filename, Format format ){
+CharRagdollType* CharImporter::ImportRagdollType( const String& filename, Format format, uint meshindex ){
 	CharImporter charimporter( format );
 	charimporter.createRagdoll();
 	AssImp assimp;
 	assimp.open( filename, AssImp::YUp_to_ZUp_Synty2() );
 	Skeleton* skeleton = assimp.loadSkeleton();
 	charimporter.setupRagdollFromSkeleton( *skeleton );
-	charimporter.loadSkin( *skeleton, assimp, 0 );
+	charimporter.loadSkin( *skeleton, assimp, meshindex );
 	odelete( skeleton );
 	return charimporter.ragdolltype();
 }
@@ -796,8 +796,12 @@ CharImporter::CharImporter( Format format ){
 	setupBones();
 	if( format == MocapFormat ){
 		setupJointNamesMocap();
-	} else if( format == MecanimFormat ){
+	} else if( format == Mecanim1Format ){
+		setupJointNamesMecanim1();
+	} else if( format == Mecanim2Format ){
 		setupJointNamesMecanim2();
+	} else if( format == SyntyV3Format ){
+		setupJointNamesSyntyV3();
 	} else {
 		assert( false );
 	}
@@ -908,6 +912,22 @@ void CharImporter::setupJointNamesMecanim2(){
 		side->foot.skin_root_joint_name = String( "Foot" ) + side->skin_joint_ext_name;
 	}
 }
+void CharImporter::setupJointNamesSyntyV3(){
+	_head.skin_root_joint_name = "Head";
+	_neck.skin_root_joint_name = "Neck";
+	_spine_1.skin_root_joint_name = "Spine_02";
+	_spine_0.skin_root_joint_name = "Hips";
+	_l.skin_joint_ext_name = "_L";
+	_r.skin_joint_ext_name = "_R";
+	for( Side* side : _sides ){
+		side->upperarm.skin_root_joint_name = String( "Shoulder" )+ side->skin_joint_ext_name;
+		side->lowerarm.skin_root_joint_name = String( "Elbow" ) + side->skin_joint_ext_name;
+		side->hand.skin_root_joint_name = String( "Hand" ) + side->skin_joint_ext_name;
+		side->upperleg.skin_root_joint_name = String( "UpperLeg" ) + side->skin_joint_ext_name;
+		side->lowerleg.skin_root_joint_name = String( "LowerLeg" ) + side->skin_joint_ext_name;
+		side->foot.skin_root_joint_name = String( "Ankle" ) + side->skin_joint_ext_name;
+	}
+}
 void CharImporter::createRagdoll(){
 	assert( _ragdolltype == null );
 	_ragdolltype = new CharRagdollType();
@@ -951,7 +971,10 @@ void CharImporter::loadSkin( const Skeleton& skeleton, AssImp& assimp, uint mesh
 	_testmesh = new MeshPNT();
 	assert( _ragdolltype );
 	assert( _ragdolltype->_skin == null );
-	_ragdolltype->_skin = SkinImporter::Import( assimp, 0 );
+	_ragdolltype->_skin = SkinImporter::Import( assimp, meshindex );
+	for( SkinBoneType* skinbone : _ragdolltype->_skin->bones() ){
+		logDebug( "  CharImporter ", skinbone->name, "\t", skinbone->jointname );
+	}
 	for( SkinBoneType* skinbone : _ragdolltype->_skin->bones() ){
 		SkeletonJoint* skeletonjoint = skeleton.getJointByName( skinbone->jointname );
 		Bone* bone = getBoneForSkeletonJoint( skeletonjoint );
@@ -1101,6 +1124,12 @@ CharImporter::Bone*CharImporter::findBoneForSkeletonJoint( SkeletonJoint* aijoin
 }
 CharImporter::Bone* CharImporter::getBoneForSkeletonJoint( SkeletonJoint* aijoint ) const {
 	CharImporter::Bone* bone = findBoneForSkeletonJoint( aijoint );
+	if( bone == null ){
+		logError( "CharImporter::getBoneForSkeletonJoint not found", aijoint->name() );
+		if( aijoint->name() == "Root" ){
+			bone = & ( ( ( CharImporter* ) this )->_spine_0 );
+		}
+	}
 	assert( bone );
 	return bone;
 }

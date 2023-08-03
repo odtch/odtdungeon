@@ -35,11 +35,14 @@ void DungeonCollection::import( CollectionImporter& importer ){
 	Material* material;
 	material = importer.materialWithTexture( "fk01", "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Textures/PolygonFantasyKingdom_Texture_01_A.png" );
 	material->setFlag( MaterialFlag_CalcNormalFromTriangle );
-	importer.resource( "rt1", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Female_01.fbx", CharImporter::MecanimFormat ) );
-	importer.resource( "rt2", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Jester_01.fbx", CharImporter::MecanimFormat ) );
-	importer.resource( "rt4", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Prince_01.fbx", CharImporter::MecanimFormat ) );
-	importer.resource( "rt5", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Rider_01.fbx", CharImporter::MecanimFormat ) );
-	importer.resource( "rt6", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Male_01.fbx", CharImporter::MecanimFormat ) );
+	importer.resource( "rt1", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Female_01.fbx", CharImporter::Mecanim2Format ) );
+	importer.resource( "rt2", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Jester_01.fbx", CharImporter::Mecanim2Format ) );
+	importer.resource( "rt3", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Prince_01.fbx", CharImporter::Mecanim2Format ) );
+	importer.resource( "rt4", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Rider_01.fbx", CharImporter::Mecanim2Format ) );
+	importer.resource( "rt5", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_Fantasy_Kingdom/Source_Files/Characters/SK_Chr_Soldier_Male_01.fbx", CharImporter::Mecanim2Format ) );
+	//importer.resource( "rt6", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_SciFi_Worlds/src/FBX/BR_Characters.fbx", CharImporter::SyntyV3Format, 4 ) );
+	//importer.resource( "rt6", CharImporter::ImportRagdollType( "/home/rt/media/Polygon_SciFi_Worlds/src/FBX/BR_Characters.fbx", CharImporter::MecanimFormat ) );
+	//importer.resource( "rt6", CharImporter::ImportRagdollType( "", CharImporter::MecanimFormat ) );
 
 	material = importer.materialWithTexture( "spell01a",
 											 //"/home/rt/media/KriptoFX/Explosions/Textures/Trails/Trail1.png" );
